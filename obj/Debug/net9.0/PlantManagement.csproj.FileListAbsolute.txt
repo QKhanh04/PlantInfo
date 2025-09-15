@@ -196,3 +196,5 @@ C:\Users\Admin\Desktop\PlantManagement\bin\Debug\net9.0\zh-Hant\Microsoft.CodeAn
 C:\Users\Admin\Desktop\PlantManagement\obj\Debug\net9.0\PlantManagement.csproj.AssemblyReference.cache
 C:\Users\Admin\Desktop\PlantManagement\obj\Debug\net9.0\PlantMan.D8669207.Up2Date
 c:\Users\Admin\Desktop\PlantManagement\obj\Debug\net9.0\compressed\vd5vy1gmnt-fu80iuyjlh.gz
+c:\Users\Admin\Desktop\PlantManagement\bin\Debug\net9.0\BCrypt.Net-Next.dll
+c:\Users\Admin\Desktop\PlantManagement\obj\Debug\net9.0\PlantManagement.sourcelink.json

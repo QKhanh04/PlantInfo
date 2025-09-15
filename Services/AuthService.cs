@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using PlantManagement.Common.Results;
 using PlantManagement.Helper;
 using PlantManagement.Models;
 using PlantManagement.Repositories;
@@ -29,27 +30,33 @@ namespace PlantManagement.Services
             return user.Result;
         }
 
-        public async Task<User?> Register(string username, string email, string password)
+        public async Task<ServiceResult<User>> Register(string username, string email, string password)
         {
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            // if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+            // {
+            //     return new ServiceResult<User> { Success = false, Message = "Invalid input." };
+            // }
+            var existingUserName = await _authRepository.GetUserByUsernameOrEmail(username);
+            var existingEmail = await _authRepository.GetUserByUsernameOrEmail(email);
+
+            if (existingUserName != null)
             {
-                return null;
+                return new ServiceResult<User> { Success = false, Message = "Username already exists." };
             }
-            var existingUser = await _authRepository.GetUserByUsernameOrEmail(username);
-            if (existingUser != null)
+            if (existingEmail != null)
             {
-                return null;
+                return new ServiceResult<User> { Success = false, Message = "Email already exists." };
             }
-            var hashedPassword = PasswordHelper.HashPassword(password);
+
             var newUser = new User
             {
                 Username = username,
                 Email = email,
-                PasswordHash = hashedPassword
+                PasswordHash = PasswordHelper.HashPassword(password)
             };
             await _authRepository.AddAsync(newUser);
             await _authRepository.SaveChangesAsync();
-            return newUser;
+            return new ServiceResult<User> { Success = true, Message = "User registered successfully.", Data = newUser };
         }
     }
 }

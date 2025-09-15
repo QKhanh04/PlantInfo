@@ -10,13 +10,11 @@ namespace PlantManagement.Repositories
 {
     public class AuthRepository : GenericRepository<User>, IAuthRepository
     {
-        private readonly GenericRepository<User> _genericRepository;
         private readonly PlantDbContext _context;
 
-        public AuthRepository(DbContext context) : base(context)
+        public AuthRepository(PlantDbContext context) : base(context)
         {
-            _context = (PlantDbContext)context;
-            _genericRepository = new GenericRepository<User>(context);
+            _context = context;
         }
 
         public async Task<User?> GetUserByUsernameOrEmail(string usernameOrEmail)

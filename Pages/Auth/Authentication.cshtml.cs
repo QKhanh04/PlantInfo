@@ -19,17 +19,16 @@ namespace PlantManagement.Pages.Auth
         {
             _authService = authService;
         }
-
+        [BindProperty]
         public LoginViewModel LoginVM { get; set; }
+        [BindProperty]
         public RegisterViewModel RegisterVM { get; set; }
-
-
 
         public void OnGet()
         {
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync([FromForm] LoginViewModel LoginVM)
         {
             if (!ModelState.IsValid)
                 return Page();
@@ -59,53 +58,34 @@ namespace PlantManagement.Pages.Auth
                     IsPersistent = true,
                     ExpiresUtc = DateTime.UtcNow.AddMinutes(30)
                 });
+            TempData["SuccessMessage"] = "Đăng nhập thành công!";
 
             return RedirectToPage("/Index");
         }
 
-        public async Task<IActionResult> OnPostRegister()
+        public async Task<IActionResult> OnPostRegister([FromForm] RegisterViewModel RegisterVM)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
 
-            // Kiểm tra username trùng
-            var existingUser = await _authService.Users
-                .FirstOrDefaultAsync(u => u.Username == Input.Username);
+            var result = await _authService.Register(RegisterVM.Username, RegisterVM.Email, RegisterVM.Password);
 
-            if (existingUser != null)
+
+            if (!result.Success)
             {
-                ModelState.AddModelError("Input.Username", "Username already exists");
+                if (result.Message.Contains("Username"))
+                    ModelState.AddModelError("Input.Username", result.Message);
+                else if (result.Message.Contains("Email"))
+                    ModelState.AddModelError("Input.Email", result.Message);
+                else
+                    ModelState.AddModelError(string.Empty, result.Message);
+
                 return Page();
             }
 
-            // Kiểm tra email trùng
-            var existingEmail = await _authService.Users
-                .FirstOrDefaultAsync(u => u.Email == Input.Email);
-
-            if (existingEmail != null)
-            {
-                ModelState.AddModelError("Input.Email", "Email already exists");
-                return Page();
-            }
-
-            // Hash password với BCrypt
-            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(Input.Password);
-
-            var newUser = new User
-            {
-                Username = Input.Username,
-                Email = Input.Email,
-                PasswordHash = hashedPassword,
-                Role = "User", // mặc định role User
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _authService.Users.Add(newUser);
-            await _authService.SaveChangesAsync();
-
-            // Sau khi đăng ký thành công → redirect sang Login
+            TempData["SuccessMessage"] = "Đăng ký thành công! Vui lòng đăng nhập.";
             return RedirectToPage("/Login");
         }
     }
