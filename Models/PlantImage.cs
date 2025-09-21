@@ -7,13 +7,13 @@ public partial class PlantImage
 {
     public int ImageId { get; set; }
 
-    public int PlantId { get; set; }
+    public int? PlantId { get; set; }
 
-    public string ImageUrl { get; set; } = null!;
+    public string? ImageUrl { get; set; }
 
     public string? Caption { get; set; }
 
     public bool? IsPrimary { get; set; }
 
-    public virtual Plant Plant { get; set; } = null!;
+    public virtual Plant? Plant { get; set; }
 }

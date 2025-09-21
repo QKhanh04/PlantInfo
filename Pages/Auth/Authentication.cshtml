@@ -1,85 +1,157 @@
 @page
 @model AuthenticationModel
 @{
-    Layout = null;
     ViewData["Title"] = "Authentication";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-@section Styles {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/auth.css" />
-}
+</head>
+<body>
+    <div class="background">
+        <div class="auth-container">
+            <h1 class="auth-title">Tài khoản người dùng</h1>
+            <p class="auth-subtitle">
+                Đăng nhập hoặc tạo tài khoản để sử dụng các tính năng cá nhân hóa
+            </p>
 
+            <!-- Tab Buttons -->
+            <div class="tab-buttons">
+                <div class="tab-indicator @(Model.ActiveTab == "register" ? "register" : "")"></div>
+                <button type="button"
+                        class="tab-button @(Model.ActiveTab == "login" ? "active" : "")"
+                        onclick="switchToLogin()">Đăng nhập</button>
+                <button type="button"
+                        class="tab-button @(Model.ActiveTab == "register" ? "active" : "")"
+                        onclick="switchToRegister()">Đăng ký</button>
+            </div>
 
-<div class="wrapper">
-    <div class="title-text">
-        <div class="title login">Login Form</div>
-        <div class="title signup">Signup Form</div>
-    </div>
-    <div class="form-container">
-        <div class="slide-controls">
-            <input type="radio" name="slide" id="login" checked>
-            <input type="radio" name="slide" id="signup">
-            <label for="login" class="slide login">Login</label>
-            <label for="signup" class="slide signup">Signup</label>
-            <div class="slider-tab"></div>
+            <!-- Forms Container -->
+            <div class="forms-container" id="formsContainer">
+
+                <!-- Login Form -->
+                <div class="form-wrapper login @(Model.ActiveTab != "login" ? "inactive" : "active")" id="loginForm">
+                    <form method="post" asp-page-handler="Login">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <!-- Username/Email -->
+                        <div class="form-group">
+                            <label class="form-label">Email hoặc Username</label>
+                            <div class="input-icon">
+                                <i class="bi bi-envelope"></i>
+                                <input asp-for="LoginVM.UsernameOrEmail"
+                                       class="form-input"
+                                       placeholder="Nhập email hoặc username" />
+                            </div>
+                            <span asp-validation-for="LoginVM.UsernameOrEmail" class="text-danger error-message"></span>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group">
+                            <label class="form-label">Mật khẩu</label>
+                            <div class="input-icon">
+                                <i class="bi bi-lock"></i>
+                                <input asp-for="LoginVM.Password"
+                                       class="form-input"
+                                       type="password"
+                                       id="loginPassword"
+                                       placeholder="........" />
+                                <button type="button"
+                                        class="password-toggle"
+                                        onclick="togglePassword('loginPassword', this)">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                            <span asp-validation-for="LoginVM.Password" class="text-danger error-message"></span>
+                        </div>
+
+                        <button type="submit" class="submit-button">Đăng nhập</button>
+                    </form>
+                </div>
+
+                <!-- Register Form -->
+                <div class="form-wrapper register @(Model.ActiveTab == "register" ? "active" : "inactive")" id="registerForm">
+                    <form method="post" asp-page-handler="Register">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <!-- Username -->
+                        <div class="form-group">
+                            <label class="form-label">Username</label>
+                            <div class="input-icon">
+                                <i class="bi bi-person"></i>
+                                <input asp-for="RegisterVM.Username"
+                                       class="form-input"
+                                       placeholder="Tên đăng nhập" />
+                            </div>
+                            <span asp-validation-for="RegisterVM.Username" class="text-danger error-message"></span>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <div class="input-icon">
+                                <i class="bi bi-envelope"></i>
+                                <input asp-for="RegisterVM.Email"
+                                       class="form-input"
+                                       placeholder="your@email.com" />
+                            </div>
+                            <span asp-validation-for="RegisterVM.Email" class="text-danger error-message"></span>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group">
+                            <label class="form-label">Mật khẩu</label>
+                            <div class="input-icon">
+                                <i class="bi bi-lock"></i>
+                                <input asp-for="RegisterVM.Password"
+                                       class="form-input"
+                                       type="password"
+                                       id="registerPassword"
+                                       placeholder="........" />
+                                <button type="button"
+                                        class="password-toggle"
+                                        onclick="togglePassword('registerPassword', this)">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                            <span asp-validation-for="RegisterVM.Password" class="text-danger error-message"></span>
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="form-group">
+                            <label class="form-label">Xác nhận mật khẩu</label>
+                            <div class="input-icon">
+                                <i class="bi bi-lock"></i>
+                                <input asp-for="RegisterVM.ConfirmPassword"
+                                       class="form-input"
+                                       type="password"
+                                       id="confirmPassword"
+                                       placeholder="........" />
+                                <button type="button"
+                                        class="password-toggle"
+                                        onclick="togglePassword('confirmPassword', this)">
+                                    <i class="bi bi-eye-slash"></i>
+                                </button>
+                            </div>
+                            <span asp-validation-for="RegisterVM.ConfirmPassword" class="text-danger error-message"></span>
+                        </div>
+                        <div> @TempData["SuccessMessage"]</div>
+
+                        <button type="submit" class="submit-button">Đăng ký</button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="form-inner">
-            <form action="#" class="login">
-                <div class="field">
-                    <input type="text" placeholder="Email Address" required>
-                    <span asp-validation-for="LoginVM.UsernameOrEmail"></span>
-
-                </div>
-                <div class="field">
-                    <input type="password" placeholder="Password" required>
-                    <span asp-validation-for="LoginVM.Password"></span>
-
-                </div>
-                <div class="pass-link"><a href="#">Forgot password?</a></div>
-                <div class="field btn">
-                    <div class="btn-layer"></div>
-                    <input type="submit" value="Login">
-                </div>
-                <div class="signup-link">Not a member? <a href="">Signup now</a></div>
-            </form>
-            <form action="#" class="signup">
-                <div class="field">
-                    <input type="text" placeholder="Email Address" required>
-                </div>
-                <div class="field">
-                    <input type="password" placeholder="Password" required>
-                </div>
-                <div class="field">
-                    <input type="password" placeholder="Confirm password" required>
-                </div>
-                <div class="field btn">
-                    <div class="btn-layer"></div>
-                    <input type="submit" value="Signup">
-                </div>
-            </form>
-        </div>
     </div>
-</div>
-@section Scripts {
-    <script>
-        const loginText = document.querySelector(".title-text .login");
-        const loginForm = document.querySelector("form.login");
-        const loginBtn = document.querySelector("label.login");
-        const signupBtn = document.querySelector("label.signup");
-        const signupLink = document.querySelector("form .signup-link a");
-        signupBtn.onclick = (() => {
-            loginForm.style.marginLeft = "-50%";
-            loginText.style.marginLeft = "-50%";
-        });
-        loginBtn.onclick = (() => {
-            loginForm.style.marginLeft = "0%";
-            loginText.style.marginLeft = "0%";
-        });
-        signupLink.onclick = (() => {
-            signupBtn.click();
-            return false;
-        });
-    </script>
-}
+
+    @section Scripts {
+        <script src="~/js/auth.js"></script>
+        <partial name="_ValidationScriptsPartial" />
+    }
+</body>
+</html>

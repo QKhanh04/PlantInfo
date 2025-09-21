@@ -9,7 +9,7 @@ public partial class SearchLog
 
     public int? UserId { get; set; }
 
-    public string Keyword { get; set; } = null!;
+    public string? Keyword { get; set; }
 
     public DateTime? SearchDate { get; set; }
 

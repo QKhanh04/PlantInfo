@@ -5,8 +5,6 @@ namespace PlantManagement.Models;
 
 public partial class GrowthCondition
 {
-    public int ConditionId { get; set; }
-
     public int PlantId { get; set; }
 
     public string? SoilType { get; set; }

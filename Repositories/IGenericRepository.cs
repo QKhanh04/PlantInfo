@@ -20,5 +20,6 @@ namespace PlantManagement.Repositories
         void RemoveRange(IEnumerable<T> entities);
 
         Task<int> SaveChangesAsync();
+        IQueryable<T> Query();
     }
 }

@@ -9,28 +9,33 @@ using PlantManagement.Repositories;
 
 namespace PlantManagement.Services
 {
-    public class AuthService
+    public class AuthService : IAuthService
     {
-        private readonly AuthRepository _authRepository;
-        public AuthService(AuthRepository authRepository)
+        private readonly IAuthRepository _authRepository;
+        public AuthService(IAuthRepository authRepository)
         {
             _authRepository = authRepository;
         }
-        public async Task<User?> Login(string usernameOrEmail, string password)
+        public async Task<ServiceResult<User?>> Login(string usernameOrEmail, string password)
         {
             if (string.IsNullOrEmpty(usernameOrEmail) || string.IsNullOrEmpty(password))
             {
-                return null;
+                return ServiceResult<User?>.Fail("Invalid input");
             }
             var user = _authRepository.GetUserByUsernameOrEmail(usernameOrEmail);
-            if (user == null || !PasswordHelper.VerifyPassword(password, user.Result.PasswordHash))
+            if (user == null)
             {
-                return null;
+                return ServiceResult<User?>.Fail("User not found");
             }
-            return user.Result;
+            if (!PasswordHelper.VerifyPassword(password, user.Result.Password))
+            {
+                return ServiceResult<User?>.Fail("Incorrect password");
+            }
+
+            return ServiceResult<User?>.Ok(user.Result, "Login successful");
         }
 
-        public async Task<ServiceResult<User>> Register(string username, string email, string password)
+        public async Task<ServiceResult<User>> Register(string username, string email, string password, string confirmPassword)
         {
             // if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
             // {
@@ -47,12 +52,16 @@ namespace PlantManagement.Services
             {
                 return new ServiceResult<User> { Success = false, Message = "Email already exists." };
             }
+            if (password != confirmPassword)
+            {
+                return new ServiceResult<User> { Success = false, Message = "Passwords do not match." };
+            }
 
             var newUser = new User
             {
                 Username = username,
                 Email = email,
-                PasswordHash = PasswordHelper.HashPassword(password)
+                Password = PasswordHelper.HashPassword(password)
             };
             await _authRepository.AddAsync(newUser);
             await _authRepository.SaveChangesAsync();

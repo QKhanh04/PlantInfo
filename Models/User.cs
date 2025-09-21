@@ -9,7 +9,7 @@ public partial class User
 
     public string Username { get; set; } = null!;
 
-    public string PasswordHash { get; set; } = null!;
+    public string Password { get; set; } = null!;
 
     public string? FullName { get; set; }
 
@@ -17,7 +17,7 @@ public partial class User
 
     public string? Role { get; set; }
 
-    public DateTime? CreatedAt { get; set; }
+    public DateTime? CreateAt { get; set; }
 
     public virtual ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
 

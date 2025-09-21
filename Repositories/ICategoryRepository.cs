@@ -6,8 +6,7 @@ using PlantManagement.Models;
 
 namespace PlantManagement.Repositories
 {
-    public interface IAuthRepository : IGenericRepository<User>
+    public interface ICategoryRepository : IGenericRepository<Category>
     {
-        public Task<User?> GetUserByUsernameOrEmail(string usernameOrEmail);
     }
 }

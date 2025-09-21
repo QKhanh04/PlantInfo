@@ -28,14 +28,18 @@ public partial class PlantDbContext : DbContext
 
     public virtual DbSet<PlantImage> PlantImages { get; set; }
 
+    public virtual DbSet<PlantReference> PlantReferences { get; set; }
+
     public virtual DbSet<SearchLog> SearchLogs { get; set; }
+
+    public virtual DbSet<Species> Species { get; set; }
 
     public virtual DbSet<Use> Uses { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=PlantDB;Username=postgres;Password=12345");
+        => optionsBuilder.UseNpgsql("Host=localhost;Database=PlantDB;Username=postgres;Password=12345");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -61,7 +65,6 @@ public partial class PlantDbContext : DbContext
             entity.ToTable("diseases");
 
             entity.Property(e => e.DiseaseId).HasColumnName("disease_id");
-            entity.Property(e => e.Cause).HasColumnName("cause");
             entity.Property(e => e.DiseaseName)
                 .HasMaxLength(255)
                 .HasColumnName("disease_name");
@@ -71,6 +74,7 @@ public partial class PlantDbContext : DbContext
 
             entity.HasOne(d => d.Plant).WithMany(p => p.Diseases)
                 .HasForeignKey(d => d.PlantId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("diseases_plant_id_fkey");
         });
 
@@ -80,12 +84,14 @@ public partial class PlantDbContext : DbContext
 
             entity.ToTable("favorites");
 
+            entity.HasIndex(e => e.UserId, "idx_favorites_user");
+
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.PlantId).HasColumnName("plant_id");
-            entity.Property(e => e.CreatedAt)
+            entity.Property(e => e.CreateAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
-                .HasColumnName("created_at");
+                .HasColumnName("create_at");
 
             entity.HasOne(d => d.Plant).WithMany(p => p.Favorites)
                 .HasForeignKey(d => d.PlantId)
@@ -98,30 +104,31 @@ public partial class PlantDbContext : DbContext
 
         modelBuilder.Entity<GrowthCondition>(entity =>
         {
-            entity.HasKey(e => e.ConditionId).HasName("growth_conditions_pkey");
+            entity.HasKey(e => e.PlantId).HasName("growth_conditions_pkey");
 
             entity.ToTable("growth_conditions");
 
-            entity.Property(e => e.ConditionId).HasColumnName("condition_id");
+            entity.Property(e => e.PlantId)
+                .ValueGeneratedNever()
+                .HasColumnName("plant_id");
             entity.Property(e => e.Climate)
                 .HasMaxLength(255)
                 .HasColumnName("climate");
-            entity.Property(e => e.PlantId).HasColumnName("plant_id");
             entity.Property(e => e.SoilType)
                 .HasMaxLength(255)
                 .HasColumnName("soil_type");
             entity.Property(e => e.Sunlight)
-                .HasMaxLength(100)
+                .HasMaxLength(255)
                 .HasColumnName("sunlight");
             entity.Property(e => e.TemperatureRange)
-                .HasMaxLength(100)
+                .HasMaxLength(255)
                 .HasColumnName("temperature_range");
             entity.Property(e => e.WaterRequirement)
-                .HasMaxLength(100)
+                .HasMaxLength(255)
                 .HasColumnName("water_requirement");
 
-            entity.HasOne(d => d.Plant).WithMany(p => p.GrowthConditions)
-                .HasForeignKey(d => d.PlantId)
+            entity.HasOne(d => d.Plant).WithOne(p => p.GrowthCondition)
+                .HasForeignKey<GrowthCondition>(d => d.PlantId)
                 .HasConstraintName("growth_conditions_plant_id_fkey");
         });
 
@@ -133,27 +140,20 @@ public partial class PlantDbContext : DbContext
 
             entity.HasIndex(e => e.CommonName, "idx_plants_common_name");
 
-            entity.HasIndex(e => e.ScientificName, "idx_plants_scientific_name");
-
-            entity.HasIndex(e => e.ScientificName, "plants_scientific_name_key").IsUnique();
-
             entity.Property(e => e.PlantId).HasColumnName("plant_id");
             entity.Property(e => e.CommonName)
                 .HasMaxLength(255)
                 .HasColumnName("common_name");
             entity.Property(e => e.Description).HasColumnName("description");
-            entity.Property(e => e.Family)
-                .HasMaxLength(255)
-                .HasColumnName("family");
-            entity.Property(e => e.Genus)
-                .HasMaxLength(255)
-                .HasColumnName("genus");
             entity.Property(e => e.Origin)
                 .HasMaxLength(255)
                 .HasColumnName("origin");
-            entity.Property(e => e.ScientificName)
-                .HasMaxLength(255)
-                .HasColumnName("scientific_name");
+            entity.Property(e => e.SpeciesId).HasColumnName("species_id");
+
+            entity.HasOne(d => d.Species).WithMany(p => p.Plants)
+                .HasForeignKey(d => d.SpeciesId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("plants_species_id_fkey");
 
             entity.HasMany(d => d.Categories).WithMany(p => p.Plants)
                 .UsingEntity<Dictionary<string, object>>(
@@ -168,6 +168,8 @@ public partial class PlantDbContext : DbContext
                     {
                         j.HasKey("PlantId", "CategoryId").HasName("plant_category_pkey");
                         j.ToTable("plant_category");
+                        j.HasIndex(new[] { "CategoryId" }, "idx_plant_category_category");
+                        j.HasIndex(new[] { "PlantId" }, "idx_plant_category_plant");
                         j.IndexerProperty<int>("PlantId").HasColumnName("plant_id");
                         j.IndexerProperty<int>("CategoryId").HasColumnName("category_id");
                     });
@@ -185,6 +187,8 @@ public partial class PlantDbContext : DbContext
                     {
                         j.HasKey("PlantId", "UseId").HasName("plant_use_pkey");
                         j.ToTable("plant_use");
+                        j.HasIndex(new[] { "PlantId" }, "idx_plant_use_plant");
+                        j.HasIndex(new[] { "UseId" }, "idx_plant_use_use");
                         j.IndexerProperty<int>("PlantId").HasColumnName("plant_id");
                         j.IndexerProperty<int>("UseId").HasColumnName("use_id");
                     });
@@ -195,6 +199,8 @@ public partial class PlantDbContext : DbContext
             entity.HasKey(e => e.ImageId).HasName("plant_images_pkey");
 
             entity.ToTable("plant_images");
+
+            entity.HasIndex(e => new { e.PlantId, e.IsPrimary }, "idx_plant_images_primary");
 
             entity.Property(e => e.ImageId).HasColumnName("image_id");
             entity.Property(e => e.Caption).HasColumnName("caption");
@@ -208,7 +214,33 @@ public partial class PlantDbContext : DbContext
 
             entity.HasOne(d => d.Plant).WithMany(p => p.PlantImages)
                 .HasForeignKey(d => d.PlantId)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("plant_images_plant_id_fkey");
+        });
+
+        modelBuilder.Entity<PlantReference>(entity =>
+        {
+            entity.HasKey(e => e.ReferenceId).HasName("plant_references_pkey");
+
+            entity.ToTable("plant_references");
+
+            entity.Property(e => e.ReferenceId).HasColumnName("reference_id");
+            entity.Property(e => e.Author)
+                .HasMaxLength(255)
+                .HasColumnName("author");
+            entity.Property(e => e.PlantId).HasColumnName("plant_id");
+            entity.Property(e => e.PublishedYear).HasColumnName("published_year");
+            entity.Property(e => e.SourceName)
+                .HasMaxLength(255)
+                .HasColumnName("source_name");
+            entity.Property(e => e.Url)
+                .HasMaxLength(255)
+                .HasColumnName("url");
+
+            entity.HasOne(d => d.Plant).WithMany(p => p.PlantReferences)
+                .HasForeignKey(d => d.PlantId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("plant_references_plant_id_fkey");
         });
 
         modelBuilder.Entity<SearchLog>(entity =>
@@ -217,11 +249,11 @@ public partial class PlantDbContext : DbContext
 
             entity.ToTable("search_logs");
 
-            entity.HasIndex(e => e.Keyword, "idx_search_logs_keyword");
+            entity.HasIndex(e => e.UserId, "idx_search_logs_user");
 
             entity.Property(e => e.SearchId).HasColumnName("search_id");
             entity.Property(e => e.Keyword)
-                .HasMaxLength(255)
+                .HasMaxLength(500)
                 .HasColumnName("keyword");
             entity.Property(e => e.SearchDate)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -231,8 +263,34 @@ public partial class PlantDbContext : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.SearchLogs)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.SetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("search_logs_user_id_fkey");
+        });
+
+        modelBuilder.Entity<Species>(entity =>
+        {
+            entity.HasKey(e => e.SpeciesId).HasName("species_pkey");
+
+            entity.ToTable("species");
+
+            entity.HasIndex(e => e.ScientificName, "idx_species_scientific_name");
+
+            entity.HasIndex(e => e.ScientificName, "species_scientific_name_key").IsUnique();
+
+            entity.Property(e => e.SpeciesId).HasColumnName("species_id");
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.Family)
+                .HasMaxLength(255)
+                .HasColumnName("family");
+            entity.Property(e => e.Genus)
+                .HasMaxLength(255)
+                .HasColumnName("genus");
+            entity.Property(e => e.OrderName)
+                .HasMaxLength(255)
+                .HasColumnName("order_name");
+            entity.Property(e => e.ScientificName)
+                .HasMaxLength(255)
+                .HasColumnName("scientific_name");
         });
 
         modelBuilder.Entity<Use>(entity =>
@@ -256,24 +314,26 @@ public partial class PlantDbContext : DbContext
 
             entity.ToTable("users");
 
+            entity.HasIndex(e => e.Username, "idx_users_username");
+
             entity.HasIndex(e => e.Email, "users_email_key").IsUnique();
 
             entity.HasIndex(e => e.Username, "users_username_key").IsUnique();
 
             entity.Property(e => e.UserId).HasColumnName("user_id");
-            entity.Property(e => e.CreatedAt)
+            entity.Property(e => e.CreateAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
                 .HasColumnType("timestamp without time zone")
-                .HasColumnName("created_at");
+                .HasColumnName("create_at");
             entity.Property(e => e.Email)
                 .HasMaxLength(255)
                 .HasColumnName("email");
             entity.Property(e => e.FullName)
                 .HasMaxLength(255)
                 .HasColumnName("full_name");
-            entity.Property(e => e.PasswordHash)
+            entity.Property(e => e.Password)
                 .HasMaxLength(255)
-                .HasColumnName("password_hash");
+                .HasColumnName("password");
             entity.Property(e => e.Role)
                 .HasMaxLength(50)
                 .HasDefaultValueSql("'User'::character varying")
