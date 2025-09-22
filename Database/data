@@ -1,0 +1,377 @@
+-- Thêm dữ liệu vào bảng species
+INSERT INTO species (scientific_name, genus, family, order_name, description) VALUES
+('Oryza sativa', 'Oryza', 'Poaceae', 'Poales', 'Cây lúa nước'),
+('Zea mays', 'Zea', 'Poaceae', 'Poales', 'Cây ngô'),
+('Mangifera indica', 'Mangifera', 'Anacardiaceae', 'Sapindales', 'Cây xoài'),
+('Citrus sinensis', 'Citrus', 'Rutaceae', 'Sapindales', 'Cây cam'),
+('Coffea arabica', 'Coffea', 'Rubiaceae', 'Gentianales', 'Cây cà phê Arabica'),
+('Theobroma cacao', 'Theobroma', 'Malvaceae', 'Malvales', 'Cây ca cao'),
+('Saccharum officinarum', 'Saccharum', 'Poaceae', 'Poales', 'Cây mía'),
+('Solanum lycopersicum', 'Solanum', 'Solanaceae', 'Solanales', 'Cây cà chua'),
+('Capsicum annuum', 'Capsicum', 'Solanaceae', 'Solanales', 'Cây ớt'),
+('Allium cepa', 'Allium', 'Amaryllidaceae', 'Asparagales', 'Cây hành tây'),
+('Brassica oleracea', 'Brassica', 'Brassicaceae', 'Brassicales', 'Cây cải bắp'),
+('Lactuca sativa', 'Lactuca', 'Asteraceae', 'Asterales', 'Cây xà lách'),
+('Cucumis sativus', 'Cucumis', 'Cucurbitaceae', 'Cucurbitales', 'Cây dưa chuột'),
+('Cucurbita pepo', 'Cucurbita', 'Cucurbitaceae', 'Cucurbitales', 'Cây bí ngô'),
+('Phaseolus vulgaris', 'Phaseolus', 'Fabaceae', 'Fabales', 'Cây đậu tây'),
+('Glycine max', 'Glycine', 'Fabaceae', 'Fabales', 'Cây đậu tương'),
+('Arachis hypogaea', 'Arachis', 'Fabaceae', 'Fabales', 'Cây lạc'),
+('Cocos nucifera', 'Cocos', 'Arecaceae', 'Arecales', 'Cây dừa'),
+('Musa acuminata', 'Musa', 'Musaceae', 'Zingiberales', 'Cây chuối'),
+('Ananas comosus', 'Ananas', 'Bromeliaceae', 'Poales', 'Cây thơm'),
+('Carica papaya', 'Carica', 'Caricaceae', 'Brassicales', 'Cây đu đủ'),
+('Prunus persica', 'Prunus', 'Rosaceae', 'Rosales', 'Cây đào'),
+('Malus domestica', 'Malus', 'Rosaceae', 'Rosales', 'Cây táo'),
+('Vitis vinifera', 'Vitis', 'Vitaceae', 'Vitales', 'Cây nho'),
+('Fragaria × ananassa', 'Fragaria', 'Rosaceae', 'Rosales', 'Cây dâu tây'),
+('Rubus idaeus', 'Rubus', 'Rosaceae', 'Rosales', 'Cây mâm xôi'),
+('Vaccinium corymbosum', 'Vaccinium', 'Ericaceae', 'Ericales', 'Cây việt quất'),
+('Persea americana', 'Persea', 'Lauraceae', 'Laurales', 'Cây bơ'),
+('Ficus carica', 'Ficus', 'Moraceae', 'Rosales', 'Cây sung'),
+('Punica granatum', 'Punica', 'Lythraceae', 'Myrtales', 'Cây lựu'),
+('Psidium guajava', 'Psidium', 'Myrtaceae', 'Myrtales', 'Cây ổi'),
+('Syzygium cumini', 'Syzygium', 'Myrtaceae', 'Myrtales', 'Cây sim'),
+('Litchi chinensis', 'Litchi', 'Sapindaceae', 'Sapindales', 'Cây vải thiều'),
+('Dimocarpus longan', 'Dimocarpus', 'Sapindaceae', 'Sapindales', 'Cây nhãn'),
+('Nephelium lappaceum', 'Nephelium', 'Sapindaceae', 'Sapindales', 'Cây chôm chôm'),
+('Durio zibethinus', 'Durio', 'Malvaceae', 'Malvales', 'Cây sầu riêng'),
+('Artocarpus heterophyllus', 'Artocarpus', 'Moraceae', 'Rosales', 'Cây mít'),
+('Garcinia mangostana', 'Garcinia', 'Clusiaceae', 'Malpighiales', 'Cây măng cụt'),
+('Lansium domesticum', 'Lansium', 'Meliaceae', 'Sapindales', 'Cây bòn bon'),
+('Citrus maxima', 'Citrus', 'Rutaceae', 'Sapindales', 'Cây bưởi'),
+('Citrus reticulata', 'Citrus', 'Rutaceae', 'Sapindales', 'Cây quýt'),
+('Citrus limon', 'Citrus', 'Rutaceae', 'Sapindales', 'Cây chanh'),
+('Averrhoa carambola', 'Averrhoa', 'Oxalidaceae', 'Oxalidales', 'Cây khế'),
+('Annona squamosa', 'Annona', 'Annonaceae', 'Magnoliales', 'Cây na'),
+('Annona muricata', 'Annona', 'Annonaceae', 'Magnoliales', 'Cây mãng cầu xiêm'),
+('Spondias dulcis', 'Spondias', 'Anacardiaceae', 'Sapindales', 'Cây cóc'),
+('Chrysophyllum cainito', 'Chrysophyllum', 'Sapotaceae', 'Ericales', 'Cây vú sữa'),
+('Diospyros kaki', 'Diospyros', 'Ebenaceae', 'Ericales', 'Cây hồng'),
+('Actinidia deliciosa', 'Actinidia', 'Actinidiaceae', 'Ericales', 'Cây kiwi'),
+('Phoenix dactylifera', 'Phoenix', 'Arecaceae', 'Arecales', 'Cây chà là');
+
+-- Thêm dữ liệu vào bảng plants (50 bản ghi)
+INSERT INTO plants (common_name, origin, species_id, description, is_active) VALUES
+('Lúa nước', 'Châu Á', 1, 'Cây lương thực chính của người Việt Nam, được trồng chủ yếu ở đồng bằng sông Cửu Long và đồng bằng Bắc Bộ. Lúa là nguồn cung cấp carbohydrate chính, có thể trồng 2-3 vụ/năm tùy vùng. Hạt lúa sau khi xay xát thành gạo là thực phẩm thiết yếu hàng ngày.', TRUE),
+('Ngô', 'Trung và Nam Mỹ', 2, 'Cây lương thực quan trọng thứ ba thế giới sau lúa mì và lúa nước. Ngô có khả năng thích ứng cao với nhiều loại đất và khí hậu. Được sử dụng làm thực phẩm, thức ăn chăn nuôi và nguyên liệu công nghiệp. Ngô giàu tinh bột, protein và các vitamin nhóm B.', TRUE),
+('Xoài', 'Nam Á', 3, 'Cây ăn quả nhiệt đới được mệnh danh là "vua của các loại trái cây". Xoài có hương vị thơm ngon, giàu vitamin A, C và chất xơ. Việt Nam có nhiều giống xoài đặc sản như xoài Cát Chu, xoài Tượng, xoài Keo. Là sản phẩm xuất khẩu quan trọng.', TRUE),
+('Cam', 'Trung Quốc', 4, 'Cây ăn quả họ cam chanh, nguồn cung cấp vitamin C dồi dào. Cam có tính mát, giúp giải khát và tăng cường sức đề kháng. Vỏ cam có thể sử dụng làm thuốc và gia vị. Cam Canh, cam Sành là những giống nổi tiếng ở Việt Nam.', TRUE),
+('Cà phê', 'Ethiopia', 5, 'Cây công nghiệp chiến lược, Việt Nam là nước xuất khẩu cà phê lớn thứ hai thế giới. Cà phê Arabica cho chất lượng cao, hương vị tinh tế. Được trồng chủ yếu ở Tây Nguyên với khí hậu và đất đỏ bazan thích hợp. Tạo việc làm cho hàng triệu lao động.', TRUE),
+('Ca cao', 'Châu Mỹ', 6, 'Cây nguyên liệu sản xuất chocolate và các sản phẩm thực phẩm. Hạt ca cao giàu chất chống oxi hóa, có lợi cho sức khỏe tim mạch. Việt Nam trồng ca cao chủ yếu ở Đông Nam Bộ và một số tỉnh Tây Nguyên. Cây có giá trị kinh tế cao.', TRUE),
+('Mía', 'New Guinea', 7, 'Cây công nghiệp sản xuất đường chủ yếu, chiếm 80% sản lượng đường thế giới. Mía cũng được sử dụng để sản xuất ethanol sinh học. Việt Nam trồng mía tập trung ở miền Tây Nam Bộ. Thân mía chứa 12-18% saccharose, có thể ép lấy nước uống trực tiếp.', TRUE),
+('Cà chua', 'Nam Mỹ', 8, 'Cây rau quả được trồng phổ biến, nguồn cung cấp lycopene - chất chống ung thư mạnh. Cà chua có thể ăn sống, nấu chín hoặc chế biến thành sốt, ketchup. Giàu vitamin C, K và folate. Có nhiều giống từ cherry nhỏ đến beef lớn.', TRUE),
+('Ớt', 'Châu Mỹ', 9, 'Cây gia vị không thể thiếu trong ẩm thực Việt Nam. Chứa capsaicin tạo vị cay, có tác dụng kháng viêm và giảm đau. Ớt giàu vitamin C, cao hơn cam chanh. Có nhiều loại từ ớt hiểm, ớt sừng bò đến ớt chuông ngọt.', TRUE),
+('Hành tây', 'Châu Á', 10, 'Cây gia vị cơ bản, được sử dụng trong hầu hết các món ăn. Hành tây chứa quercetin - chất chống oxi hóa mạnh, có tác dụng chống viêm và bảo vệ tim mạch. Có thể ăn sống, xào, hay dùng làm gia vị cho nhiều món ăn khác nhau.', TRUE),
+('Cải bắp', 'Địa Trung Hải', 11, 'Cây rau lá giàu vitamin C, K và chất xơ. Cải bắp có thể ăn sống làm salad hoặc nấu chín. Chứa sulforaphane có tác dụng chống ung thư. Dễ trồng, thích ứng với khí hậu mát mẻ. Là thành phần quan trọng trong nhiều món ăn truyền thống.', TRUE),
+('Xà lách', 'Địa Trung Hải', 12, 'Cây rau lá chính cho salad, ít calo nhưng giàu folate và vitamin K. Có nhiều loại như xà lách xoăn, xà lách bơ, xà lách cos. Dễ tiêu hóa, thích hợp cho người ăn kiêng. Cần khí hậu mát để phát triển tốt.', TRUE),
+('Dưa chuột', 'Ấn Độ', 13, 'Cây rau quả có tính mát, chứa 95% nước, rất tốt để giải khát và thanh nhiệt. Giàu silica có lợi cho da và tóc. Có thể ăn sống, làm dưa muối hoặc nấu canh. Dễ trồng, sinh trưởng nhanh, cho năng suất cao.', TRUE),
+('Bí ngô', 'Bắc Mỹ', 14, 'Cây rau củ quả giàu beta-carotene, vitamin A và chất xơ. Bí ngô có vị ngọt tự nhiên, thích hợp làm súp, bánh hoặc món tráng miệng. Hạt bí cũng có thể rang ăn, giàu protein và kẽm. Cây mọc lan rộng, cần diện tích lớn.', TRUE),
+('Đậu tây', 'Châu Mỹ', 15, 'Cây họ đậu giàu protein thực vật, chất xơ và folate. Có khả năng cố định nitơ từ không khí, cải thiện độ phì nhiêu của đất. Hạt đậu có thể nấu chín, làm salad hoặc chế biến thành nhiều món ăn khác nhau. Dễ trồng và chăm sóc.', TRUE),
+('Đậu tương', 'Đông Á', 16, 'Cây công nghiệp quan trọng, nguồn protein thực vật hoàn chỉnh. Nguyên liệu sản xuất dầu ăn, tương, đậu phụ, sữa đậu nành. Chứa isoflavone có lợi cho phụ nữ mãn kinh. Việt Nam nhập khẩu nhiều đậu tương để chế biến thức ăn chăn nuôi.', TRUE),
+('Lạc', 'Nam Mỹ', 17, 'Cây hạt có dầu, nguồn cung cấp protein và chất béo không bão hòa tốt cho sức khỏe. Lạc có thể ăn sống, luộc, rang hoặc chế biến thành dầu, bơ lạc. Giàu niacin, folate và vitamin E. Trồng nhiều ở miền Nam với đất cát thoát nước tốt.', TRUE),
+('Dừa', 'Ấn Độ Dương', 18, 'Cây đa dụng nhất vùng nhiệt đới. Nước dừa giàu khoáng chất, cùi dừa chứa chất béo tốt. Lá dừa làm mái nhà, thân làm gỗ xây dựng. Dầu dừa có tác dụng kháng khuẩn. Cây dừa sống lâu, có thể cho sản phẩm 50-80 năm.', TRUE),
+('Chuối', 'Đông Nam Á', 19, 'Cây ăn quả nhiệt đới phổ biến nhất, giàu kali, vitamin B6 và chất xơ. Chuối chín có thể ăn trực tiếp, chuối xanh nấu canh hoặc chiên. Lá chuối dùng gói bánh, hoa chuối làm rau. Cây sinh trưởng nhanh, cho quả quanh năm.', TRUE),
+('Thơm', 'Nam Mỹ', 20, 'Cây ăn quả nhiệt đới có vị ngọt đặc trưng và hương thơm quyến rũ. Thơm chứa enzyme bromelain giúp tiêu hóa protein. Giàu vitamin C và manganese. Có thể ăn tươi, làm nước ép hoặc chế biến thành mứt. Phù hợp với khí hậu nhiệt đới ẩm.', TRUE),
+('Đu đủ', 'Trung Mỹ', 21, 'Cây ăn quả giàu vitamin A, C và enzyme papain hỗ trợ tiêu hóa. Đu đủ xanh làm salad Thái, đu đủ chín ăn tráng miệng. Lá đu đủ có thể nấu canh hoặc làm trà. Cây sinh trưởng nhanh, ra quả sớm sau 8-12 tháng trồng.', TRUE),
+('Đào', 'Trung Quốc', 22, 'Cây ăn quả ôn đới, biểu tượng của sự trường thọ trong văn hóa Á Đông. Đào giàu vitamin A, C và chất xơ. Có nhiều giống từ đào tiên ngọt đến đào chua. Cần khí hậu mát về đông để ra hoa và kết quả tốt.', TRUE),
+('Táo', 'Trung Á', 23, 'Cây ăn quả ôn đới phổ biến nhất thế giới. Táo chứa pectin và quercetin tốt cho sức khỏe. Có hàng nghìn giống khác nhau về màu sắc, vị và texture. "An apple a day keeps the doctor away" - thể hiện giá trị dinh dưỡng của táo. Cần khí hậu mát về đông.', TRUE),
+('Nho', 'Cận Đông', 24, 'Cây ăn quả cổ xưa, nguyên liệu chính sản xuất rượu vang. Nho chứa resveratrol - chất chống lão hóa mạnh. Có thể ăn tươi, phơi khô thành nho khô hoặc ép lấy nước. Cần khí hậu Địa Trung Hải với mùa khô và mùa mưa rõ rệt.', TRUE),
+('Dâu tây', 'Bắc Mỹ và Chile', 25, 'Cây ăn quả nhỏ có hàm lượng vitamin C cao hơn cam. Dâu tây chứa anthocyanin tạo màu đỏ và chống oxi hóa. Có thể ăn tươi, làm mứt, bánh hoặc kem. Cần đất thoát nước tốt và khí hậu mát mẻ để phát triển.', TRUE),
+('Mâm xôi', 'Châu Âu', 26, 'Cây ăn quả dại có hàm lượng chất xơ và vitamin C cao. Mâm xôi đỏ chứa ketone giúp đốt cháy chất béo. Có thể ăn tươi, làm mứt hoặc sấy khô. Cây mọc thành bụi, dễ nhân giống và chăm sóc.', TRUE),
+('Việt quất', 'Bắc Mỹ', 27, 'Siêu thực phẩm với hàm lượng chất chống oxi hóa cao nhất. Việt quất tốt cho trí nhớ và thị lực. Có thể ăn tươi, làm mứt hoặc thêm vào bánh. Cần đất chua và khí hậu mát để phát triển tốt.', TRUE),
+('Bơ', 'Trung Mỹ', 28, 'Cây ăn quả giàu chất béo không bão hòa tốt cho tim mạch. Bơ chứa folate, kali và vitamin K. Có thể ăn trực tiếp, làm sinh tố hoặc guacamole. Cây cần nhiều nước và khí hậu ôn hòa để phát triển.', TRUE),
+('Sung', 'Tây Á', 29, 'Cây ăn quả cổ xưa được nhắc đến trong nhiều tôn giáo. Sung tươi ngọt và mềm, sung khô giàu chất xơ và khoáng chất. Lá sung có thể dùng làm thuốc dân gian. Cây thích ứng với nhiều loại đất và khí hậu.', TRUE),
+('Lựu', 'Iran', 30, 'Cây ăn quả có nhiều hạt đỏ ruby, biểu tượng của sự thịnh vượng. Lựu giàu punicalagin - chất chống oxi hóa mạnh. Có tác dụng chống viêm và bảo vệ tim mạch. Có thể ăn tươi hoặc ép lấy nước. Cây chịu hạn tốt.', TRUE),
+('Ổi', 'Trung Mỹ', 31, 'Cây ăn quả nhiệt đới có hàm lượng vitamin C gấp 4-5 lần cam. Ổi có vị ngọt dịu, thịt quả giòn. Lá ổi có thể pha trà, có tác dụng chống tiêu chảy. Cây dễ trồng, chịu hạn tốt, cho quả quanh năm.', TRUE),
+('Sim', 'Ấn Độ', 32, 'Cây ăn quả nhỏ màu tím đen, chứa nhiều chất chống oxi hóa. Sim có vị chua ngọt đặc trưng, thường được làm rượu hoặc mứt. Cây mọc hoang, thích ứng với đất nghèo và khí hậu khắc nghiệt.', TRUE),
+('Vải thiều', 'Trung Quốc', 33, 'Cây ăn quả nhiệt đới quý hiếm với thịt trong trắng ngọt như mật. Vải giàu vitamin C và đồng. Vải Thiều Lục Ngạn, Hải Dương là đặc sản nổi tiếng. Cây khó trồng, cần kỹ thuật cao và điều kiện thời tiết phù hợp.', TRUE),
+('Nhãn', 'Đông Nam Á', 34, 'Cây ăn quả nhiệt đới có thịt trong trắng, vị ngọt dịu. Nhãn giàu vitamin C, iron và potassium. Hạt nhãn có thể rang ăn hoặc pha trà. Nhãn lồng Hưng Yên là giống đặc sản. Cây cần khí hậu ẩm và đất thoát nước tốt.', TRUE),
+('Chôm chôm', 'Đông Nam Á', 35, 'Cây ăn quả nhiệt đới có vỏ màu đỏ đầy gai. Thịt trong trắng ngọt, giòn như vải. Chôm chôm giàu vitamin C và iron. Là đặc sản của miền Nam Việt Nam. Cây cần nhiệt độ cao và độ ẩm lớn để phát triển.', TRUE),
+('Sầu riêng', 'Đông Nam Á', 36, 'Vua của các loại trái cây với hương vị đậm đà, độc đáo. Sầu riêng giàu calories, vitamin B và potassium. Có hàng trăm giống khác nhau. Ri6 là giống nổi tiếng của Việt Nam. Cây cần khí hậu nhiệt đới ẩm và đất phì nhiêu.', TRUE),
+('Mít', 'Ấn Độ', 37, 'Cây cho quả lớn nhất thế giới, có thể nặng đến 50kg. Mít non có thể nấu canh, mít chín ăn tráng miệng. Hạt mít luộc ăn như khoai. Lá mít dùng làm thức ăn gia súc. Cây thích ứng tốt với khí hậu nhiệt đới.', TRUE),
+('Măng cụt', 'Đông Nam Á', 38, 'Nữ hoàng của các loại trái cây với vỏ tím đen, thịt trong trắng ngọt thanh. Măng cụt chứa xanthone - chất chống viêm mạnh. Cây rất khó trồng, cần 7-10 năm mới ra quả. Là loại quả đắt tiền và quý hiếm.', TRUE),
+('Bòn bon', 'Đông Nam Á', 39, 'Cây ăn quả địa phương với thịt trong trắng, vị ngọt chua. Có thể ăn tươi hoặc làm mứt. Vỏ và hạt có thể sử dụng trong y học cổ truyền. Cây thích ứng tốt với khí hậu nhiệt đới ẩm của Việt Nam.', TRUE),
+('Bưởi', 'Đông Nam Á', 40, 'Cây ăn quả lớn nhất họ cam chanh với thịt trong có thể màu trắng, hồng hoặc đỏ. Bưởi giàu vitamin C và lycopene. Bưởi Da Xanh, Năm Roi là các giống nổi tiếng. Vỏ bưởi có thể làm mứt hoặc tinh dầu.', TRUE),
+('Quýt', 'Đông Nam Á', 41, 'Cây ăn quả nhỏ họ cam chanh, dễ bóc vỏ và ăn. Quýt giàu vitamin C và flavonoid. Vỏ quýt khô dùng làm thuốc trong Đông y. Cây thích ứng tốt với khí hậu cận nhiệt đới, dễ trồng và chăm sóc.', TRUE),
+('Chanh', 'Đông Nam Á', 42, 'Cây gia vị và ăn quả không thể thiếu trong ẩm thực Việt Nam. Chanh giàu vitamin C và acid citric. Sử dụng làm nước chấm, gia vị hoặc đồ uống. Lá chanh có hương thơm đặc trưng, dùng nấu cà ri.', TRUE),
+('Khế', 'Đông Nam Á', 43, 'Cây ăn quả có hình dạng ngôi sao độc đáo khi cắt ngang. Khế chua giàu vitamin C, khế ngọt có thể ăn tráng miệng. Khế có tác dụng hạ huyết áp và cholesterol. Cây dễ trồng, ra quả quanh năm.', TRUE),
+('Na', 'Châu Mỹ', 44, 'Cây ăn quả nhiệt đới với thịt trong trắng ngọt như kem. Na giàu vitamin C, kali và chất xơ. Hạt na độc, không ăn được. Cây thích ứng tốt với khí hậu khô, chịu hạn tốt. Na Thái Lan là giống được ưa chuộng.', TRUE),
+('Mãng cầu xiêm', 'Châu Mỹ', 45, 'Cây ăn quả nhiệt đới có quả lớn, vỏ xanh gai mềm. Thịt trong trắng ngọt, có hương vị đặc biệt kết hợp giữa chua và ngọt. Mãng cầu xiêm giàu vitamin C, chất xơ và carbohydrate. Có tác dụng tăng cường miễn dịch và hỗ trợ tiêu hóa. Cây sinh trưởng mạnh trong khí hậu nhiệt đới ẩm.', TRUE),
+('Cóc', 'Melanesia', 46, 'Cây ăn quả nhiệt đới có vị chua ngọt đặc trưng, thường được gọi là táo tây nhiệt đới. Cóc giàu vitamin C, chất xơ và enzyme. Quả non có thể làm salad, quả chín ăn tráng miệng. Lá cóc có thể sử dụng làm thuốc dân gian để điều trị tiêu chảy. Cây thích ứng tốt với nhiều loại đất.', TRUE),
+('Vú sữa', 'Trung Mỹ', 47, 'Cây ăn quả nhiệt đới có thịt trong mịn màng như kem, vị ngọt đậm đà. Vú sữa giàu vitamin C, calcium và phosphorus. Quả có thể ăn tươi hoặc làm sinh tố. Cây cần khí hậu ẩm và đất thoát nước tốt. Là loại cây ăn quả còn ít phổ biến ở Việt Nam.', TRUE),
+('Hồng', 'Trung Quốc', 48, 'Cây ăn quả ôn đới với quả có màu cam đỏ đặc trưng. Hồng giàu beta-carotene, vitamin A và tannin. Có hai loại chính: hồng sắt (ăn cứng) và hồng mềm (để chín mềm mới ăn). Lá hồng có thể pha trà, có tác dụng hạ huyết áp. Cây cần thời gian lạnh để ra hoa kết quả.', TRUE),
+('Kiwi', 'Trung Quốc', 49, 'Cây ăn quả ôn đới có hàm lượng vitamin C cao nhất trong các loại trái cây. Kiwi chứa enzyme actinidin giúp tiêu hóa protein. Có thể ăn tươi, làm sinh tố hoặc salad. Vỏ kiwi cũng ăn được và chứa nhiều chất xơ. Cây cần khí hậu ôn đới mát và độ ẩm cao.', TRUE),
+('Chà là', 'Bắc Phi', 50, 'Cây ăn quả sa mạc có khả năng chịu hạn cực tốt. Chà là giàu glucose, fructose và chất xơ. Được mệnh danh là "bánh mì của sa mạc" vì giá trị dinh dưỡng cao. Có thể ăn tươi hoặc sấy khô bảo quản lâu. Cây cọ này có thể sống trong điều kiện khắc nghiệt của sa mạc.', TRUE);
+
+-- Thêm dữ liệu vào bảng growth_conditions
+INSERT INTO growth_conditions (plant_id, soil_type, climate, temperature_range, water_requirement, sunlight) VALUES
+(1, 'Đất phù sa', 'Nhiệt đới ẩm', '20-35°C', 'Cao', 'Đầy đủ'),
+(2, 'Đất thịt pha cát', 'Ôn đới, cận nhiệt đới', '18-30°C', 'Trung bình', 'Đầy đủ'),
+(3, 'Đất thoát nước tốt', 'Nhiệt đới', '24-35°C', 'Trung bình', 'Đầy đủ'),
+(4, 'Đất chua nhẹ', 'Cận nhiệt đới', '15-30°C', 'Trung bình', 'Đầy đủ'),
+(5, 'Đất đỏ bazan', 'Nhiệt đới cao nguyên', '15-25°C', 'Cao', 'Bán âm'),
+(6, 'Đất giàu chất hữu cơ', 'Nhiệt đới ẩm', '20-30°C', 'Cao', 'Bán âm'),
+(7, 'Đất phù sa', 'Nhiệt đới', '20-35°C', 'Cao', 'Đầy đủ'),
+(8, 'Đất thoát nước tốt', 'Ôn đới ấm', '18-25°C', 'Trung bình', 'Đầy đủ'),
+(9, 'Đất thoát nước tốt', 'Nhiệt đới, cận nhiệt đới', '18-32°C', 'Trung bình', 'Đầy đủ'),
+(10, 'Đất tơi xốp', 'Ôn đới', '10-25°C', 'Trung bình', 'Đầy đủ'),
+(11, 'Đất giàu chất hữu cơ', 'Ôn đới mát', '5-20°C', 'Trung bình', 'Đầy đủ'),
+(12, 'Đất thoát nước tốt', 'Ôn đới mát', '10-20°C', 'Trung bình', 'Bán âm'),
+(13, 'Đất thoát nước tốt', 'Ôn đới ấm', '15-30°C', 'Cao', 'Đầy đủ'),
+(14, 'Đất giàu chất hữu cơ', 'Ôn đới ấm', '15-25°C', 'Trung bình', 'Đầy đủ'),
+(15, 'Đất thoát nước tốt', 'Ôn đới', '15-25°C', 'Trung bình', 'Đầy đủ'),
+(16, 'Đất phù sa', 'Ôn đới ấm', '20-30°C', 'Trung bình', 'Đầy đủ'),
+(17, 'Đất cát pha', 'Nhiệt đới, cận nhiệt đới', '20-30°C', 'Thấp', 'Đầy đủ'),
+(18, 'Đất cát ven biển', 'Nhiệt đới', '24-32°C', 'Thấp', 'Đầy đủ'),
+(19, 'Đất giàu chất hữu cơ', 'Nhiệt đới ẩm', '26-30°C', 'Cao', 'Bán âm'),
+(20, 'Đất chua, thoát nước tốt', 'Nhiệt đới', '20-32°C', 'Trung bình', 'Đầy đủ'),
+(21, 'Đất thoát nước tốt', 'Nhiệt đới', '21-33°C', 'Trung bình', 'Đầy đủ'),
+(22, 'Đất thoát nước tốt', 'Ôn đới', '10-25°C', 'Trung bình', 'Đầy đủ'),
+(23, 'Đất thoát nước tốt', 'Ôn đới', '5-25°C', 'Trung bình', 'Đầy đủ'),
+(24, 'Đất thoát nước tốt', 'Địa Trung Hải', '10-30°C', 'Thấp đến trung bình', 'Đầy đủ'),
+(25, 'Đất chua nhẹ', 'Ôn đới mát', '10-20°C', 'Trung bình', 'Đầy đủ'),
+(26, 'Đất chua', 'Ôn đới mát', '5-20°C', 'Trung bình', 'Bán âm'),
+(27, 'Đất chua', 'Ôn đới mát', '5-25°C', 'Cao', 'Đầy đủ'),
+(28, 'Đất thoát nước tốt', 'Nhiệt đới, cận nhiệt đới', '15-25°C', 'Trung bình', 'Đầy đủ'),
+(29, 'Đất thoát nước tốt', 'Địa Trung Hải', '15-35°C', 'Thấp', 'Đầy đủ'),
+(30, 'Đất thoát nước tốt', 'Cận nhiệt đới khô', '10-35°C', 'Thấp', 'Đầy đủ'),
+(31, 'Đất thoát nước tốt', 'Nhiệt đới', '20-35°C', 'Trung bình', 'Đầy đủ'),
+(32, 'Đất chua', 'Nhiệt đới ẩm', '20-32°C', 'Cao', 'Bán âm'),
+(33, 'Đất thoát nước tốt', 'Cận nhiệt đới', '20-30°C', 'Trung bình', 'Đầy đủ'),
+(34, 'Đất giàu chất hữu cơ', 'Nhiệt đới', '20-32°C', 'Trung bình', 'Bán âm'),
+(35, 'Đất giàu chất hữu cơ', 'Nhiệt đới ẩm', '22-32°C', 'Cao', 'Bán âm'),
+(36, 'Đất giàu chất hữu cơ', 'Nhiệt đới ẩm', '24-32°C', 'Cao', 'Bán âm'),
+(37, 'Đất giàu chất hữu cơ', 'Nhiệt đới', '22-35°C', 'Trung bình', 'Đầy đủ'),
+(38, 'Đất giàu chất hữu cơ', 'Nhiệt đới ẩm', '25-32°C', 'Cao', 'Bán âm'),
+(39, 'Đất thoát nước tốt', 'Nhiệt đới', '22-30°C', 'Trung bình', 'Đầy đủ'),
+(40, 'Đất thoát nước tốt', 'Cận nhiệt đới', '15-30°C', 'Trung bình', 'Đầy đủ'),
+(41, 'Đất thoát nước tốt', 'Cận nhiệt đới', '15-28°C', 'Trung bình', 'Đầy đủ'),
+(42, 'Đất thoát nước tốt', 'Nhiệt đới, cận nhiệt đới', '15-30°C', 'Trung bình', 'Đầy đủ'),
+(43, 'Đất thoát nước tốt', 'Nhiệt đới', '20-32°C', 'Trung bình', 'Đầy đủ'),
+(44, 'Đất thoát nước tốt', 'Nhiệt đới', '20-32°C', 'Trung bình', 'Đầy đủ'),
+(45, 'Đất giàu chất hữu cơ', 'Nhiệt đới', '20-30°C', 'Cao', 'Bán âm'),
+(46, 'Đất thoát nước tốt', 'Nhiệt đới', '20-32°C', 'Trung bình', 'Đầy đủ'),
+(47, 'Đất thoát nước tốt', 'Nhiệt đới', '20-30°C', 'Trung bình', 'Đầy đủ'),
+(48, 'Đất thoát nước tốt', 'Ôn đới', '5-25°C', 'Trung bình', 'Đầy đủ'),
+(49, 'Đất thoát nước tốt', 'Ôn đới', '10-25°C', 'Cao', 'Bán âm'),
+(50, 'Đất cát sa mạc', 'Sa mạc', '20-50°C', 'Rất thấp', 'Đầy đủ');
+
+-- Thêm dữ liệu vào bảng categories
+INSERT INTO categories (category_name, description) VALUES
+('Cây lương thực', 'Cây trồng cung cấp thực phẩm chính'),
+('Cây ăn quả', 'Cây trồng cho quả ăn được'),
+('Cây rau củ', 'Cây trồng rau và củ'),
+('Cây gia vị', 'Cây trồng làm gia vị'),
+('Cây công nghiệp', 'Cây trồng phục vụ công nghiệp'),
+('Cây thuốc', 'Cây có tính chất chữa bệnh'),
+('Cây cảnh', 'Cây trồng để trang trí'),
+('Cây họ đậu', 'Cây thuộc họ đậu cung cấp protein'),
+('Cây nhiệt đới', 'Cây sinh trưởng ở vùng nhiệt đới'),
+('Cây ôn đới', 'Cây sinh trưởng ở vùng ôn đới');
+
+-- Thêm dữ liệu vào bảng plant_category
+INSERT INTO plant_category (plant_id, category_id) VALUES
+(1, 1), (1, 9), -- Lúa
+(2, 1), (2, 9), -- Ngô
+(3, 2), (3, 9), -- Xoài
+(4, 2), (4, 9), -- Cam
+(5, 5), (5, 9), -- Cà phê
+(6, 5), (6, 9), -- Ca cao
+(7, 5), (7, 9), -- Mía
+(8, 3), (8, 9), -- Cà chua
+(9, 3), (9, 4), (9, 9), -- Ớt
+(10, 3), (10, 4), -- Hành tây
+(11, 3), (11, 10), -- Cải bắp
+(12, 3), (12, 10), -- Xà lách
+(13, 3), (13, 9), -- Dưa chuột
+(14, 3), (14, 10), -- Bí ngô
+(15, 8), (15, 1), -- Đậu tây
+(16, 8), (16, 5), -- Đậu tương
+(17, 8), (17, 5), -- Lạc
+(18, 2), (18, 9), -- Dừa
+(19, 2), (19, 9), -- Chuối
+(20, 2), (20, 9), -- Thơm
+(21, 2), (21, 9), -- Đu đủ
+(22, 2), (22, 10), -- Đào
+(23, 2), (23, 10), -- Táo
+(24, 2), (24, 10), -- Nho
+(25, 2), (25, 10), -- Dâu tây
+(26, 2), (26, 10), -- Mâm xôi
+(27, 2), (27, 10), -- Việt quất
+(28, 2), (28, 9), -- Bơ
+(29, 2), (29, 10), -- Sung
+(30, 2), (30, 10), -- Lựu
+(31, 2), (31, 9), -- Ổi
+(32, 2), (32, 9), -- Sim
+(33, 2), (33, 9), -- Vải
+(34, 2), (34, 9), -- Nhãn
+(35, 2), (35, 9), -- Chôm chôm
+(36, 2), (36, 9), -- Sầu riêng
+(37, 2), (37, 9), -- Mít
+(38, 2), (38, 9), -- Măng cụt
+(39, 2), (39, 9), -- Bòn bon
+(40, 2), (40, 9), -- Bưởi
+(41, 2), (41, 9), -- Quýt
+(42, 2), (42, 4), (42, 9), -- Chanh
+(43, 2), (43, 9), -- Khế
+(44, 2), (44, 9), -- Na
+(45, 2), (45, 9), -- Mãng cầu xiêm
+(46, 2), (46, 9), -- Cóc
+(47, 2), (47, 9), -- Vú sữa
+(48, 2), (48, 10), -- Hồng
+(49, 2), (49, 10), -- Kiwi
+(50, 2), (50, 9); -- Chà là
+
+-- Thêm dữ liệu vào bảng uses
+INSERT INTO uses (use_name, description) VALUES
+('Thực phẩm', 'Sử dụng làm thức ăn'),
+('Làm thuốc', 'Có tính chất chữa bệnh'),
+('Gia vị', 'Sử dụng để tăng hương vị món ăn'),
+('Công nghiệp', 'Nguyên liệu cho sản xuất công nghiệp'),
+('Trang trí', 'Sử dụng để trang trí, làm cảnh'),
+('Làm dầu', 'Chiết xuất dầu từ cây'),
+('Làm đồ uống', 'Chế biến thành đồ uống'),
+('Xuất khẩu', 'Sản phẩm xuất khẩu kinh tế'),
+('Thức ăn gia súc', 'Làm thức ăn cho động vật'),
+('Làm giấy', 'Nguyên liệu sản xuất giấy');
+
+-- Thêm dữ liệu vào bảng plant_use
+INSERT INTO plant_use (plant_id, use_id) VALUES
+(1, 1), (1, 8), -- Lúa: thực phẩm, xuất khẩu
+(2, 1), (2, 9), (2, 6), -- Ngô: thực phẩm, thức ăn gia súc, làm dầu
+(3, 1), (3, 8), -- Xoài: thực phẩm, xuất khẩu
+(4, 1), (4, 2), -- Cam: thực phẩm, làm thuốc
+(5, 7), (5, 4), (5, 8), -- Cà phê: đồ uống, công nghiệp, xuất khẩu
+(6, 4), (6, 1), (6, 8), -- Ca cao: công nghiệp, thực phẩm, xuất khẩu
+(7, 4), (7, 8), -- Mía: công nghiệp, xuất khẩu
+(8, 1), (8, 2), -- Cà chua: thực phẩm, làm thuốc
+(9, 3), (9, 2), -- Ớt: gia vị, làm thuốc
+(10, 3), (10, 2), -- Hành tây: gia vị, làm thuốc
+(11, 1), (11, 2), -- Cải bắp: thực phẩm, làm thuốc
+(12, 1), (12, 2), -- Xà lách: thực phẩm, làm thuốc
+(13, 1), (13, 2), -- Dưa chuột: thực phẩm, làm thuốc
+(14, 1), (14, 9), -- Bí ngô: thực phẩm, thức ăn gia súc
+(15, 1), (15, 2), -- Đậu tây: thực phẩm, làm thuốc
+(16, 1), (16, 6), (16, 4), -- Đậu tương: thực phẩm, làm dầu, công nghiệp
+(17, 1), (17, 6), -- Lạc: thực phẩm, làm dầu
+(18, 1), (18, 6), (18, 4), -- Dừa: thực phẩm, làm dầu, công nghiệp
+(19, 1), (19, 9), -- Chuối: thực phẩm, thức ăn gia súc
+(20, 1), (20, 8), -- Thơm: thực phẩm, xuất khẩu
+(21, 1), (21, 2), -- Đu đủ: thực phẩm, làm thuốc
+(22, 1), (22, 5), -- Đào: thực phẩm, trang trí
+(23, 1), (23, 8), -- Táo: thực phẩm, xuất khẩu
+(24, 1), (24, 7), -- Nho: thực phẩm, làm đồ uống
+(25, 1), (25, 2), -- Dâu tây: thực phẩm, làm thuốc
+(26, 1), (26, 2), -- Mâm xôi: thực phẩm, làm thuốc
+(27, 1), (27, 2), -- Việt quất: thực phẩm, làm thuốc
+(28, 1), (28, 6), -- Bơ: thực phẩm, làm dầu
+(29, 1), (29, 2), -- Sung: thực phẩm, làm thuốc
+(30, 1), (30, 2), -- Lựu: thực phẩm, làm thuốc
+(31, 1), (31, 2), -- Ổi: thực phẩm, làm thuốc
+(32, 1), (32, 2), -- Sim: thực phẩm, làm thuốc
+(33, 1), (33, 8), -- Vải: thực phẩm, xuất khẩu
+(34, 1), (34, 8), -- Nhãn: thực phẩm, xuất khẩu
+(35, 1), (35, 8), -- Chôm chôm: thực phẩm, xuất khẩu
+(36, 1), (36, 8), -- Sầu riêng: thực phẩm, xuất khẩu
+(37, 1), (37, 2), -- Mít: thực phẩm, làm thuốc
+(38, 1), (38, 2), -- Măng cụt: thực phẩm, làm thuốc
+(39, 1), (39, 8), -- Bòn bon: thực phẩm, xuất khẩu
+(40, 1), (40, 2), -- Bưởi: thực phẩm, làm thuốc
+(41, 1), (41, 2), -- Quýt: thực phẩm, làm thuốc
+(42, 3), (42, 2), (42, 1), -- Chanh: gia vị, làm thuốc, thực phẩm
+(43, 1), (43, 2), -- Khế: thực phẩm, làm thuốc
+(44, 1), (44, 2), -- Na: thực phẩm, làm thuốc
+(45, 1), (45, 2), -- Mãng cầu xiêm: thực phẩm, làm thuốc
+(46, 1), (46, 8), -- Cóc: thực phẩm, xuất khẩu
+(47, 1), (47, 2), -- Vú sữa: thực phẩm, làm thuốc
+(48, 1), (48, 5), -- Hồng: thực phẩm, trang trí
+(49, 1), (49, 2), -- Kiwi: thực phẩm, làm thuốc
+(50, 1), (50, 8); -- Chà là: thực phẩm, xuất khẩu
+
+-- Thêm dữ liệu chi tiết vào bảng diseases
+INSERT INTO diseases (plant_id, disease_name, symptoms, treatment) VALUES
+(1, 'Đạo ôn lúa', 'Lá xuất hiện các đốm hình thoi màu nâu xám, có viền nâu đậm. Bệnh lan nhanh trong thời tiết ẩm ướt, có thể gây chết cây con hoặc làm hạt lép.', 'Sử dụng giống kháng bệnh, xử lý hạt giống bằng thuốc diệt nấm. Phun thuốc Propiconazole 25EC hoặc Tebuconazole. Cải thiện thoát nước ruộng, tránh bón đạm quá nhiều.'),
+(1, 'Bệnh khô vằn', 'Lá bắt đầu vàng từ đầu lá, sau đó khô dần xuống phiến lá. Cây sinh trưởng kém, hạt lép hoặc không chắc.', 'Bón phân kali đầy đủ, đặc biệt giai đoạn trổ bông. Tưới nước đều đặn, tránh để cây bị hạn. Phun phân lá chứa kali và các vi lượng cần thiết.'),
+(2, 'Bệnh đốm lá ngô', 'Lá xuất hiện các đốm tròn màu nâu, có thể có vòng đồng tâm. Bệnh nặng làm lá héo khô, ảnh hưởng quang hợp.', 'Luân canh với cây họ đậu. Phun thuốc Mancozeb 80WP hoặc Copper oxychloride. Loại bỏ và đốt các lá bệnh. Tránh tưới nước lên lá.'),
+(3, 'Bệnh thán thư xoài', 'Quả non có đốm đen nhỏ, sau mở rộng thành vết loét lõm. Quả chín bị thối nâu đen, không thể tiêu thụ.', 'Phun thuốc đồng như Copper sulfate trong mùa mưa. Cắt tỉa tạo tán thoáng mát. Thu hoạch đúng độ chín, tránh để quả quá già trên cây.'),
+(4, 'Bệnh loét khô cam', 'Cành non có vết loét màu nâu, vỏ cây nứt và bong ra. Cây yếu dần, lá vàng rụng.', 'Cắt bỏ các cành bệnh, phun thuốc diệt khuẩn Streptomycin. Tăng cường phân hữu cơ, tránh làm tổn thương vỏ cây khi canh tác.'),
+(5, 'Bệnh gỉ sắt cà phê', 'Mặt dưới lá xuất hiện bột màu vàng cam (bào tử nấm). Lá dần vàng và rụng sớm, ảnh hưởng năng suất.', 'Phun thuốc diệt nấm chuyên biệt như Triadimenol. Cải thiện thoáng gió trong vườn, tránh trồng quá dày. Thu gom và đốt lá rụng.'),
+(8, 'Bệnh héo xanh cà chua', 'Cây héo nhanh dù đất vẫn ẩm, lá còn xanh nhưng cây chết. Cắt thân thấy mạch dẫn bị nâu.', 'Sử dụng giống lai kháng bệnh (có ký hiệu V). Luân canh với cây khác họ ít nhất 3 năm. Khử trùng đất bằng thuốc hoặc phơi nắng.'),
+(8, 'Bệnh đốm nâu sớm', 'Lá già xuất hiện đốm nâu có vòng đồng tâm, sau lan ra toàn bộ lá. Quả có đốm nâu lõm ở cuống.', 'Phun thuốc Mancozeb hoặc Chlorothalonil định kỳ. Cải thiện thông gió, tránh tưới nước lên lá. Bón phân cân đối, tăng cường kháng bệnh.'),
+(18, 'Bệnh vàng lá dừa', 'Lá dừa vàng từ lá già lên lá non, sau đó rụng. Cây sinh trưởng chậm, ít ra hoa và quả.', 'Bón phân NPK cân đối, đặc biệt chú ý phân kali. Tưới nước đầy đủ trong mùa khô. Bổ sung các vi lượng như Mg, Zn, B.'),
+(19, 'Bệnh héo Panama chuối', 'Lá chuối vàng từ lá già, sau đó héo và gãy gập. Thân cây có vệt nâu khi cắt ngang. Cây chết trong vài tuần.', 'Sử dụng giống chuối kháng bệnh như Pisang Awak. Vệ sinh vườn sạch, không trồng chuối liên tục trên cùng một vùng. Khử trùng dụng cụ canh tác.'),
+(9, 'Bệnh đốm lá ớt', 'Lá ớt có đốm nâu nhỏ, dần mở rộng và thủng lỗ. Lá vàng rụng sớm, ảnh hưởng sinh trưởng.', 'Phun thuốc chứa đồng như Copper hydroxide. Tưới gốc thay vì tưới phun. Tăng cường thông gió, tránh trồng quá dày.'),
+(23, 'Bệnh sương mai táo', 'Lá và chồi non phủ một lớp bột trắng, lá xoăn và rụng. Quả non bị nhiễm có thể nứt hoặc rụng sớm.', 'Phun thuốc Sulfur hoặc Myclobutanil. Cắt tỉa để tăng thông gió. Tránh bón đạm quá nhiều trong thời kỳ mẫm mầm.'),
+(24, 'Bệnh phấn trắng nho', 'Lá, chồi và quả non phủ lớp bột trắng. Quả bị nhiễm có vị khó chịu, không phù hợp làm rượu.', 'Phun thuốc diệt nấm Myclobutanil hoặc Penconazole. Trồng các giống kháng bệnh. Cắt tỉa hợp lý để tăng thông gió.'),
+(36, 'Bệnh thối gốc sầu riêng', 'Gốc cây có vết loét nâu đen, chảy nhựa. Lá vàng và rụng, cây dần chết từ gốc lên.', 'Cắt bỏ phần gốc bị bệnh, bôi thuốc diệt nấm. Cải thiện thoát nước, tránh úng nước quanh gốc. Bón vôi để tăng pH đất.'),
+(37, 'Bệnh khô lá mít', 'Lá mít khô từ mép lá vào trong, dần lan toàn bộ lá. Cây sinh trưởng kém, ít ra hoa quả.', 'Tưới nước đầy đủ, đặc biệt mùa khô. Bón phân hữu cơ và phân kali. Che phủ gốc cây để giữ ẩm cho đất.');
+
+-- Thêm dữ liệu vào bảng users
+INSERT INTO users (username, password, email, role, create_at) VALUES
+('admin', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin@plantdb.com', 'Admin', '2024-01-01 08:00:00'),
+('nguyenvana', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'nguyenvana@email.com', 'User', '2024-01-15 10:30:00'),
+('lethib', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'lethib@email.com', 'User', '2024-02-01 14:20:00'),
+('tranvanc', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'tranvanc@email.com', 'User', '2024-02-10 09:15:00'),
+('phamthid', '$2b$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'phamthid@email.com', 'User', '2024-03-05 16:45:00');
+
+-- Thêm dữ liệu vào bảng search_logs
+INSERT INTO search_logs (user_id, keyword, search_date) VALUES
+(2, 'cây lúa', '2024-03-01 08:30:00'),
+(2, 'cây ăn quả', '2024-03-01 09:15:00'),
+(3, 'cà phê', '2024-03-02 10:20:00'),
+(3, 'cây nhiệt đới', '2024-03-02 11:30:00'),
+(4, 'rau củ', '2024-03-03 14:45:00'),
+(4, 'cây thuốc', '2024-03-03 15:20:00'),
+(5, 'xoài', '2024-03-04 08:10:00'),
+(2, 'sầu riêng', '2024-03-05 09:30:00'),
+(3, 'cây công nghiệp', '2024-03-05 16:20:00'),
+(4, 'ớt', '2024-03-06 11:15:00');
+
+-- Thêm dữ liệu vào bảng favorites
+INSERT INTO favorites (user_id, plant_id, create_at) VALUES
+(2, 1, '2024-03-01 08:35:00'),
+(2, 3, '2024-03-01 09:20:00'),
+(2, 36, '2024-03-05 09:35:00'),
+(3, 5, '2024-03-02 10:25:00'),
+(3, 18, '2024-03-02 11:35:00'),
+(4, 8, '2024-03-03 14:50:00'),
+(4, 9, '2024-03-06 11:20:00'),
+(5, 3, '2024-03-04 08:15:00'),
+(5, 19, '2024-03-04 08:20:00'),
+(2, 19, '2024-03-07 10:30:00');
+
+-- Thêm dữ liệu vào bảng plant_images
+INSERT INTO plant_images (plant_id, image_url, caption, is_primary) VALUES
+(1, '/images/plants/lua_1.jpg', 'Ruộng lúa xanh tươi', TRUE),
+(1, '/images/plants/lua_2.jpg', 'Hạt lúa chín vàng', FALSE),
+(2, '/images/plants/ngo_1.jpg', 'Cây ngô đang phát triển', TRUE),
+(2, '/images/plants/ngo_2.jpg', 'Bắp ngô chín', FALSE),
+(3, '/images/plants/xoai_1.jpg', 'Cây xoài ra hoa', TRUE),
+(3, '/images/plants/xoai_2.jpg', 'Quả xoài chín', FALSE),
+(4, '/images/plants/cam_1.jpg', 'Cây cam đang ra quả', TRUE),
+(5, '/images/plants/cafe_1.jpg', 'Cây cà phê ra hoa', TRUE),
+(5, '/images/plants/cafe_2.jpg', 'Cherry cà phê chín đỏ', FALSE),
+(8, '/images/plants/chua_1.jpg', 'Cây cà chua ra quả', TRUE),
+(18, '/images/plants/dua_1.jpg', 'Cây dừa ven biển', TRUE),
+(19, '/images/plants/chuoi_1.jpg', 'Cây chuối có nải', TRUE),
+(36, '/images/plants/sau_rieng_1.jpg', 'Sầu riêng trên cây', TRUE),
+(37, '/images/plants/mit_1.jpg', 'Quả mít to trên thân', TRUE);
+
+-- Thêm dữ liệu chi tiết vào bảng plant_references
+INSERT INTO plant_references (plant_id, source_name, url, author, published_year) VALUES
+(1, 'Cẩm nang kỹ thuật trồng lúa bền vững', 'https://www.riceknowledge.gov.vn/lua-nuoc', 'Viện Lúa Quốc Gia - TS. Nguyễn Văn Hùng', 2023),
+(3, 'Hướng dẫn trồng và chăm sóc cây xoài xuất khẩu', 'https://www.fruitvn.com/xoai-xuat-khau', 'Viện Cây Ăn Quả - PGS.TS. Lê Thị Hoa', 2022),
+(5, 'Quy trình sản xuất cà phê chất lượng cao', 'https://www.coffee.org.vn/ky-thuat', 'Viện Nghiên cứu Cà phê và Ca cao Việt Nam - ThS. Trần Minh Tuấn', 2023),
+(8, 'Kỹ thuật trồng cà chua an toàn theo VietGAP', 'https://www.vietgap.com/ca-chua-an-toan', 'Trung tâm Khuyến nông Quốc gia - KS. Phạm Văn Nam', 2022),
+(18, 'Cây dừa - Cây kinh tế vùng ven biển', 'https://www.coconut.gov.vn/kinh-te', 'Hiệp hội Dừa Việt Nam - TS. Võ Thành Danh', 2023),
+(19, 'Quy trình trồng chuối theo tiêu chuẩn GlobalGAP', 'https://www.banana.export.vn/globalgap', 'Viện Cây Ăn Quả Miền Nam - ThS. Nguyễn Thị Lan', 2022),
+(36, 'Kỹ thuật trồng sầu riêng cho năng suất cao', 'https://www.durian.org.vn/ky-thuat-trong', 'Hiệp hội Sầu riêng Việt Nam - KS. Lương Văn Thành', 2023),
+(2, 'Hướng dẫn sản xuất ngô lai năng suất cao', 'https://www.corn.agri.vn/ngo-lai', 'Viện Nghiên cứu Ngô - TS. Đỗ Văn Dũng', 2022),
+(4, 'Cây cam và kỹ thuật chăm sóc tăng năng suất', 'https://www.citrus.vn/cam-canh', 'Trung tâm Nghiên cứu Cam chanh - ThS. Hoàng Minh Đức', 2023),
+(6, 'Sản xuất ca cao bền vững tại Việt Nam', 'https://www.cacao.research.vn/ben-vung', 'Viện Nghiên cứu Ca cao - PGS.TS. Phạm Thanh Vũ', 2022),
+(10, 'Kỹ thuật trồng hành tây vụ đông xuân', 'https://www.vegetable.org.vn/hanh-tay', 'Viện Rau quả - ThS. Lê Văn Hải', 2023),
+(15, 'Cây đậu tây và vai trò trong luân canh', 'https://www.legume.agri.vn/dau-tay', 'Viện Cây Lương thực - TS. Bùi Thị Mai', 2022),
+(20, 'Thơm MD2 - Giống thơm xuất khẩu chất lượng cao', 'https://www.pineapple.vn/md2-export', 'Viện Cây Ăn Quả - KS. Trần Quốc Tuấn', 2023),
+(25, 'Kỹ thuật trồng dâu tây trong nhà màng', 'https://www.strawberry.vn/nha-mang', 'Trung tâm Ứng dụng Công nghệ - ThS. Ngô Thị Hương', 2022),
+(28, 'Cây bơ và tiềm năng phát triển tại Việt Nam', 'https://www.avocado.research.vn/tiem-nang', 'Viện Nghiên cứu Cây Ăn Quả - TS. Vũ Công Hậu', 2023)

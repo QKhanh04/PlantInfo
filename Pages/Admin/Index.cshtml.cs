@@ -32,7 +32,7 @@ namespace PlantManagement.Pages.Admin
         public int CurrentPage { get; set; } = 1;
         [BindProperty(SupportsGet = true)]
         public int TotalPages { get; set; }
-        public const int pageSize = 3;
+        public const int pageSize = 9;
  
         [BindProperty(SupportsGet = true)]
         public FilterViewModel FilterVM { get; set; }

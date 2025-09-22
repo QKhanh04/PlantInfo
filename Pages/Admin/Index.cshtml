@@ -3,90 +3,156 @@
 @{
     ViewData["Title"] = "Plants - Admin";
 }
+
+
+
+
 <!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <style>
-        @* .admin-container body {
-            background-color: #f9f9f9;
-        }
-
-        .admin-container .title {
-            color: #2c3e50;
-            font-size: 24px;
-            margin-bottom: 16px;
-        }
-
-        .admin-container .btn {
-            padding: 8px 16px;
-            background: #3498db;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-        }
-
-        .admin-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        } *@
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="~/css/admin-index.css" />
 </head>
 
 <body>
-    <h2>Danh sách cây trồng</h2>
-    <p>Tổng cộng: @Model.Plants.TotalItems cây</p>
-
-    <form method="get" class="row mb-3">
-        <div class="col-md-4">
-            <input type="text" name="Search" value="@Model.FilterVM.Keyword" class="form-control" placeholder="Tìm kiếm theo tên">
-        </div>
-        <div class="col-md-4">
-            <select name="CategoryFilter" class="form-select">
-                <option value="">-- Tất cả category --</option>
-                @* <option value="Cây gỗ" selected="@(Model.FilterVM.CategoryId == "Cây gỗ")">Cây gỗ</option>
-                <option value="Hoa" selected="@(Model.CategoryFilter == "Hoa")">Hoa</option>
-                <option value="Cây ăn quả" selected="@(Model.CategoryFilter == "Cây ăn quả")">Cây ăn quả</option> *@
-            </select>
-        </div>
-        <div class="col-md-4">
-            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-        </div>
-    </form>
-
-    <div class="row">
-        @foreach (var plant in Model.Plants.Items)
+    <div class="admin-container">
+        <h1>Quản lý cây trồng</h1>
+        <!-- Hiển thị thông báo lỗi -->
+        @if (TempData["Error"] != null)
         {
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <img src="@plant.CommonName" class="card-img-top" alt="@plant.CommonName">
-                    <div class="card-body">
-                        <h5 class="card-title">@plant.CommonName</h5>
-                        <small class="text-muted">@plant.CommonName</small>
-                        <p class="card-text mt-2">@plant.Description</p>
-                        <span class="badge bg-success">@plant.CommonName</span>
-                    </div>
-                    <div class="card-footer">
-                        <a class="btn btn-outline-primary btn-sm" href="#">Sửa</a>
-                        <a class="btn btn-outline-danger btn-sm" href="#">Xóa</a>
-                    </div>
-                </div>
+            <div class="alert alert-danger">
+                @TempData["Error"]
             </div>
         }
-    </div>
+        <!-- Form bộ lọc -->
+        <form method="get" class="mb-3">
+            <div class="row g-2 align-items-center mb-2">
+                <div class="col-md-9">
+                    <input asp-for="FilterVM.Keyword" class="form-control"
+                        placeholder="Tìm theo tên hoặc tên khoa học" />
+                </div>
+                <div class="col-md-3 search-button">
+                    <button type="submit" class="btn btn-primary w-100">Tìm kiếm</button>
+                </div>
+            </div>
+            <div class="row g-2">
+                <div class="col-md-3">
+                    <select asp-for="FilterVM.CategoryId" class="form-select"
+                        asp-items="@(new SelectList(Model.Categories, "CategoryId", "CategoryName"))">
+                        <option value="">-- Chọn Danh mục --</option>
+                    </select>
+                </div>
+            </div>
+        </form>
 
-    <nav>
-        <ul class="pagination">
-            @for (int i = 1; i <= Model.TotalPages; i++)
+        <!-- Bảng danh sách -->
+        @if (Model.Plants != null && Model.Plants.Items.Any())
+        {
+            <div class="row">
+                @foreach (var plant in Model.Plants.Items)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100">
+                            <img src="@plant.CommonName" class="card-img-top" alt="@plant.CommonName">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center">
+                                    <h5 class="card-title mb-0 me-2">@plant.CommonName</h5>
+                                    <span class="badge bg-success ms-auto">@plant.CommonName</span>
+                                </div>
+
+
+                                <small class="text-muted">@plant.Species?.ScientificName</small>
+                                <p class="card-text mt-2">@plant.Description</p>
+                            </div>
+                            <div class="card-footer">
+                                <a class="btn btn-outline-primary btn-sm" href="#">Sửa</a>
+                                <a class="btn btn-outline-danger btn-sm" href="#">Xóa</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <!-- Phân trang -->
+            @if (Model.TotalPages > 1)
             {
-                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                    <a class="page-link"
-                        href="?CurrentPage=@i&Keyword=@Model.FilterVM.Keyword&CategoryId=@Model.FilterVM.CategoryId">@i</a>
-                </li>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <!-- Nút Trước -->
+                        <li class="page-item @(Model.CurrentPage <= 1 ? "disabled" : "")">
+                            <a class="page-link"
+                                href="/Admin/Index?CurrentPage=@(Model.CurrentPage - 1)&Keyword=@Model.FilterVM.Keyword&CategoryId=@Model.FilterVM.CategoryId">
+                                Trước
+                            </a>
+                        </li>
+
+                        @{
+                            int start = Math.Max(1, Model.CurrentPage - 2);
+                            int end = Math.Min(Model.TotalPages, Model.CurrentPage + 2);
+                            if (Model.CurrentPage <= 3)
+                            {
+                                start = 1;
+                                end = Math.Min(5, Model.TotalPages);
+                            }
+                            else if (Model.CurrentPage >= Model.TotalPages - 2)
+                            {
+                                end = Model.TotalPages;
+                                start = Math.Max(1, Model.TotalPages - 4);
+                            }
+                        }
+
+                        <!-- Dấu ... trước -->
+                        @if (start > 1)
+                        {
+                            <li class="page-item">
+                                <a class="page-link"
+                                    href="/Admin/Index?CurrentPage=1&Keyword=@Model.FilterVM.Keyword&CategoryId=@Model.FilterVM.CategoryId">
+                                    1
+                                </a>
+                            </li>
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        }
+
+                        <!-- Số trang -->
+                        @for (int i = start; i <= end; i++)
+                        {
+                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                <a class="page-link"
+                                    href="/Admin/Index?CurrentPage=@i&Keyword=@Model.FilterVM.Keyword&CategoryId=@Model.FilterVM.CategoryId">
+                                    @i
+                                </a>
+                            </li>
+                        }
+
+                        <!-- Dấu ... sau -->
+                        @if (end < Model.TotalPages)
+                        {
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                            <li class="page-item">
+                                <a class="page-link"
+                                    href="/Admin/Index?CurrentPage=@Model.TotalPages&Keyword=@Model.FilterVM.Keyword&CategoryId=@Model.FilterVM.CategoryId">
+                                    @Model.TotalPages
+                                </a>
+                            </li>
+                        }
+
+                        <!-- Nút Sau -->
+                        <li class="page-item @(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
+                            <a class="page-link"
+                                href="/Admin/Index?CurrentPage=@(Model.CurrentPage + 1)&Keyword=@Model.FilterVM.Keyword&CategoryId=@Model.FilterVM.CategoryId">
+                                Sau
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             }
-        </ul>
-    </nav>
+
+        }
+        else
+        {
+            <p class="text-muted">Không tìm thấy cây nào.</p>
+        }
+    </div>
 </body>

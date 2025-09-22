@@ -318,8 +318,6 @@ public partial class PlantDbContext : DbContext
 
             entity.HasIndex(e => e.Email, "users_email_key").IsUnique();
 
-            entity.HasIndex(e => e.Username, "users_username_key").IsUnique();
-
             entity.Property(e => e.UserId).HasColumnName("user_id");
             entity.Property(e => e.CreateAt)
                 .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -328,9 +326,6 @@ public partial class PlantDbContext : DbContext
             entity.Property(e => e.Email)
                 .HasMaxLength(255)
                 .HasColumnName("email");
-            entity.Property(e => e.FullName)
-                .HasMaxLength(255)
-                .HasColumnName("full_name");
             entity.Property(e => e.Password)
                 .HasMaxLength(255)
                 .HasColumnName("password");

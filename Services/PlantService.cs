@@ -43,8 +43,8 @@ namespace PlantManagement.Service
                 if (!string.IsNullOrWhiteSpace(keyword))
                 {
                     query = query.Where(p =>
-                        p.CommonName.Contains(keyword) ||
-                        (p.Species != null && p.Species.ScientificName.Contains(keyword)));
+                        p.CommonName.ToLower().Contains(keyword.ToLower()) ||
+                        (p.Species != null && p.Species.ScientificName.ToLower().Contains(keyword.ToLower())));
                 }
                 if (categoryId.HasValue)
                 {
