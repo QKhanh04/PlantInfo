@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PlantManagement.Common.Results;
+using PlantManagement.DTOs;
 using PlantManagement.Models;
 using PlantManagement.Repositories;
 using PlantManagement.Services;
@@ -15,72 +17,86 @@ namespace PlantManagement.Service
     public class PlantService : IPlantService
     {
         private readonly IPlantRepository _plantRepo;
-        public PlantService(IPlantRepository plantRepo)
+        private readonly IMapper _mapper;
+        public PlantService(IPlantRepository plantRepo, IMapper mapper)
         {
             _plantRepo = plantRepo;
+            _mapper = mapper;
         }
         // 1. Danh sách + tìm kiếm + phân trang
 
-        public async Task<ServiceResult<PagedResult<Plant>>> GetPagedAsync(
+            public async Task<ServiceResult<PagedResult<PlantDTO>>> GetPagedAsync(
    string? keyword,
    int page,
    int pageSize,
-   int? categoryId = null,
-   int? useId = null,
-   int? diseaseId = null
-
+   int? categoryId = null
 )
         {
             try
             {
                 var query = _plantRepo.Query()
                     .Include(p => p.Species)
-                    .Include(p => p.GrowthCondition)
                     .Include(p => p.Categories)
-                    .Include(p => p.Uses)
-                    .Include(p => p.Diseases)
+                    .Include(p => p.PlantImages)
                     .AsQueryable();
                 if (!string.IsNullOrWhiteSpace(keyword))
                 {
+                    var lowerKeyword = keyword.ToLower();
                     query = query.Where(p =>
-                        p.CommonName.ToLower().Contains(keyword.ToLower()) ||
-                        (p.Species != null && p.Species.ScientificName.ToLower().Contains(keyword.ToLower())));
+                        p.CommonName.ToLower().Contains(lowerKeyword) ||
+                        (p.Species != null && p.Species.ScientificName.ToLower().Contains(lowerKeyword)));
                 }
                 if (categoryId.HasValue)
                 {
                     query = query.Where(p => p.Categories.Any(c => c.CategoryId == categoryId.Value));
                 }
-                if (useId.HasValue)
-                {
-                    query = query.Where(p => p.Uses.Any(u => u.UseId == useId.Value));
-                }
-                if (diseaseId.HasValue)
-                {
-                    query = query.Where(p => p.Diseases.Any(d => d.DiseaseId == diseaseId.Value));
-                }
-               
-
+ 
+ 
                 var total = await query.CountAsync();
                 var data = await query
                     .OrderBy(p => p.CommonName)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize)
                     .ToListAsync();
-
-                var result = new PagedResult<Plant>
+ 
+                var dtoList = _mapper.Map<List<PlantDTO>>(data);
+ 
+ 
+                var result = new PagedResult<PlantDTO>
                 {
-                    Items = data,
+                    Items = dtoList,
                     CurrentPage = page,
                     PageSize = pageSize,
                     TotalItems = total,
                     TotalPages = (int)Math.Ceiling((double)total / pageSize)
                 };
-                return ServiceResult<PagedResult<Plant>>.Ok(result);
+                return ServiceResult<PagedResult<PlantDTO>>.Ok(result);
             }
             catch (Exception ex)
             {
-                return ServiceResult<PagedResult<Plant>>.Fail($"Lỗi khi lấy dữ liệu: {ex.Message}");
+                return ServiceResult<PagedResult<PlantDTO>>.Fail($"Lỗi khi lấy dữ liệu: {ex.Message}");
             }
+        }
+ 
+
+        public async Task<ServiceResult<PlantDetailDTO>> GetDetailAsync(int id)
+        {
+            var plant = await _plantRepo.Query()
+                .Include(p => p.Species)
+                .Include(p => p.Categories)
+                .Include(p => p.PlantImages)
+                .Include(p => p.Uses)
+                .Include(p => p.Diseases)
+                .Include(p => p.GrowthCondition)
+                .FirstOrDefaultAsync(p => p.PlantId == id);
+ 
+            if (plant == null)
+                return ServiceResult<PlantDetailDTO>.Fail("Không tìm thấy cây!");
+ 
+            var dtoList = _mapper.Map<PlantDetailDTO>(plant);
+ 
+ 
+            return ServiceResult<PlantDetailDTO>.Ok(dtoList);
         }
         // 2. Lấy chi tiết
         public async Task<ServiceResult<Plant>> GetByIdAsync(int id)

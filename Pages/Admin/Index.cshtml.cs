@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using PlantManagement.Common.Results;
+using PlantManagement.DTOs;
 using PlantManagement.Models;
 using PlantManagement.Services;
 using PlantManagement.ViewModel;
@@ -27,7 +28,7 @@ namespace PlantManagement.Pages.Admin
             _categoryService = categoryService;
         }
  
-        public PagedResult<Plant>? Plants { get; set; }
+        public PagedResult<PlantDTO>? Plants { get; set; }
         [BindProperty(SupportsGet = true)]
         public int CurrentPage { get; set; } = 1;
         [BindProperty(SupportsGet = true)]
@@ -44,7 +45,7 @@ namespace PlantManagement.Pages.Admin
         public async Task<IActionResult> OnGetAsync()
         {
             var result = await _plantService.GetPagedAsync(FilterVM.Keyword, CurrentPage, pageSize,
-            FilterVM.CategoryId, FilterVM.UseId, FilterVM.DiseaseId);
+            FilterVM.CategoryId);
             var categories = await _categoryService.GetAllCategories();
             _logger.LogWarning("Lỗi khi lấy danh sách cây: {Message}", result.Data.Items);
             if (!result.Success)

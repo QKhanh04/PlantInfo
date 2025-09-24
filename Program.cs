@@ -28,6 +28,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/Denied";  // Trang khi không có quyền
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
     });
+// Add AutoMapper for all profiles in the assembly
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
 builder.Services.AddAuthorization();
 var app = builder.Build();
 

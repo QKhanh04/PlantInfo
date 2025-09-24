@@ -10,8 +10,6 @@ namespace PlantManagement.ViewModel
         public string? Keyword { get; set; }
         public int? CategoryId { get; set; }
 
-        public int? UseId { get; set; }
 
-        public int? DiseaseId { get; set; }
     }
 }
