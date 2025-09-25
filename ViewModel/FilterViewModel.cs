@@ -9,7 +9,7 @@ namespace PlantManagement.ViewModel
     {
         public string? Keyword { get; set; }
         public int? CategoryId { get; set; }
-
+        public string? OrderName { get; set; }
 
     }
 }

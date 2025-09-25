@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using PlantManagement.Data;
 using PlantManagement.Repositories;
-using PlantManagement.Service;
 using PlantManagement.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +16,9 @@ builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPlantService, PlantService>();
 builder.Services.AddScoped<IPlantRepository, PlantRepository>();
+builder.Services.AddScoped<ISpeciesService, SpeciesService>();
+builder.Services.AddScoped<ISpeciesRepository, SpeciesRepository>();
+
 
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -44,13 +46,12 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();  
 
 app.UseRouting();
 
-app.UseAuthorization();
-app.UseAuthentication();
-app.MapStaticAssets();
-app.MapRazorPages()
-   .WithStaticAssets();
+app.UseAuthentication(); 
+app.UseAuthorization(); 
+app.MapRazorPages();
 
 app.Run();

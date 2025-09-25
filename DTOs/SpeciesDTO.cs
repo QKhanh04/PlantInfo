@@ -7,9 +7,9 @@ namespace PlantManagement.DTOs
 {
     public class SpeciesDTO
     {
-        public string SpeciesName { get; set; }
-        public string SpeciesGenius { get; set; }
-        public string SpeciesFamily { get; set; }
-        public string SpeciesOrder { get; set; }
+        public string ScientificName { get; set; }
+        public string Genus { get; set; }
+        public string Family { get; set; }
+        public string OrderName { get; set; }
     }
 }

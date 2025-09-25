@@ -15,6 +15,12 @@ public partial class Plant
 
     public string? Description { get; set; }
 
+    public bool? IsActive { get; set; }
+
+    public DateTime? CreateAt { get; set; }
+
+    public DateTime? UpdateAt { get; set; }
+
     public virtual ICollection<Disease> Diseases { get; set; } = new List<Disease>();
 
     public virtual ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();

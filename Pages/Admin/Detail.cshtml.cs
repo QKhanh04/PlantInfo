@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,8 @@ using PlantManagement.Services;
 
 namespace PlantManagement.Pages.Admin
 {
+
+    [Authorize(Roles = "Admin")]
     public class DetailModel : PageModel
     {
         private readonly ILogger<DetailModel> _logger;
@@ -35,7 +38,6 @@ namespace PlantManagement.Pages.Admin
             }
             Plants = result.Data;
             return Page();
-
 
         }
     }

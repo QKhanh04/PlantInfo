@@ -10,10 +10,12 @@ namespace PlantManagement.Services
 {
     public interface IPlantService
     {
-        Task<ServiceResult<PagedResult<PlantDTO>>> GetPagedAsync(string? keyword,
+        Task<ServiceResult<PagedResult<PlantDTO>>> GetPagedAsync(
+   string? keyword,
    int page,
    int pageSize,
-   int? categoryId);
+   int? categoryId,
+   string? orderName);
         Task<ServiceResult<Plant>> GetByIdAsync(int id);
         Task<ServiceResult<Plant>> CreateAsync(Plant plant);
         Task<ServiceResult<Plant>> UpdateAsync(Plant plant);

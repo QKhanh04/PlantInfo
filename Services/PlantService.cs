@@ -12,24 +12,27 @@ using PlantManagement.Services;
 
 
 
-namespace PlantManagement.Service
+namespace PlantManagement.Services
 {
     public class PlantService : IPlantService
     {
         private readonly IPlantRepository _plantRepo;
         private readonly IMapper _mapper;
+ 
         public PlantService(IPlantRepository plantRepo, IMapper mapper)
         {
             _plantRepo = plantRepo;
             _mapper = mapper;
         }
         // 1. Danh sách + tìm kiếm + phân trang
-
-            public async Task<ServiceResult<PagedResult<PlantDTO>>> GetPagedAsync(
+ 
+        public async Task<ServiceResult<PagedResult<PlantDTO>>> GetPagedAsync(
    string? keyword,
    int page,
    int pageSize,
-   int? categoryId = null
+   int? categoryId,
+   string? orderName
+ 
 )
         {
             try
@@ -50,6 +53,11 @@ namespace PlantManagement.Service
                 {
                     query = query.Where(p => p.Categories.Any(c => c.CategoryId == categoryId.Value));
                 }
+                if (!string.IsNullOrEmpty(orderName))
+                {
+                    query = query.Where(p => p.Species != null && p.Species.OrderName == orderName);
+                }
+ 
  
  
                 var total = await query.CountAsync();
@@ -78,7 +86,6 @@ namespace PlantManagement.Service
             }
         }
  
-
         public async Task<ServiceResult<PlantDetailDTO>> GetDetailAsync(int id)
         {
             var plant = await _plantRepo.Query()
@@ -88,6 +95,7 @@ namespace PlantManagement.Service
                 .Include(p => p.Uses)
                 .Include(p => p.Diseases)
                 .Include(p => p.GrowthCondition)
+                .Include(p => p.PlantImages)
                 .FirstOrDefaultAsync(p => p.PlantId == id);
  
             if (plant == null)
@@ -98,6 +106,8 @@ namespace PlantManagement.Service
  
             return ServiceResult<PlantDetailDTO>.Ok(dtoList);
         }
+ 
+ 
         // 2. Lấy chi tiết
         public async Task<ServiceResult<Plant>> GetByIdAsync(int id)
         {

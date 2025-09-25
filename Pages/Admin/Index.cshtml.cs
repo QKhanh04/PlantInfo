@@ -11,7 +11,7 @@ using PlantManagement.DTOs;
 using PlantManagement.Models;
 using PlantManagement.Services;
 using PlantManagement.ViewModel;
- 
+
 namespace PlantManagement.Pages.Admin
 {
     // [Authorize(Roles = "Admin")]
@@ -20,45 +20,74 @@ namespace PlantManagement.Pages.Admin
         private readonly ILogger<IndexModel> _logger;
         private readonly IPlantService _plantService;
         private readonly ICategoryService _categoryService;
- 
-        public IndexModel(ILogger<IndexModel> logger, IPlantService plantService, ICategoryService categoryService)
+        private readonly ISpeciesService _speciesService;
+
+        public IndexModel(ILogger<IndexModel> logger, IPlantService plantService, ICategoryService categoryService, ISpeciesService speciesService)
         {
             _logger = logger;
             _plantService = plantService;
             _categoryService = categoryService;
+            _speciesService = speciesService;
         }
- 
+
         public PagedResult<PlantDTO>? Plants { get; set; }
         [BindProperty(SupportsGet = true)]
         public int CurrentPage { get; set; } = 1;
         [BindProperty(SupportsGet = true)]
         public int TotalPages { get; set; }
         public const int pageSize = 9;
- 
+
         [BindProperty(SupportsGet = true)]
         public FilterViewModel FilterVM { get; set; }
         public IEnumerable<Category> Categories { get; set; } = new List<Category>();
-        public List<Use> Uses { get; set; } = new();
-        public List<Disease> Diseases { get; set; } = new();
- 
- 
+        public List<string> OrderNames { get; set; } = new List<string>();
+
+
         public async Task<IActionResult> OnGetAsync()
         {
+            
             var result = await _plantService.GetPagedAsync(FilterVM.Keyword, CurrentPage, pageSize,
-            FilterVM.CategoryId);
+            FilterVM.CategoryId, FilterVM.OrderName);
             var categories = await _categoryService.GetAllCategories();
+            OrderNames = await _speciesService.GetDistinctOrderNameAsync();
             _logger.LogWarning("Lỗi khi lấy danh sách cây: {Message}", result.Data.Items);
             if (!result.Success)
             {
- 
+
                 TempData["Error"] = result.Message;
                 return Page();
             }
             Plants = result.Data;
             TotalPages = result.Data.TotalPages;
- 
+
             Categories = categories.Data;
             return Page();
         }
+
+        public async Task<PartialViewResult> OnGetPartialAsync(string keyword, int? categoryId, string orderName, int currentPage = 1)
+        {
+            var result = await _plantService.GetPagedAsync(keyword, currentPage, pageSize, categoryId, orderName);
+
+            if (!result.Success)
+            {
+                Plants = new PagedResult<PlantDTO>
+                {
+                    Items = new List<PlantDTO>(),
+                    CurrentPage = 1,
+                    TotalPages = 0
+                };
+            }
+            else
+            {
+                Plants = result.Data;
+                TotalPages = result.Data.TotalPages;
+                CurrentPage = result.Data.CurrentPage;
+            }
+
+            return Partial("_PlantListPartial", this);
+        }
+
+
+
     }
 }

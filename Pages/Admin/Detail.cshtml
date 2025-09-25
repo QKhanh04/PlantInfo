@@ -1,173 +1,487 @@
-@page
-@model PlantManagement.Pages.Admin.DetailModel
+@page "{id:int}"
+@model DetailModel
 @{
     ViewData["Title"] = "Chi tiết cây trồng";
 }
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Model.Plants.CommonName - Chi tiết cây trồng</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #2d5016;
+            --light-green: #4a7c59;
+            --accent-green: #7fb069;
+            --soft-green: #f0f7ed;
+            --warm-white: #fafafa;
+            --text-dark: #2c3e50;
+            --text-muted: #6c757d;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.12);
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-<div class="container py-4">
-    <!-- Back -->
-    <a class="text-decoration-none text-dark mb-3 d-inline-flex align-items-center"
-       href="javascript:history.back()">
-        <i class="bi bi-arrow-left me-2"></i> Quay lại
-    </a>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    <!-- Header -->
-    <div class="row align-items-center mb-4">
-        <div class="col-lg-7">
-            <div class="mb-2">
-                @foreach (var category in Model.Plants.CategoryNames)
-                {
-                    <span class="badge bg-success me-1">@category</span>
-                }
-            </div>
-            <h1 class="fw-bold">@Model.Plants.CommonName</h1>
-            <div class="fst-italic text-muted mb-3">@Model.Plants.Species?.SpeciesName</div>
-            <p class="text-muted">@Model.Plants.Description</p>
-            <div class="d-flex flex-wrap gap-3 mt-3 text-muted">
-                <div><i class="bi bi-geo-alt me-1"></i>@Model.Plants.Origin</div>
-                <div><i class="bi bi-calendar3 me-1"></i>Mùa xuân – Mùa hè</div>
-            </div>
-        </div>
-        <div class="col-lg-5">
-            @if (Model.Plants.ImageUrls != null && Model.Plants.ImageUrls.Any())
-            {
-                <img src="@Model.Plants.ImageUrls.First()" 
-                     alt="@Model.Plants.CommonName" 
-                     class="img-fluid rounded"
-                     style="width:100%; height:420px; object-fit:cover;" />
-            }
-        </div>
-    </div>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--warm-white) 0%, var(--soft-green) 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
 
-    <!-- Stats row -->
-    <div class="row g-3 mb-4">
-        <div class="col-6 col-md-3">
-            <div class="stat-card h-100">
-                <i class="bi bi-brightness-high"></i>
-                <div class="fw-bold mt-2">Ánh sáng</div>
-                <div class="text-muted small mt-1">6-8 giờ/ngày</div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="stat-card h-100">
-                <i class="bi bi-droplet"></i>
-                <div class="fw-bold mt-2">Tưới nước</div>
-                <div class="text-muted small mt-1">@Model.Plants.GrowthCondition?.WaterRequirement</div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="stat-card h-100">
-                <i class="bi bi-thermometer-half"></i>
-                <div class="fw-bold mt-2">Nhiệt độ</div>
-                <div class="text-muted small mt-1">@Model.Plants.GrowthCondition?.TemperatureRange</div>
-            </div>
-        </div>
-        <div class="col-6 col-md-3">
-            <div class="stat-card h-100">
-                <i class="bi bi-calendar-heart"></i>
-                <div class="fw-bold mt-2">Tuổi thọ</div>
-                <div class="text-muted small mt-1">20-50 năm</div>
-            </div>
-        </div>
-    </div>
+        .detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
 
-    <!-- Basic Info & Growth Condition -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-6">
-            <div class="info-box">
-                <div class="section-title">Thông tin cơ bản</div>
-                <div class="kv-row">
-                    <div class="kv-key">Họ thực vật</div>
-                    <div class="text-muted small mt-1">@Model.Plants.Species?.SpeciesFamily</div>
-                </div>
-                <div class="kv-row">
-                    <div class="kv-key">Chi</div>
-                    <div class="text-muted small mt-1">@Model.Plants.Species?.SpeciesGenius</div>
-                </div>
-                <div class="kv-row">
-                    <div class="kv-key">Bộ</div>
-                    <div class="text-muted small mt-1">@Model.Plants.Species?.SpeciesOrder</div>
-                </div>
-                <div class="kv-row">
-                    <div class="kv-key">Xuất xứ</div>
-                    <div class="text-muted small mt-1">@Model.Plants.Origin</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="info-box">
-                <div class="section-title">Điều kiện sinh trưởng</div>
-                <div class="kv-row">
-                    <div class="kv-key">Loại đất</div>
-                    <div class="text-muted small mt-1">@Model.Plants.GrowthCondition?.SoilType</div>
-                </div>
-                <div class="kv-row">
-                    <div class="kv-key">Ánh sáng</div>
-                    <div class="text-muted small mt-1">@Model.Plants.GrowthCondition?.Sunlight</div>
-                </div>
-                <div class="kv-row">
-                    <div class="kv-key">Khí hậu</div>
-                    <div class="text-muted small mt-1">@Model.Plants.GrowthCondition?.Climate</div>
-                </div>
-            </div>
-        </div>
-    </div>
+        /* Back Button */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.75rem 1.5rem;
+            background: white;
+            border: 2px solid var(--primary-green);
+            border-radius: 50px;
+            color: var(--primary-green);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: 0 4px 20px var(--shadow-light);
+            margin-bottom: 2rem;
+        }
 
-    <!-- Uses & Propagation -->
-    <div class="row g-4 mb-4">
-        <div class="col-md-6">
-            <div class="info-box">
-                <div class="section-title">Công dụng và lợi ích</div>
-                <div class="fw-bold mb-2">Công dụng chính</div>
-                <div class="mb-3">
-                    @foreach (var u in Model.Plants.Uses)
+        .back-button:hover {
+            background: var(--primary-green);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px var(--shadow-medium);
+        }
+
+        /* Header Section */
+        .plant-header {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px var(--shadow-light);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .plant-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, var(--accent-green), var(--light-green));
+            border-radius: 50%;
+            opacity: 0.1;
+            transform: translate(50%, -50%);
+        }
+
+        .category-badges {
+            margin-bottom: 1rem;
+        }
+
+        .badge-custom {
+            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(45, 80, 22, 0.3);
+        }
+
+        .plant-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .scientific-name {
+            font-style: italic;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .plant-description {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .plant-meta {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .meta-item i {
+            color: var(--accent-green);
+        }
+
+        .plant-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--border-radius);
+            box-shadow: 0 15px 50px var(--shadow-medium);
+        }
+
+        .plant-image img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .plant-image:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Stats Cards */
+        .stats-section {
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 8px 30px var(--shadow-light);
+            transition: var(--transition);
+            height: 100%;
+            border: 1px solid rgba(45, 80, 22, 0.1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 50px var(--shadow-medium);
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .stat-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Info Boxes */
+        .info-section {
+            margin-bottom: 2rem;
+        }
+
+        .info-box {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: 0 8px 30px var(--shadow-light);
+            height: 100%;
+            transition: var(--transition);
+        }
+
+        .info-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px var(--shadow-medium);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-green);
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary-green), var(--accent-green));
+            border-radius: 2px;
+        }
+
+        .kv-row {
+            margin-bottom: 1.5rem;
+        }
+
+        .kv-key {
+            font-weight: 600;
+            color: var(--primary-green);
+            font-size: 1rem;
+        }
+
+        .kv-value {
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--accent-green), transparent);
+            margin: 1.5rem 0;
+        }
+
+        /* Uses and Diseases */
+        .badge-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .badge-item {
+            background: var(--soft-green);
+            color: var(--primary-green);
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 2px solid var(--accent-green);
+            transition: var(--transition);
+        }
+
+        .badge-item:hover {
+            background: var(--accent-green);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+       
+        /* Animation Classes */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: var(--transition);
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="detail-container">
+        <!-- Back Button -->
+        <a class="back-button" href="javascript:history.back()" data-aos="fade-down">
+            <i class="bi bi-arrow-left me-2"></i> Quay lại
+        </a>
+
+        <!-- Header Section -->
+        <div class="plant-header" data-aos="fade-up">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="category-badges">
+                        @foreach (var category in Model.Plants.CategoryNames)
+                        {
+                            <span class="badge-custom">@category</span>
+                        }
+                    </div>
+                    <h1 class="plant-title">@Model.Plants.CommonName</h1>
+                    <div class="scientific-name">@Model.Plants.Species?.ScientificName</div>
+                    <p class="plant-description">@Model.Plants.Description</p>
+                    <div class="plant-meta">
+                        <div class="meta-item">
+                            <i class="bi bi-geo-alt"></i>
+                            <span>@Model.Plants.Origin</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 mt-4 mt-lg-0">
+                    @if (Model.Plants.ImageUrls != null && Model.Plants.ImageUrls.Any())
                     {
-                        <span class="pill">@u.UseName</span>
+                        <div class="plant-image">
+                            <img src="@Model.Plants.ImageUrls.First()" alt="@Model.Plants.CommonName" />
+                        </div>
                     }
                 </div>
-                <hr />
-                <div>
-                    <div class="fw-bold mb-2">Lợi ích môi trường</div>
-                    <ul class="mb-0">
-                        <li>Cải thiện không khí</li>
-                        <li>Giá trị kinh tế</li>
-                        <li>Giá trị thẩm mỹ</li>
-                    </ul>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="stats-section" data-aos="fade-up" data-aos-delay="100">
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <i class="bi bi-brightness-high stat-icon" style="color: #f39c12;"></i>
+                        <div class="stat-title">Ánh sáng</div>
+                        <div class="stat-value">@Model.Plants.GrowthCondition?.Sunlight</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <i class="bi bi-droplet stat-icon" style="color: #3498db;"></i>
+                        <div class="stat-title">Tưới nước</div>
+                        <div class="stat-value">@Model.Plants.GrowthCondition?.WaterRequirement</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <i class="bi bi-thermometer-half stat-icon" style="color: #e74c3c;"></i>
+                        <div class="stat-title">Nhiệt độ</div>
+                        <div class="stat-value">@Model.Plants.GrowthCondition?.TemperatureRange</div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="info-box">
-                <div class="section-title">Nhân giống và chăm sóc</div>
-                <div class="fw-bold">Phương pháp nhân giống</div>
-                <div class="mt-2">
-                    <span class="pill">Gieo hạt</span>
-                    <span class="pill">Chiết cành</span>
-                    <span class="pill">Ghép cây</span>
+
+        <!-- Info Sections -->
+        <div class="info-section" data-aos="fade-up" data-aos-delay="200">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="info-box">
+                        <div class="section-title">Thông tin cơ bản</div>
+                        <div class="kv-row">
+                            <div class="kv-key">Họ thực vật</div>
+                            <div class="kv-value">@Model.Plants.Species?.Family</div>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="kv-row">
+                            <div class="kv-key">Chi</div>
+                            <div class="kv-value">@Model.Plants.Species?.Genus</div>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="kv-row">
+                            <div class="kv-key">Bộ</div>
+                            <div class="kv-value">@Model.Plants.Species?.OrderName</div>
+                        </div>
+                    </div>
                 </div>
-                <hr />
-                <div>
-                    <div class="fw-bold mb-2">Bệnh thường gặp</div>
-                    <ul class="mb-0">
-                        @foreach (var d in Model.Plants.Diseases)
-                        {
-                            <li>@d.DiseaseName</li>
-                        }
-                    </ul>
+                <div class="col-md-6">
+                    <div class="info-box">
+                        <div class="section-title">Điều kiện sinh trưởng</div>
+                        <div class="kv-row">
+                            <div class="kv-key">Loại đất</div>
+                            <div class="kv-value">@Model.Plants.GrowthCondition?.SoilType</div>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="kv-row">
+                            <div class="kv-key">Ánh sáng</div>
+                            <div class="kv-value">@Model.Plants.GrowthCondition?.Sunlight</div>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="kv-row">
+                            <div class="kv-key">Khí hậu</div>
+                            <div class="kv-value">@Model.Plants.GrowthCondition?.Climate</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Uses and Diseases -->
+        <div class="info-section" data-aos="fade-up" data-aos-delay="300">
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="info-box">
+                        <div class="section-title">Công dụng chính</div>
+                        <div class="badge-list">
+                            @foreach (var use in Model.Plants.Uses)
+                            {
+                                <span class="badge-item">@use.UseName</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="info-box">
+                        <div class="section-title">Bệnh thường gặp</div>
+                        <div class="badge-list">
+                            @foreach (var disease in Model.Plants.Diseases)
+                            {
+                                <span class="badge-item">@disease.DiseaseName</span>
+                            }
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Cultural -->
-    <div class="row mb-5">
-        <div class="col-12">
-            <div class="cultural">
-                <div class="section-title">Ý nghĩa văn hóa</div>
-                <div class="text-muted">
-                    Có ý nghĩa quan trọng trong văn hóa Việt Nam, thường được trồng trong các khu vườn truyền thống.
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true
+        });
+
+        // Add smooth scrolling and interaction effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects to cards
+            const cards = document.querySelectorAll('.stat-card, .info-box');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-8px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Add click effects to badges
+            const badges = document.querySelectorAll('.badge-item');
+            badges.forEach(badge => {
+                badge.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -12,7 +12,7 @@ namespace PlantManagement.DTOs
         public string Description { get; set; }
         public string SpeciesName { get; set; }
         public List<string> CategoryNames { get; set; }
-        public string ImageUrls { get; set; }
+        public List<string> ImageUrls { get; set; }
  
     }
 }
