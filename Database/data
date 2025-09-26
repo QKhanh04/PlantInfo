@@ -1,3 +1,169 @@
+
+
+
+
+DROP TABLE IF EXISTS favorites CASCADE;
+DROP TABLE IF EXISTS search_logs CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS plant_images CASCADE;
+DROP TABLE IF EXISTS plant_use CASCADE;
+DROP TABLE IF EXISTS uses CASCADE;
+DROP TABLE IF EXISTS plant_category CASCADE;
+DROP TABLE IF EXISTS categories CASCADE;
+DROP TABLE IF EXISTS diseases CASCADE;
+DROP TABLE IF EXISTS growth_conditions CASCADE;
+DROP TABLE IF EXISTS plants CASCADE;
+DROP TABLE IF EXISTS species CASCADE;
+DROP TABLE IF EXISTS plant_references CASCADE;
+ 
+-- Bảng species: phân loại sinh học
+CREATE TABLE species (
+    species_id SERIAL PRIMARY KEY,
+    scientific_name VARCHAR(255) UNIQUE NOT NULL,
+    genus VARCHAR(255),
+    family VARCHAR(255),
+    order_name VARCHAR(255),
+    description TEXT
+);
+ 
+-- Bảng plants: thông tin cây trồng
+CREATE TABLE plants (
+    plant_id SERIAL PRIMARY KEY,
+    common_name VARCHAR(255),
+    origin VARCHAR(255),
+    species_id INT REFERENCES species(species_id) ON DELETE SET NULL,
+    description TEXT,
+ 	is_active BOOLEAN DEFAULT TRUE,
+	create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	update_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+
+);
+ 
+-- Bảng điều kiện sinh trưởng
+CREATE TABLE growth_conditions (
+    plant_id INT PRIMARY KEY REFERENCES plants(plant_id) ON DELETE CASCADE,
+    soil_type VARCHAR(255),
+    climate VARCHAR(255),
+    temperature_range VARCHAR(255),
+    water_requirement VARCHAR(255),
+    sunlight VARCHAR(255)
+);
+ 
+-- Bảng sâu bệnh
+CREATE TABLE diseases (
+    disease_id SERIAL PRIMARY KEY,
+    plant_id INT REFERENCES plants(plant_id) ON DELETE CASCADE,
+    disease_name VARCHAR(255),
+    symptoms TEXT,
+    treatment TEXT
+);
+ 
+-- Bảng phân loại cây trồng
+CREATE TABLE categories (
+    category_id SERIAL PRIMARY KEY,
+    category_name VARCHAR(255) UNIQUE NOT NULL,
+    description TEXT
+);
+ 
+-- Liên kết cây trồng với phân loại
+CREATE TABLE plant_category (
+    plant_id INT REFERENCES plants(plant_id) ON DELETE CASCADE,
+    category_id INT REFERENCES categories(category_id) ON DELETE CASCADE,
+    PRIMARY KEY (plant_id, category_id)
+);
+ 
+-- Bảng công dụng
+CREATE TABLE uses (
+    use_id SERIAL PRIMARY KEY,
+    use_name VARCHAR(255) UNIQUE NOT NULL,
+    description TEXT
+);
+ 
+-- Liên kết cây trồng với công dụng
+CREATE TABLE plant_use (
+    plant_id INT REFERENCES plants(plant_id) ON DELETE CASCADE,
+    use_id INT REFERENCES uses(use_id) ON DELETE CASCADE,
+    PRIMARY KEY (plant_id, use_id)
+);
+ 
+-- Bảng hình ảnh cây trồng
+CREATE TABLE plant_images (
+    image_id SERIAL PRIMARY KEY,
+    plant_id INT REFERENCES plants(plant_id) ON DELETE CASCADE,
+    image_url VARCHAR(500),
+    caption TEXT,
+    is_primary BOOLEAN DEFAULT FALSE
+);
+ 
+-- Bảng người dùng
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE,
+    role VARCHAR(50) CHECK (role IN ('User', 'Admin')) DEFAULT 'User',
+    create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+ 
+-- Bảng nhật ký tìm kiếm
+CREATE TABLE search_logs (
+    search_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    keyword VARCHAR(500),
+    search_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+ 
+-- Bảng cây yêu thích
+CREATE TABLE favorites (
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    plant_id INT REFERENCES plants(plant_id) ON DELETE CASCADE,
+    create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, plant_id)
+);
+ 
+-- Bảng tham khảo tài liệu
+CREATE TABLE plant_references (
+    reference_id SERIAL PRIMARY KEY,
+    plant_id INT REFERENCES plants(plant_id) ON DELETE CASCADE,
+    source_name VARCHAR(255),
+    url VARCHAR(255),
+    author VARCHAR(255),
+    published_year INT
+);
+ 
+ 
+-- Tìm kiếm cây theo tên thường gọi
+CREATE INDEX idx_plants_common_name ON plants (common_name);
+ 
+-- Tìm kiếm cây theo tên khoa học
+CREATE INDEX idx_species_scientific_name ON species (scientific_name);
+ 
+-- Truy vấn cây theo phân loại
+CREATE INDEX idx_plant_category_plant ON plant_category (plant_id);
+CREATE INDEX idx_plant_category_category ON plant_category (category_id);
+ 
+-- Truy vấn cây theo công dụng
+CREATE INDEX idx_plant_use_plant ON plant_use (plant_id);
+CREATE INDEX idx_plant_use_use ON plant_use (use_id);
+ 
+-- Truy vấn hình ảnh chính của cây
+CREATE INDEX idx_plant_images_primary ON plant_images (plant_id, is_primary);
+ 
+-- Truy vấn người dùng theo tên đăng nhập
+CREATE INDEX idx_users_username ON users (username);
+ 
+-- Truy vấn cây yêu thích theo người dùng
+CREATE INDEX idx_favorites_user ON favorites (user_id);
+ 
+-- Truy vấn nhật ký tìm kiếm theo người dùng
+CREATE INDEX idx_search_logs_user ON search_logs (user_id);
+
+
+
+
+
+
 -- Thêm dữ liệu vào bảng species
 INSERT INTO species (scientific_name, genus, family, order_name, description) VALUES
 ('Oryza sativa', 'Oryza', 'Poaceae', 'Poales', 'Cây lúa nước'),
