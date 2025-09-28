@@ -24,11 +24,26 @@ namespace PlantManagement.Mappings
             CreateMap<Use, UsesDTO>();
             CreateMap<Species, SpeciesDTO>();
             CreateMap<GrowthCondition, GrowthConditionDTO>();
- 
- 
- 
- 
- 
+
+
+            CreateMap<PlantCreateDTO, Plant>()
+                           .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
+                           .ForMember(dest => dest.UpdateAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
+                           .ForMember(dest => dest.IsActive, opt => opt.MapFrom(_ => true));
+
+            // GrowthCondition
+            CreateMap<GrowthConditionDTO, GrowthCondition>();
+
+            // Disease
+            CreateMap<DiseaseDTO, Disease>();
+
+            // PlantImage
+            CreateMap<PlantImageDTO, PlantImage>();
+
+            // PlantReference
+            CreateMap<PlantReferenceDTO, PlantReference>();
+
+
         }
     }
 }

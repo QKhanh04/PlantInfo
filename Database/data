@@ -541,3 +541,190 @@ INSERT INTO plant_references (plant_id, source_name, url, author, published_year
 (20, 'Thơm MD2 - Giống thơm xuất khẩu chất lượng cao', 'https://www.pineapple.vn/md2-export', 'Viện Cây Ăn Quả - KS. Trần Quốc Tuấn', 2023),
 (25, 'Kỹ thuật trồng dâu tây trong nhà màng', 'https://www.strawberry.vn/nha-mang', 'Trung tâm Ứng dụng Công nghệ - ThS. Ngô Thị Hương', 2022),
 (28, 'Cây bơ và tiềm năng phát triển tại Việt Nam', 'https://www.avocado.research.vn/tiem-nang', 'Viện Nghiên cứu Cây Ăn Quả - TS. Vũ Công Hậu', 2023)
+
+
+
+
+// PlantService
+public class PlantService : IPlantService
+{
+    private readonly IPlantRepository _plantRepository;
+    public PlantService(IPlantRepository plantRepository)
+    {
+        _plantRepository = plantRepository;
+    }
+    public async Task<ServiceResult<Plant>> CreateAsync(Plant plant)
+    {
+        try
+        {
+            await _plantRepository.AddAsync(plant);
+            await _plantRepository.SaveChangesAsync();
+            return ServiceResult<Plant>.Ok(plant, "Plant created successfully");
+        }
+        catch (Exception ex)
+        {
+            return ServiceResult<Plant>.Fail($"Error creating plant: {ex.Message}");
+        }
+    }
+}
+ 
+// SpeciesService
+public class SpeciesService : ISpeciesService
+{
+    private readonly ISpeciesRepository _speciesRepository;
+    public SpeciesService(ISpeciesRepository speciesRepository)
+    {
+        _speciesRepository = speciesRepository;
+    }
+    public async Task<ServiceResult<Species>> CreateAsync(Species species)
+    {
+        try
+        {
+            await _speciesRepository.AddAsync(species);
+            await _speciesRepository.SaveChangesAsync();
+            return ServiceResult<Species>.Ok(species, "Species created successfully");
+        }
+        catch (Exception ex)
+        {
+            return ServiceResult<Species>.Fail($"Error creating species: {ex.Message}");
+        }
+    }
+}
+ 
+// CategoryService
+public class CategoryService : ICategoryService
+{
+    private readonly ICategoryRepository _categoryRepository;
+    public CategoryService(ICategoryRepository categoryRepository)
+    {
+        _categoryRepository = categoryRepository;
+    }
+    public async Task<ServiceResult<Category>> CreateAsync(Category category)
+    {
+        try
+        {
+            await _categoryRepository.AddAsync(category);
+            await _categoryRepository.SaveChangesAsync();
+            return ServiceResult<Category>.Ok(category, "Category created successfully");
+        }
+        catch (Exception ex)
+        {
+            return ServiceResult<Category>.Fail($"Error creating category: {ex.Message}");
+        }
+    }
+}
+ 
+// UseService
+public class UseService : IUseService
+{
+    private readonly IUseRepository _useRepository;
+    public UseService(IUseRepository useRepository)
+    {
+        _useRepository = useRepository;
+    }
+    public async Task<ServiceResult<Use>> CreateAsync(Use use)
+    {
+        try
+        {
+            await _useRepository.AddAsync(use);
+            await _useRepository.SaveChangesAsync();
+            return ServiceResult<Use>.Ok(use, "Use created successfully");
+        }
+        catch (Exception ex)
+        {
+            return ServiceResult<Use>.Fail($"Error creating use: {ex.Message}");
+        }
+    }
+}
+ 
+// GrowthConditionService
+public class GrowthConditionService : IGrowthConditionService
+{
+    private readonly IGrowthConditionRepository _repo;
+    public GrowthConditionService(IGrowthConditionRepository repo)
+    {
+        _repo = repo;
+    }
+    public async Task<ServiceResult<GrowthCondition>> CreateAsync(GrowthCondition gc)
+    {
+        try
+        {
+            await _repo.AddAsync(gc);
+            await _repo.SaveChangesAsync();
+            return ServiceResult<GrowthCondition>.Ok(gc, "Growth condition created successfully");
+        }
+        catch (Exception ex)
+        {
+            return ServiceResult<GrowthCondition>.Fail($"Error creating growth condition: {ex.Message}");
+        }
+    }
+}
+ 
+// DiseaseService
+public class DiseaseService : IDiseaseService
+{
+    private readonly IDiseaseRepository _repo;
+    public DiseaseService(IDiseaseRepository repo)
+    {
+        _repo = repo;
+    }
+    public async Task<ServiceResult<Disease>> CreateAsync(Disease disease)
+    {
+        try
+        {
+            await _repo.AddAsync(disease);
+            await _repo.SaveChangesAsync();
+            return ServiceResult<Disease>.Ok(disease, "Disease created successfully");
+        }
+        catch (Exception ex)
+        {
+            return ServiceResult<Disease>.Fail($"Error creating disease: {ex.Message}");
+        }
+    }
+}
+ 
+// PlantImageService
+public class PlantImageService : IPlantImageService
+{
+    private readonly IPlantImageRepository _repo;
+    public PlantImageService(IPlantImageRepository repo)
+    {
+        _repo = repo;
+    }
+    public async Task<ServiceResult<PlantImage>> CreateAsync(PlantImage image)
+    {
+        try
+        {
+            await _repo.AddAsync(image);
+            await _repo.SaveChangesAsync();
+            return ServiceResult<PlantImage>.Ok(image, "Image created successfully");
+        }
+        catch (Exception ex)
+        {
+            return ServiceResult<PlantImage>.Fail($"Error creating image: {ex.Message}");
+        }
+    }
+}
+ 
+// PlantReferenceService
+public class PlantReferenceService : IPlantReferenceService
+{
+    private readonly IPlantReferenceRepository _repo;
+    public PlantReferenceService(IPlantReferenceRepository repo)
+    {
+        _repo = repo;
+    }
+    public async Task<ServiceResult<PlantReference>> CreateAsync(PlantReference reference)
+    {
+        try
+        {
+            await _repo.AddAsync(reference);
+            await _repo.SaveChangesAsync();
+            return ServiceResult<PlantReference>.Ok(reference, "Reference created successfully");
+        }
+        catch (Exception ex)
+        {
+            return ServiceResult<PlantReference>.Fail($"Error creating reference: {ex.Message}");
+        }
+    }
+}

@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using PlantManagement.DTOs;
 using PlantManagement.Services;
+using PlantManagement.Services.Interfaces;
 
 namespace PlantManagement.Pages.Admin
 {
@@ -38,6 +39,7 @@ namespace PlantManagement.Pages.Admin
             }
             Plants = result.Data;
             return Page();
+
 
         }
     }

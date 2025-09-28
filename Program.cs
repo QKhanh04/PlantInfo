@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using PlantManagement.Data;
-using PlantManagement.Repositories;
-using PlantManagement.Services;
+using PlantManagement.Repositories.Implementations;
+using PlantManagement.Repositories.Interfaces;
+using PlantManagement.Services.Implementations;
+using PlantManagement.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,23 +12,41 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<PlantDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IAuthRepository, AuthRepository>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<IPlantService, PlantService>();
-builder.Services.AddScoped<IPlantRepository, PlantRepository>();
-builder.Services.AddScoped<ISpeciesService, SpeciesService>();
-builder.Services.AddScoped<ISpeciesRepository, SpeciesRepository>();
-
-
-
+// Generic Repository (nếu bạn dùng)
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+ 
+// Repository
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IPlantRepository, PlantRepository>();
+builder.Services.AddScoped<ISpeciesRepository, SpeciesRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IUseRepository, UseRepository>();
+builder.Services.AddScoped<IGrowthConditionRepository, GrowthConditionRepository>();
+builder.Services.AddScoped<IDiseaseRepository, DiseaseRepository>();
+builder.Services.AddScoped<IPlantImageRepository, PlantImageRepository>();
+// builder.Services.AddScoped<IPlantReferenceRepository, PlantReferenceRepository>();
+// // Nếu có bảng liên kết:
+// builder.Services.AddScoped<IPlantCategoryRepository, PlantCategoryRepository>();
+// builder.Services.AddScoped<IPlantUseRepository, PlantUseRepository>();
+ 
+// Service
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IPlantService, PlantService>();
+builder.Services.AddScoped<ISpeciesService, SpeciesService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IUseService, UseService>();
+builder.Services.AddScoped<IGrowthConditionService, GrowthConditionService>();
+builder.Services.AddScoped<IDiseaseService, DiseaseService>();
+builder.Services.AddScoped<IPlantImageService, PlantImageService>();
+builder.Services.AddScoped<IPlantReferenceService, PlantReferenceService>();
+// Nếu có bảng liên kết:
+// builder.Services.AddScoped<IPlantCategoryService, PlantCategoryService>();
+// builder.Services.AddScoped<IPlantUseService, PlantUseService>();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Login";          // Trang login khi chưa đăng nhập
+        options.LoginPath = "/Auth";          // Trang login khi chưa đăng nhập
         options.AccessDeniedPath = "/Denied";  // Trang khi không có quyền
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
     });
@@ -45,7 +65,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseStaticFiles();  
 
 app.UseRouting();

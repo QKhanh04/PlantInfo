@@ -10,6 +10,7 @@ using PlantManagement.Common.Results;
 using PlantManagement.DTOs;
 using PlantManagement.Models;
 using PlantManagement.Services;
+using PlantManagement.Services.Interfaces;
 using PlantManagement.ViewModel;
 
 namespace PlantManagement.Pages.Admin
@@ -40,7 +41,7 @@ namespace PlantManagement.Pages.Admin
         [BindProperty(SupportsGet = true)]
         public FilterViewModel FilterVM { get; set; }
         public IEnumerable<Category> Categories { get; set; } = new List<Category>();
-        public List<string> OrderNames { get; set; } = new List<string>();
+        public List<string> OrderList { get; set; } = new List<string>();
 
 
         public async Task<IActionResult> OnGetAsync()
@@ -49,7 +50,7 @@ namespace PlantManagement.Pages.Admin
             var result = await _plantService.GetPagedAsync(FilterVM.Keyword, CurrentPage, pageSize,
             FilterVM.CategoryId, FilterVM.OrderName);
             var categories = await _categoryService.GetAllCategories();
-            OrderNames = await _speciesService.GetDistinctOrderNameAsync();
+            OrderList = await _speciesService.GetDistinctOrderNameAsync();
             _logger.LogWarning("Lỗi khi lấy danh sách cây: {Message}", result.Data.Items);
             if (!result.Success)
             {

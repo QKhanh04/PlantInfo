@@ -6,470 +6,19 @@
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý cây trồng - Admin Dashboard</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.0/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary-green: #2d5016;
-            --light-green: #4a7c59;
-            --accent-green: #7fb069;
-            --soft-green: #f0f7ed;
-            --warm-white: #fafafa;
-            --text-dark: #2c3e50;
-            --text-muted: #6c757d;
-            --shadow-light: rgba(0, 0, 0, 0.08);
-            --shadow-medium: rgba(0, 0, 0, 0.15);
-            --border-radius: 16px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --gradient-bg: linear-gradient(135deg, #f8fffe 0%, #e8f5e8 50%, #f0f7ed 100%);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--gradient-bg);
-            color: var(--text-dark);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-
-        .admin-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-
-        /* Header Section */
-        .page-header {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding: 2rem 0;
-        }
-
-        .page-title {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--primary-green);
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .page-subtitle {
-            color: var(--text-muted);
-            font-size: 1.2rem;
-            font-weight: 400;
-        }
-
-        /* Alert Styles */
-        .alert {
-            border-radius: var(--border-radius);
-            border: none;
-            box-shadow: 0 8px 30px var(--shadow-light);
-            margin-bottom: 2rem;
-        }
-
-        .alert-danger {
-            background: linear-gradient(135deg, #fee2e2, #fecaca);
-            color: #b91c1c;
-            border-left: 4px solid #dc2626;
-        }
-
-        /* Filter Section */
-        .filter-section {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 10px 40px var(--shadow-light);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .filter-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-green), var(--accent-green));
-        }
-
-        .filter-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-green);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .form-control, .form-select {
-            border-radius: 12px;
-            border: 2px solid #e9ecef;
-            padding: 0.75rem 1rem;
-            font-size: 1rem;
-            transition: var(--transition);
-            background: white;
-        }
-
-        .form-control:focus, .form-select:focus {
-            border-color: var(--accent-green);
-            box-shadow: 0 0 0 0.2rem rgba(127, 176, 105, 0.25);
-        }
-
-        .search-button .btn {
-            border-radius: 12px;
-            padding: 0.75rem 2rem;
-            font-weight: 600;
-            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
-            border: none;
-            transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(45, 80, 22, 0.3);
-        }
-
-        .search-button .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(45, 80, 22, 0.4);
-        }
-
-        /* Plants Grid */
-        .plants-grid {
-            margin-bottom: 3rem;
-        }
-
-        .plant-card {
-            background: white;
-            border-radius: var(--border-radius);
-            border: none;
-            box-shadow: 0 8px 30px var(--shadow-light);
-            transition: var(--transition);
-            height: 100%;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .plant-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px var(--shadow-medium);
-        }
-
-        .plant-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-green), var(--accent-green));
-            opacity: 0;
-            transition: var(--transition);
-        }
-
-        .plant-card:hover::before {
-            opacity: 1;
-        }
-
-        .plant-image {
-            position: relative;
-            overflow: hidden;
-            height: 250px;
-        }
-
-        .plant-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: var(--transition);
-        }
-
-        .plant-card:hover .plant-image img {
-            transform: scale(1.1);
-        }
-
-        .plant-image-placeholder {
-            width: 100%;
-            height: 250px;
-            background: linear-gradient(135deg, var(--soft-green), #e8f5e8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent-green);
-            font-size: 3rem;
-        }
-
-        .card-body {
-            padding: 1.5rem;
-        }
-
-        .plant-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--primary-green);
-            margin-bottom: 0.5rem;
-        }
-
-        .plant-species {
-            color: var(--text-muted);
-            font-style: italic;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        .plant-description {
-            color: var(--text-dark);
-            font-size: 0.95rem;
-            line-height: 1.6;
-            margin-bottom: 1rem;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .category-badges {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .category-badge {
-            background: var(--soft-green);
-            color: var(--primary-green);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            border: 1px solid var(--accent-green);
-        }
-
-        .card-footer {
-            background: #f8f9fa;
-            border-top: 1px solid #e9ecef;
-            padding: 1rem 1.5rem;
-        }
-
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-        }
-
-        .action-btn {
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: var(--transition);
-            border: 2px solid;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .btn-edit {
-            color: #0d6efd;
-            border-color: #0d6efd;
-            background: rgba(13, 110, 253, 0.1);
-        }
-
-        .btn-edit:hover {
-            background: #0d6efd;
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .btn-delete {
-            color: #dc3545;
-            border-color: #dc3545;
-            background: rgba(220, 53, 69, 0.1);
-        }
-
-        .btn-delete:hover {
-            background: #dc3545;
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        .btn-view {
-            color: var(--primary-green);
-            border-color: var(--primary-green);
-            background: rgba(45, 80, 22, 0.1);
-        }
-
-        .btn-view:hover {
-            background: var(--primary-green);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        /* Pagination */
-        .pagination-wrapper {
-            display: flex;
-            justify-content: center;
-            margin-top: 3rem;
-        }
-
-        .pagination {
-            background: white;
-            border-radius: var(--border-radius);
-            padding: 1rem;
-            box-shadow: 0 8px 30px var(--shadow-light);
-        }
-
-        .page-link {
-            color: var(--primary-green);
-            border: none;
-            padding: 0.75rem 1rem;
-            margin: 0 0.2rem;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: var(--transition);
-        }
-
-        .page-link:hover {
-            background: var(--soft-green);
-            color: var(--primary-green);
-        }
-
-        .page-item.active .page-link {
-            background: linear-gradient(135deg, var(--primary-green), var(--light-green));
-            border-color: var(--primary-green);
-        }
-
-        .page-item.disabled .page-link {
-            color: var(--text-muted);
-            background: #f8f9fa;
-        }
-
-        /* Loading State */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
-        }
-
-        .loading-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid var(--soft-green);
-            border-top: 4px solid var(--primary-green);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @* @@keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        } *@
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: var(--text-muted);
-        }
-
-        .empty-state i {
-            font-size: 4rem;
-            color: var(--accent-green);
-            margin-bottom: 1rem;
-        }
-
-        .empty-state h3 {
-            color: var(--primary-green);
-            margin-bottom: 1rem;
-        }
-
-        @* /* Responsive Design */
-        @media (max-width: 768px) {
-            .admin-container {
-                padding: 1rem;
-            }
-
-            .page-title {
-                font-size: 2rem;
-            }
-
-            .filter-section {
-                padding: 1.5rem;
-            }
-
-            .plant-card {
-                margin-bottom: 1.5rem;
-            }
-
-            .action-buttons {
-                flex-direction: column;
-            }
-
-            .action-btn {
-                justify-content: center;
-            }
-        } *@
-
-        /* Animations */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeIn 0.6s ease forwards;
-        }
-
-        @* @keyframes fadeIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        } *@
-
-        .stagger-animation > * {
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeIn 0.6s ease forwards;
-        }
-
-        .stagger-animation > *:nth-child(1) { animation-delay: 0.1s; }
-        .stagger-animation > *:nth-child(2) { animation-delay: 0.2s; }
-        .stagger-animation > *:nth-child(3) { animation-delay: 0.3s; }
-        .stagger-animation > *:nth-child(4) { animation-delay: 0.4s; }
-        .stagger-animation > *:nth-child(5) { animation-delay: 0.5s; }
-        .stagger-animation > *:nth-child(6) { animation-delay: 0.6s; }
-    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.0/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+    <link rel="stylesheet" href="~/css/admin/index.css" />
 </head>
 
 <body>
+
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
@@ -477,32 +26,32 @@
 
     <div class="admin-container">
         <!-- Header -->
-        <div class="page-header" data-aos="fade-down">
+        <div class="page-header">
             <h1 class="page-title">
                 <i class="bi bi-flower1 me-3"></i>
                 Quản lý cây trồng
             </h1>
-            <p class="page-subtitle">Hệ thống quản lý thông tin cây trồng chuyên nghiệp</p>
+            <p class="page-subtitle">Hệ thống quản lý thông tin cây trồng</p>
         </div>
 
         <!-- Error Alert -->
         @if (TempData["Error"] != null)
         {
-            <div class="alert alert-danger" data-aos="fade-up" role="alert">
+            <div class="alert alert-danger" role="alert">
                 <i class="bi bi-exclamation-triangle-fill me-2"></i>
                 @TempData["Error"]
             </div>
         }
 
         <!-- Filter Section -->
-        <div class="filter-section" data-aos="fade-up" data-aos-delay="100">
+        <div class="filter-section">
             <div class="filter-title">
                 <i class="bi bi-funnel"></i>
                 Bộ lọc tìm kiếm
             </div>
             <form id="filter-form" method="get">
                 <div class="row g-3 align-items-end">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="form-label fw-semibold">Từ khóa tìm kiếm</label>
                         <input asp-for="FilterVM.Keyword" class="form-control"
                             placeholder="Nhập tên cây trồng hoặc tên khoa học..." />
@@ -517,140 +66,34 @@
                     <div class="col-md-3">
                         <label class="form-label fw-semibold">Bộ phân loại</label>
                         <select asp-for="FilterVM.OrderName" class="form-select"
-                            asp-items="@(new SelectList(Model.OrderNames))">
+                            asp-items="@(new SelectList(Model.OrderList))">
                             <option value="">-- Tất cả bộ --</option>
                         </select>
                     </div>
-                </div>
-                <div class="row mt-3">
-                    <div class="col-12 search-button">
-                        <button type="submit" class="btn text-white">
-                            <i class="bi bi-search me-2"></i>
-                            Tìm kiếm
+                    <div class="col-md-2 search-button">
+                        <button type="button" id="reset-filter-btn" class="btn btn-secondary text-white">
+                            <i class="bi bi-x-circle me-2"></i>
+                            Xóa bộ lọc
                         </button>
                     </div>
+                </div>
+                <div class="row mt-3">
+
                 </div>
             </form>
         </div>
 
-        <!-- Plants List -->
-        <div id="ajax-content" data-aos="fade-up" data-aos-delay="200">
-            <!-- Plant Cards -->
-            <div id="plant-list">
-                <div class="row plants-grid stagger-animation">
-                    @foreach (var plant in Model.Plants.Items)
-                    {
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="card plant-card h-100">
-                                <div class="plant-image">
-                                    @if (plant.ImageUrls != null && plant.ImageUrls.Any())
-                                    {
-                                        <img src="@plant.ImageUrls.First()" alt="@plant.CommonName">
-                                    }
-                                    else
-                                    {
-                                        <div class="plant-image-placeholder">
-                                            <i class="bi bi-image"></i>
-                                        </div>
-                                    }
-                                </div>
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="plant-title">@plant.CommonName</h5>
-                                    <small class="plant-species">@plant.SpeciesName</small>
-                                    <p class="plant-description">@plant.Description</p>
-                                    <div class="category-badges mt-auto">
-                                        @foreach (var categoryName in plant.CategoryNames)
-                                        {
-                                            <span class="category-badge">@categoryName</span>
-                                        }
-                                    </div>
-                                </div>
-                                <div class="card-footer">
-                                    <div class="action-buttons">
-                                        <a href="#" class="action-btn btn-edit">
-                                            <i class="bi bi-pencil-square"></i> Sửa
-                                        </a>
-                                        <a href="#" class="action-btn btn-delete">
-                                            <i class="bi bi-trash"></i> Xóa
-                                        </a>
-                                        <a asp-page="/Admin/Detail" asp-route-id="@plant.PlantId" class="action-btn btn-view">
-                                            <i class="bi bi-eye"></i> Chi tiết
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
-
-                <!-- Pagination -->
-                @if (Model.TotalPages > 1)
-                {
-                    <div class="pagination-wrapper">
-                        <nav aria-label="Phân trang" id="pagination">
-                            <ul class="pagination mb-0">
-                                <li class="page-item @(Model.CurrentPage <= 1 ? "disabled" : "")">
-                                    <a class="page-link" href="javascript:void(0)" data-page="@(Model.CurrentPage - 1)">
-                                        <i class="bi bi-chevron-left"></i> Trước
-                                    </a>
-                                </li>
-                                @{
-                                    int start = Math.Max(1, Model.CurrentPage - 2);
-                                    int end = Math.Min(Model.TotalPages, Model.CurrentPage + 2);
-                                    if (Model.CurrentPage <= 3)
-                                    {
-                                        start = 1;
-                                        end = Math.Min(5, Model.TotalPages);
-                                    }
-                                    else if (Model.CurrentPage >= Model.TotalPages - 2)
-                                    {
-                                        end = Model.TotalPages;
-                                        start = Math.Max(1, Model.TotalPages - 4);
-                                    }
-                                }
-                                @if (start > 1)
-                                {
-                                    <li class="page-item">
-                                        <a class="page-link" href="javascript:void(0)" data-page="1">1</a>
-                                    </li>
-                                    <li class="page-item disabled"><span class="page-link">...</span></li>
-                                }
-                                @for (int i = start; i <= end; i++)
-                                {
-                                    <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                                        <a class="page-link" href="javascript:void(0)" data-page="@i">@i</a>
-                                    </li>
-                                }
-                                @if (end < Model.TotalPages)
-                                {
-                                    <li class="page-item disabled"><span class="page-link">...</span></li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="javascript:void(0)" data-page="@Model.TotalPages">@Model.TotalPages</a>
-                                    </li>
-                                }
-                                <li class="page-item @(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
-                                    <a class="page-link" href="javascript:void(0)" data-page="@(Model.CurrentPage + 1)">
-                                        Sau <i class="bi bi-chevron-right"></i>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                }
-            </div>
+        <!-- Container cho AJAX -->
+        <div id="ajax-content">
+            @await Html.PartialAsync("_PlantListPartial", Model)
         </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
     <script>
-        $(document).ready(function() {
-            // Initialize AOS
-            AOS.init({
-                duration: 800,
-                easing: 'ease-out-cubic',
-                once: true
-            });
+        $(document).ready(function () {
+
 
             // Show/Hide loading overlay
             function showLoading() {
@@ -676,6 +119,15 @@
                 loadPlants(page);
             });
 
+            $('#reset-filter-btn').on('click', function () {
+                // Reset các trường lọc về giá trị mặc định
+                $('[name="FilterVM.Keyword"]').val('');
+                $('[name="FilterVM.CategoryId"]').val('');
+                $('[name="FilterVM.OrderName"]').val('');
+                // Gọi lại AJAX loadPlants trang 1, không có bộ lọc
+                loadPlants(1);
+            });
+
             // AJAX function to load plants
             function loadPlants(page) {
                 var keyword = $('[name="FilterVM.Keyword"]').val();
@@ -688,61 +140,42 @@
                     orderName: orderName,
                     currentPage: page
                 })
-                .done(function (data) {
-                    $('#ajax-content').html(data);
-                    
-                    // Add stagger animation to new cards
-                    $('.plants-grid').addClass('stagger-animation');
-                    
-                    // Scroll to top of results
-                    $('html, body').animate({
-                        scrollTop: $('#ajax-content').offset().top - 100
-                    }, 500);
-                })
-                .fail(function() {
-                    $('#ajax-content').html(`
+                    .done(function (data) {
+                        $('#ajax-content').html(data);
+
+                        // Scroll to top of results
+                        $('html, body').animate({
+                            scrollTop: $('#ajax-content').offset().top - 100
+                        }, 500);
+                    })
+                    .fail(function () {
+                        $('#ajax-content').html(`
                         <div class="empty-state">
                             <i class="bi bi-exclamation-circle"></i>
                             <h3>Có lỗi xảy ra</h3>
                             <p>Không thể tải dữ liệu. Vui lòng thử lại sau.</p>
                         </div>
                     `);
-                })
-                .always(function() {
-                    hideLoading();
-                });
+                    })
+                    .always(function () {
+                        hideLoading();
+                    });
             }
-
-            // Add hover effects to cards
-            $(document).on('mouseenter', '.plant-card', function() {
-                $(this).find('.plant-image img').css('transform', 'scale(1.1)');
-            });
-
-            $(document).on('mouseleave', '.plant-card', function() {
-                $(this).find('.plant-image img').css('transform', 'scale(1)');
-            });
-
-            // Add click effects to buttons
-            $(document).on('click', '.action-btn', function() {
-                $(this).css('transform', 'scale(0.95)');
-                setTimeout(() => {
-                    $(this).css('transform', '');
-                }, 150);
-            });
 
             // Auto-search on filter change (with debounce)
             let searchTimeout;
-            $('[name="FilterVM.Keyword"]').on('input', function() {
+            $('[name="FilterVM.Keyword"]').on('input', function () {
                 clearTimeout(searchTimeout);
-                searchTimeout = setTimeout(function() {
+                searchTimeout = setTimeout(function () {
                     $('#filter-form').submit();
                 }, 500);
             });
 
-            $('[name="FilterVM.CategoryId"], [name="FilterVM.OrderName"]').on('change', function() {
+            $('[name="FilterVM.CategoryId"], [name="FilterVM.OrderName"]').on('change', function () {
                 $('#filter-form').submit();
             });
         });
     </script>
 </body>
+
 </html>

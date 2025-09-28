@@ -7,9 +7,11 @@ namespace PlantManagement.DTOs
 {
     public class SpeciesDTO
     {
-        public string ScientificName { get; set; }
-        public string Genus { get; set; }
-        public string Family { get; set; }
-        public string OrderName { get; set; }
+        public int SpeciesId { get; set; }
+        public string ScientificName { get; set; } = string.Empty;
+        public string? Genus { get; set; }
+        public string? Family { get; set; }
+        public string? OrderName { get; set; }
+        public string? Description { get; set; }
     }
 }
