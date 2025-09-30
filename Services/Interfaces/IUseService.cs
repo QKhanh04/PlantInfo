@@ -10,6 +10,7 @@ namespace PlantManagement.Services.Interfaces
     public interface IUseService
     {
         Task<ServiceResult<Use>> CreateAsync(Use use);
+        Task<IEnumerable<Use>> GetAllAsync();
 
     }
 }

@@ -12,37 +12,54 @@ namespace PlantManagement.Mappings
     {
         public PlantProfile()
         {
-            CreateMap<Plant, PlantDTO>()
+            CreateMap<Plant, PlantListDTO>()
                 .ForMember(dest => dest.SpeciesName, opt => opt.MapFrom(src => src.Species != null ? src.Species.ScientificName : null))
-                .ForMember(dest => dest.CategoryNames, opt => opt.MapFrom(src => src.Categories.Select(c => c.CategoryName).ToList()));
+                .ForMember(dest => dest.CategoryNames, opt => opt.MapFrom(src => src.Categories.Select(c => c.CategoryName).ToList()))
+                .ForMember(dest => dest.ImageUrls, opt => opt.MapFrom(src => src.PlantImages.Select(img => img.ImageUrl).ToList()));
 
 
             CreateMap<Plant, PlantDetailDTO>()
                 .ForMember(dest => dest.CategoryNames, opt => opt.MapFrom(src => src.Categories.Select(c => c.CategoryName).ToList()))
                 .ForMember(dest => dest.ImageUrls, opt => opt.MapFrom(src => src.PlantImages.Select(img => img.ImageUrl).ToList()));
+
+
             CreateMap<Disease, DiseasesDTO>();
-            CreateMap<Use, UsesDTO>();
+            CreateMap<Use, UseDTO>();
             CreateMap<Species, SpeciesDTO>();
             CreateMap<GrowthCondition, GrowthConditionDTO>();
-
+            CreateMap<PlantImage, PlantImageDTO>();
+            CreateMap<Category, CategoryDTO>();
 
             CreateMap<PlantCreateDTO, Plant>()
-                           .ForMember(dest => dest.CreateAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
-                           .ForMember(dest => dest.UpdateAt, opt => opt.MapFrom(_ => DateTime.UtcNow))
-                           .ForMember(dest => dest.IsActive, opt => opt.MapFrom(_ => true));
+                .ForMember(d => d.CreateAt, o => o.MapFrom(_ => DateTime.UtcNow))
+                .ForMember(d => d.UpdateAt, o => o.MapFrom(_ => DateTime.UtcNow));
+            CreateMap<Plant, PlantDTO>();
 
-            // GrowthCondition
             CreateMap<GrowthConditionDTO, GrowthCondition>();
+            CreateMap<GrowthCondition, GrowthConditionDTO>();
 
-            // Disease
             CreateMap<DiseaseDTO, Disease>();
+            CreateMap<Disease, DiseaseDTO>();
 
-            // PlantImage
             CreateMap<PlantImageDTO, PlantImage>();
+            CreateMap<PlantImage, PlantImageDTO>();
 
-            // PlantReference
             CreateMap<PlantReferenceDTO, PlantReference>();
+            CreateMap<PlantReference, PlantReferenceDTO>();
 
+            // create DTO -> entity for categories/uses
+            CreateMap<CategoryCreateDTO, Category>();
+            CreateMap<UseCreateDTO, Use>();
+
+            // entity -> DTO (for listing dropdowns)
+            CreateMap<Category, CategoryDTO>();
+            CreateMap<CategoryDTO, Category>();
+
+            CreateMap<Use, UseDTO>();
+            CreateMap<UseDTO, Use>();
+
+            CreateMap<SpeciesCreateDTO, Species>();
+            CreateMap<PlantReference, ReferenceDTO>();
 
         }
     }

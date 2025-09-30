@@ -29,5 +29,9 @@ namespace PlantManagement.Services.Implementations
                 return ServiceResult<GrowthCondition>.Fail($"Error creating growth condition: {ex.Message}");
             }
         }
+        public async Task<IEnumerable<GrowthCondition>> GetAllAsync()
+        {
+            return await _repo.GetAllAsync();
+        }
     }
 }

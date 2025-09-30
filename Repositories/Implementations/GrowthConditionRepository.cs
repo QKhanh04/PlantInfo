@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PlantManagement.Data;
 using PlantManagement.Models;
+using PlantManagement.Repositories.Interfaces;
 
 namespace PlantManagement.Repositories.Implementations
 {
-    public class GrowthConditionRepository : GenericRepository<GrowthCondition>, Interfaces.IGrowthConditionRepository
+    public class GrowthConditionRepository : GenericRepository<GrowthCondition>, IGrowthConditionRepository
     {
-        public GrowthConditionRepository(DbContext context) : base(context)
+        public GrowthConditionRepository(PlantDbContext context) : base(context)
         {
         }
     }

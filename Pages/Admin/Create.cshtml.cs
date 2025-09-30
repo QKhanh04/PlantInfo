@@ -1,106 +1,154 @@
-// using System;
-// using System.Collections.Generic;
-// using System.Linq;
-// using System.Threading.Tasks;
-// using AutoMapper;
-// using Microsoft.AspNetCore.Mvc;
-// using Microsoft.AspNetCore.Mvc.RazorPages;
-// using Microsoft.Extensions.Logging;
-// using PlantManagement.Models;
-// using PlantManagement.Repositories.Interfaces;
-// using PlantManagement.Services.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Logging;
+using PlantManagement.DTOs;
+using PlantManagement.Models;
+using PlantManagement.Repositories.Interfaces;
+using PlantManagement.Services.Interfaces;
 
-// namespace PlantManagement.Pages.Admin
-// {
-//     public class CreateModel : PageModel
-//     {
-//         private readonly ILogger<CreateModel> _logger;
-//         private readonly IPlantService _plantService;
-//         private readonly ICategoryRepository _categoryRepo;
-//         private readonly IUseRepository _useRepo;
-//         private readonly ISpeciesRepository _speciesRepo;
-//         private readonly IDiseaseRepository _diseaseRepo;
-//         private readonly IGrowthConditionRepository _growthRepo;
-//         private readonly IMapper _mapper;
+namespace PlantManagement.Pages.Admin
+{
 
-//         public CreateModel(ILogger<CreateModel> logger, IPlantService plantService, ICategoryRepository categoryRepo,
-//         IUseRepository useRepo,
-//         ISpeciesRepository speciesRepo,
-//         IDiseaseRepository diseaseRepo,
-//         IGrowthConditionRepository growthRepo,
-//         IMapper mapper)
-//         {
-//             _logger = logger;
-//             _plantService = plantService;
-//             _categoryRepo = categoryRepo;
-//             _useRepo = useRepo;
-//             _speciesRepo = speciesRepo;
-//             _diseaseRepo = diseaseRepo;
-//             _growthRepo = growthRepo;
-//             _mapper = mapper;
-//         }
+    [Authorize(Roles = "Admin")]
+    public class CreateModel : PageModel
+    {
+        private readonly ILogger<CreateModel> _logger;
+        private readonly IPlantService _plantService;
+        private readonly ICategoryService _categoryService;
+        private readonly IUseService _useService;
+        private readonly ISpeciesService _speciesService;
 
-//         [BindProperty]
-//         public CreatePlantViewModel Plant { get; set; }
+        private readonly IMapper _mapper;
 
-//         public List<Category> AllCategories { get; set; }
-//         public List<Use> AllUses { get; set; }
-//         public List<Species> AllSpecies { get; set; }
-//         public List<Disease> AllDiseases { get; set; }
-//         public List<GrowthCondition> AllGrowthConditions { get; set; }
-
-//         public async Task OnGetAsync()
-//         {
-//             AllCategories = (List<Category>)await _categoryRepo.GetAllAsync();
-//             AllUses = (List<Use>)await _useRepo.GetAllAsync();
-//             AllSpecies = (List<Species>)await _speciesRepo.GetAllAsync();
-//             AllDiseases = (List<Disease>)await _diseaseRepo.GetAllAsync();
-//             AllGrowthConditions = (List<GrowthCondition>)await _growthRepo.GetAllAsync();
-//         }
+        public CreateModel(ILogger<CreateModel> logger,
+        IPlantService plantService,
+        ICategoryService categoryService,
+        IUseService useService,
+        ISpeciesService speciesService,
 
 
+        IMapper mapper)
+        {
+            _logger = logger;
+            _plantService = plantService;
+            _categoryService = categoryService;
+            _speciesService = speciesService;
+            _useService = useService;
 
-//         public async Task<IActionResult> OnPostAsync()
-//         {
+            _mapper = mapper;
+        }
 
-//             AllCategories = (List<Category>)await _categoryRepo.GetAllAsync();
-//             AllUses = (List<Use>)await _useRepo.GetAllAsync();
-//             AllSpecies = (List<Species>)await _speciesRepo.GetAllAsync();
-//             AllDiseases = (List<Disease>)await _diseaseRepo.GetAllAsync();
-//             AllGrowthConditions = (List<GrowthCondition>)await _growthRepo.GetAllAsync();
+        [BindProperty]
+        public PlantCreateDTO Plant { get; set; }
+        [BindProperty]
+        public List<IFormFile> ImageFiles { get; set; }    // File upload
+        public List<SelectListItem> CategoryList { get; set; } = new();
+        public List<SelectListItem> UseList { get; set; } = new();
+        public List<SelectListItem> SpeciesList { get; set; } = new();
 
-//             if (!ModelState.IsValid)
-//             {
-//                 foreach (var state in ModelState)
-//                 {
-//                     var key = state.Key;
-//                     var errors = state.Value.Errors;
-//                     foreach (var error in errors)
-//                     {
-//                         _logger.LogError($"Field {key} error: {error.ErrorMessage}");
-//                         TempData["Error"] = $"Field {key} error: {error.ErrorMessage}";
-//                     }
-//                 }
+        public async Task OnGetAsync()
+        {
+            var categories = await _categoryService.GetAllAsync();
+            CategoryList = categories.Select(c => new SelectListItem
+            {
+                Value = c.CategoryId.ToString(),
+                Text = c.CategoryName
+            }).ToList();
+            var uses = await _useService.GetAllAsync();
+            UseList = uses.Select(u => new SelectListItem
+            {
+                Value = u.UseId.ToString(),
+                Text = u.UseName
+            }).ToList();
+            var species = await _speciesService.GetAllAsync();
+            SpeciesList = species.Select(s => new SelectListItem
+            {
+                Value = s.SpeciesId.ToString(),
+                Text = s.ScientificName
+            }).ToList();
+        }
 
-//                 return Page();
-//             }
 
-//             // Map ViewModel sang DTO bằng AutoMapper
-//             var dto = _mapper.Map<CreatePlantDTO>(Plant);
-//             var result = await _plantService.CreateAsync(dto);
+        public async Task<IActionResult> OnPostAsync()
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    await OnGetAsync(); // reload select list
+                    TempData["ToastMessage"] = "Dữ liệu nhập không hợp lệ. Vui lòng kiểm tra lại!";
+                    TempData["ToastType"] = "error";
+                    foreach (var key in ModelState.Keys)
+                    {
+                        var errors = ModelState[key].Errors;
+                        foreach (var error in errors)
+                        {
+                            _logger.LogWarning($"ModelState error for {key}: {error.ErrorMessage}");
+                            TempData["ToastMessage"] = $"D{key}: {error.ErrorMessage}";
+                            TempData["ToastType"] = "error";
+                        }
+                    }
+                    return Page();
+                }
 
-//             if (result.Success)
-//             {
-//                 TempData["Success"] = result.Message;
-//                 return RedirectToPage("Index");
-//             }
-//             else
-//             {
-//                 ModelState.AddModelError("", result.Message);
-//                 TempData["Error"] = result.Message;
+                if (ImageFiles != null && ImageFiles.Count > 0)
+                {
+                    var saveDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/plants");
+                    if (!Directory.Exists(saveDir)) Directory.CreateDirectory(saveDir);
 
-//                 return Page();
-//             }
-//         }
-//     }
-// }
+                    foreach (var file in ImageFiles)
+                    {
+                        if (file.Length > 0)
+                        {
+                            var fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+                            var filePath = Path.Combine(saveDir, fileName);
+                            using (var stream = new FileStream(filePath, FileMode.Create))
+                            {
+                                await file.CopyToAsync(stream);
+                            }
+                            if (Plant.Images == null) Plant.Images = new List<PlantImageDTO>();
+                            Plant.Images.Add(new PlantImageDTO
+                            {
+                                ImageUrl = "/images/plants/" + fileName,
+                                Caption = "", // lấy theo form nếu cần
+                                IsPrimary = false // lấy theo form nếu cần
+                            });
+                        }
+                    }
+                }
+
+                var result = await _plantService.CreatePlantAsync(Plant);
+
+                if (result.Success)
+                {
+                    TempData["ToastMessage"] = result.Message ?? "Thêm cây thành công!";
+                    TempData["ToastType"] = "success";
+                    return RedirectToPage("/Admin/Index");
+                }
+
+                TempData["ToastMessage"] = result.Message ?? "Thêm cây thất bại!";
+                TempData["ToastType"] = "error";
+                await OnGetAsync();
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                // Nếu có logger, ghi lại chi tiết InnerException
+                var inner = ex.InnerException;
+                _logger?.LogError(ex, "Lỗi khi thêm cây trồng: {Message}. Inner: {Inner}", ex.Message, inner?.Message);
+
+                TempData["ToastMessage"] = "Đã xảy ra lỗi khi lưu dữ liệu: " + (inner?.Message ?? ex.Message);
+                TempData["ToastType"] = "error";
+                await OnGetAsync();
+                return Page();
+            }
+        }
+    }
+}

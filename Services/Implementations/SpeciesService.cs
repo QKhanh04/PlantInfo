@@ -42,5 +42,9 @@ namespace PlantManagement.Services.Implementations
                 return ServiceResult<Species>.Fail($"Error creating species: {ex.Message}");
             }
         }
+        public async Task<IEnumerable<Species>> GetAllAsync()
+        {
+            return await _speciesRepository.GetAllAsync();
+        }
     }
 }

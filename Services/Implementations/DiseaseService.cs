@@ -29,5 +29,9 @@ namespace PlantManagement.Services.Implementations
                 return ServiceResult<Disease>.Fail($"Error creating disease: {ex.Message}");
             }
         }
+        public async Task<IEnumerable<Disease>> GetAllAsync()
+        {
+            return await _repo.GetAllAsync();
+        }
     }
 }

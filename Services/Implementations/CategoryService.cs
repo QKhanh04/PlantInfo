@@ -23,17 +23,22 @@ namespace PlantManagement.Services.Implementations
         }
 
         public async Task<ServiceResult<Category>> CreateAsync(Category category)
-    {
-        try
         {
-            await _categoryRepository.AddAsync(category);
-            await _categoryRepository.SaveChangesAsync();
-            return ServiceResult<Category>.Ok(category, "Category created successfully");
+            try
+            {
+                await _categoryRepository.AddAsync(category);
+                await _categoryRepository.SaveChangesAsync();
+                return ServiceResult<Category>.Ok(category, "Category created successfully");
+            }
+            catch (Exception ex)
+            {
+                return ServiceResult<Category>.Fail($"Error creating category: {ex.Message}");
+            }
         }
-        catch (Exception ex)
+        public async Task<IEnumerable<Category>> GetAllAsync()
         {
-            return ServiceResult<Category>.Fail($"Error creating category: {ex.Message}");
+            return await _categoryRepository.GetAllAsync();
         }
-    }
+
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PlantManagement.Common.Results;
+using PlantManagement.Data;
 using PlantManagement.DTOs;
 using PlantManagement.Models;
 using PlantManagement.Repositories;
@@ -19,97 +20,192 @@ namespace PlantManagement.Services.Implementations
     public class PlantService : IPlantService
     {
         private readonly IPlantRepository _plantRepo;
+        private readonly ISpeciesRepository _speciesRepo;
+        private readonly IGrowthConditionRepository _growthRepo;
+        private readonly IDiseaseRepository _diseaseRepo;
+        private readonly ICategoryRepository _categoryRepo;
+        private readonly IUseRepository _useRepo;
+        private readonly IPlantImageRepository _imageRepo;
+        private readonly IPlantReferenceRepository _referenceRepo;
+        private readonly PlantDbContext _dbContext;
         private readonly IMapper _mapper;
 
-        public PlantService(IPlantRepository plantRepo, IMapper mapper)
+        public PlantService(
+            IPlantRepository plantRepo,
+            ISpeciesRepository speciesRepo,
+            IGrowthConditionRepository growthRepo,
+            IDiseaseRepository diseaseRepo,
+            ICategoryRepository categoryRepo,
+            IUseRepository useRepo,
+            IPlantImageRepository imageRepo,
+            IPlantReferenceRepository referenceRepo,
+            PlantDbContext dbContext,
+            IMapper mapper)
         {
             _plantRepo = plantRepo;
+            _speciesRepo = speciesRepo;
+            _growthRepo = growthRepo;
+            _diseaseRepo = diseaseRepo;
+            _categoryRepo = categoryRepo;
+            _useRepo = useRepo;
+            _imageRepo = imageRepo;
+            _referenceRepo = referenceRepo;
+            _dbContext = dbContext;
             _mapper = mapper;
         }
 
 
-        public async Task<int> AddPlantAsync(PlantCreateDTO dto)
+        public async Task<ServiceResult<PlantDTO>> CreatePlantAsync(PlantCreateDTO model)
         {
-            // 1. Plant
-            var plant = _mapper.Map<Plant>(dto);
-            await _plantRepo.AddAsync(plant);
-            await _plantRepo.SaveChangesAsync(); // để có PlantId
-
-            // 2. GrowthCondition
-            if (dto.GrowthCondition != null)
+            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            try
             {
-                var gc = _mapper.Map<GrowthCondition>(dto.GrowthCondition);
-                gc.PlantId = plant.PlantId;
-                await _growthConditionRepo.AddAsync(gc);
-            }
-
-            // 3. Diseases
-            if (dto.Diseases?.Any() == true)
-            {
-                foreach (var d in dto.Diseases)
+                // 1. Xử lý species
+                int speciesId;
+                if (model.SpeciesId.HasValue)
                 {
-                    var disease = _mapper.Map<Disease>(d);
-                    disease.PlantId = plant.PlantId;
-                    await _diseaseRepo.AddAsync(disease);
+                    var exist = await _speciesRepo.GetByIdAsync(model.SpeciesId.Value);
+                    if (exist == null)
+                        return ServiceResult<PlantDTO>.Fail("Loài không tồn tại");
+                    speciesId = model.SpeciesId.Value;
                 }
-            }
-
-            // 4. Categories
-            if (dto.CategoryIds?.Any() == true)
-            {
-                foreach (var catId in dto.CategoryIds)
+                else if (model.NewSpecies != null)
                 {
-                    await _plantCategoryRepo.AddAsync(new PlantCategory
+                    var exist = await _speciesRepo.FindAsync(s => s.ScientificName == model.NewSpecies.ScientificName);
+                    if (exist.Any())
+                        return ServiceResult<PlantDTO>.Fail("Tên khoa học đã tồn tại");
+
+                    var newSpecies = _mapper.Map<Species>(model.NewSpecies);
+                    await _speciesRepo.AddAsync(newSpecies);
+                    await _speciesRepo.SaveChangesAsync();
+                    speciesId = newSpecies.SpeciesId;
+                }
+                else
+                {
+                    return ServiceResult<PlantDTO>.Fail("Bạn phải chọn loài có sẵn hoặc thêm mới loài");
+                }
+                // 2. Plant
+                var plant = new Plant
+                {
+                    CommonName = model.CommonName,
+                    Origin = model.Origin,
+                    Description = model.Description,
+                    SpeciesId = speciesId,
+                    IsActive = true,
+                    CreateAt = DateTime.Now,
+                    UpdateAt = DateTime.Now
+                };
+                await _plantRepo.AddAsync(plant);
+                await _plantRepo.SaveChangesAsync();
+                // 3. GrowthCondition
+                if (model.GrowthCondition != null)
+                {
+                    var gc = _mapper.Map<GrowthCondition>(model.GrowthCondition);
+                    gc.PlantId = plant.PlantId;
+                    await _growthRepo.AddAsync(gc);
+                }
+                // 4. Diseases
+                if (model.Diseases != null)
+                {
+                    foreach (var d in model.Diseases)
                     {
-                        PlantId = plant.PlantId,
-                        CategoryId = catId
-                    });
+                        var disease = _mapper.Map<Disease>(d);
+                        disease.PlantId = plant.PlantId;
+                        await _diseaseRepo.AddAsync(disease);
+                    }
                 }
-            }
-
-            // 5. Uses
-            if (dto.UseIds?.Any() == true)
-            {
-                foreach (var useId in dto.UseIds)
+                // 5. Categories
+                if (model.CategoryIds != null)
                 {
-                    await _plantUseRepo.AddAsync(new PlantUse
+                    var categories = await _categoryRepo.FindAsync(c => model.CategoryIds.Contains(c.CategoryId));
+                    foreach (var cat in categories)
                     {
-                        PlantId = plant.PlantId,
-                        UseId = useId
-                    });
+                        plant.Categories.Add(cat);
+                    }
                 }
-            }
 
-            // 6. Images
-            if (dto.Images?.Any() == true)
-            {
-                foreach (var img in dto.Images)
+                if (model.NewCategories != null)
                 {
-                    var pi = _mapper.Map<PlantImage>(img);
-                    pi.PlantId = plant.PlantId;
-                    await _plantImageRepo.AddAsync(pi);
-                }
-            }
+                    foreach (var catDto in model.NewCategories)
+                    {
+                        if (!string.IsNullOrWhiteSpace(catDto.CategoryName))
+                        {
+                            // Kiểm tra trùng tên phân loại
+                            var existCat = await _categoryRepo.FindAsync(c => c.CategoryName == catDto.CategoryName);
+                            if (existCat.Any()) continue; // Có rồi thì bỏ qua
 
-            // 7. References
-            if (dto.References?.Any() == true)
-            {
-                foreach (var rf in dto.References)
+                            var cat = _mapper.Map<Category>(catDto);
+                            await _categoryRepo.AddAsync(cat);
+                            await _categoryRepo.SaveChangesAsync();
+                            plant.Categories.Add(cat);
+                        }
+                    }
+                }
+
+                // 6. Uses
+                if (model.UseIds != null)
                 {
-                    var pr = _mapper.Map<PlantReference>(rf);
-                    pr.PlantId = plant.PlantId;
-                    await _plantReferenceRepo.AddAsync(pr);
+                    var uses = await _useRepo.FindAsync(u => model.UseIds.Contains(u.UseId));
+                    foreach (var use in uses)
+                    {
+                        plant.Uses.Add(use);
+                    }
                 }
+
+                if (model.NewUses != null)
+                {
+                    foreach (var useDto in model.NewUses)
+                    {
+                        if (!string.IsNullOrWhiteSpace(useDto.UseName))
+                        {
+                            // Kiểm tra trùng tên công dụng
+                            var existUse = await _useRepo.FindAsync(u => u.UseName == useDto.UseName);
+                            if (existUse.Any()) continue; // Có rồi thì bỏ qua
+
+                            var use = _mapper.Map<Use>(useDto);
+                            await _useRepo.AddAsync(use);
+                            await _useRepo.SaveChangesAsync();
+                            plant.Uses.Add(use);
+                        }
+                    }
+                }
+                // 7. Images
+                if (model.Images != null)
+                {
+                    foreach (var img in model.Images)
+                    {
+                        var entity = _mapper.Map<PlantImage>(img);
+                        entity.PlantId = plant.PlantId;
+                        await _imageRepo.AddAsync(entity);
+                    }
+                }
+                // 8. References
+                if (model.References != null)
+                {
+                    foreach (var r in model.References)
+                    {
+                        var entity = _mapper.Map<PlantReference>(r);
+                        entity.PlantId = plant.PlantId;
+                        await _referenceRepo.AddAsync(entity);
+                    }
+                }
+                // 9. Lưu + Commit transaction
+                await _plantRepo.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return ServiceResult<PlantDTO>.Ok(
+                    _mapper.Map<PlantDTO>(plant),
+                    "Thêm cây thành công"
+                );
             }
-
-            // Save tất cả
-            await _plantRepo.SaveChangesAsync();
-
-            return plant.PlantId;
+            catch (Exception ex)
+            {
+                // await transaction.RollbackAsync();
+                return ServiceResult<PlantDTO>.Fail($"Lỗi khi thêm cây: {ex.Message}");
+            }
         }
         // 1. Danh sách + tìm kiếm + phân trang
 
-        public async Task<ServiceResult<PagedResult<PlantDTO>>> GetPagedAsync(
+        public async Task<ServiceResult<PagedResult<PlantListDTO>>> GetPagedAsync(
    string? keyword,
    int page,
    int pageSize,
@@ -150,10 +246,10 @@ namespace PlantManagement.Services.Implementations
                     .Take(pageSize)
                     .ToListAsync();
 
-                var dtoList = _mapper.Map<List<PlantDTO>>(data);
+                var dtoList = _mapper.Map<List<PlantListDTO>>(data);
 
 
-                var result = new PagedResult<PlantDTO>
+                var result = new PagedResult<PlantListDTO>
                 {
                     Items = dtoList,
                     CurrentPage = page,
@@ -161,11 +257,11 @@ namespace PlantManagement.Services.Implementations
                     TotalItems = total,
                     TotalPages = (int)Math.Ceiling((double)total / pageSize)
                 };
-                return ServiceResult<PagedResult<PlantDTO>>.Ok(result);
+                return ServiceResult<PagedResult<PlantListDTO>>.Ok(result);
             }
             catch (Exception ex)
             {
-                return ServiceResult<PagedResult<PlantDTO>>.Fail($"Lỗi khi lấy dữ liệu: {ex.Message}");
+                return ServiceResult<PagedResult<PlantListDTO>>.Fail($"Lỗi khi lấy dữ liệu: {ex.Message}");
             }
         }
 
@@ -179,6 +275,8 @@ namespace PlantManagement.Services.Implementations
                 .Include(p => p.Diseases)
                 .Include(p => p.GrowthCondition)
                 .Include(p => p.PlantImages)
+                    .Include(p => p.PlantReferences)
+
                 .FirstOrDefaultAsync(p => p.PlantId == id);
 
             if (plant == null)

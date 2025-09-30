@@ -7,10 +7,10 @@ namespace PlantManagement.DTOs
 {
     public class GrowthConditionDTO
     {
-        public string SoilType { get; set; }
-        public string Climate { get; set; }
-        public string TemperatureRange { get; set; }
-        public string WaterRequirement { get; set; }
-        public string Sunlight { get; set; }
+        public string? SoilType { get; set; }
+        public string? Climate { get; set; }
+        public string? TemperatureRange { get; set; }
+        public string? WaterRequirement { get; set; }
+        public string? Sunlight { get; set; }
     }
 }

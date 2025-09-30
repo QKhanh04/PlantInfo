@@ -12,22 +12,23 @@ namespace PlantManagement.Services.Implementations
     public class PlantReferenceService : IPlantReferenceService
     {
         private readonly IPlantReferenceRepository _repo;
-    public PlantReferenceService(IPlantReferenceRepository repo)
-    {
-        _repo = repo;
-    }
-    public async Task<ServiceResult<PlantReference>> CreateAsync(PlantReference reference)
-    {
-        try
+        public PlantReferenceService(IPlantReferenceRepository repo)
         {
-            await _repo.AddAsync(reference);
-            await _repo.SaveChangesAsync();
-            return ServiceResult<PlantReference>.Ok(reference, "Reference created successfully");
+            _repo = repo;
         }
-        catch (Exception ex)
+        public async Task<ServiceResult<PlantReference>> CreateAsync(PlantReference reference)
         {
-            return ServiceResult<PlantReference>.Fail($"Error creating reference: {ex.Message}");
+            try
+            {
+                await _repo.AddAsync(reference);
+                await _repo.SaveChangesAsync();
+                return ServiceResult<PlantReference>.Ok(reference, "Reference created successfully");
+            }
+            catch (Exception ex)
+            {
+                return ServiceResult<PlantReference>.Fail($"Error creating reference: {ex.Message}");
+            }
         }
-    }
+        
     }
 }

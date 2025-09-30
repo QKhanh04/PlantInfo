@@ -11,10 +11,8 @@ namespace PlantManagement.Repositories.Implementations
 {
     public class CategoryRepository : GenericRepository<Category>, ICategoryRepository
     {
-        private readonly PlantDbContext _context;
         public CategoryRepository(PlantDbContext context) : base(context)
         {
-            _context = context;
         }
         
     }

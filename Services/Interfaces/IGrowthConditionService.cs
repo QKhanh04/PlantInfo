@@ -10,6 +10,6 @@ namespace PlantManagement.Services.Interfaces
     public interface IGrowthConditionService
     {
         Task<ServiceResult<GrowthCondition>> CreateAsync(GrowthCondition condition);
-
+        Task<IEnumerable<GrowthCondition>> GetAllAsync();
     }
 }

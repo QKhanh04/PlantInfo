@@ -31,7 +31,7 @@ namespace PlantManagement.Pages.Admin
             _speciesService = speciesService;
         }
 
-        public PagedResult<PlantDTO>? Plants { get; set; }
+        public PagedResult<PlantListDTO>? Plants { get; set; }
         [BindProperty(SupportsGet = true)]
         public int CurrentPage { get; set; } = 1;
         [BindProperty(SupportsGet = true)]
@@ -71,9 +71,9 @@ namespace PlantManagement.Pages.Admin
 
             if (!result.Success)
             {
-                Plants = new PagedResult<PlantDTO>
+                Plants = new PagedResult<PlantListDTO>
                 {
-                    Items = new List<PlantDTO>(),
+                    Items = new List<PlantListDTO>(),
                     CurrentPage = 1,
                     TotalPages = 0
                 };

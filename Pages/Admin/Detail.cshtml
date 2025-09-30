@@ -5,12 +5,14 @@
 }
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@Model.Plants.CommonName - Chi tiết cây trồng</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.0/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.0/font/bootstrap-icons.min.css"
+        rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     <style>
         :root {
@@ -295,7 +297,7 @@
             transform: translateY(-2px);
         }
 
-       
+
         /* Animation Classes */
         .fade-in-up {
             opacity: 0;
@@ -446,6 +448,43 @@
                 </div>
             </div>
         </div>
+        <!-- References -->
+        <div class="info-section" data-aos="fade-up" data-aos-delay="400">
+            <div class="info-box">
+                <div class="section-title">Tài liệu tham khảo</div>
+                @if (Model.Plants.References != null && Model.Plants.References.Any())
+                {
+                    <ul class="list-unstyled">
+                        @foreach (var reference in Model.Plants.References)
+                        {
+                            <li class="mb-2">
+                                <i class="bi bi-book me-2" style="color: var(--accent-green);"></i>
+                                <strong>@reference.SourceName</strong>
+                                @if (!string.IsNullOrEmpty(reference.Author))
+                                {
+                                    <span> - @reference.Author</span>
+                                }
+                                @if (reference.PublishedYear.HasValue)
+                                {
+                                    <span> (@reference.PublishedYear)</span>
+                                }
+                                @if (!string.IsNullOrEmpty(reference.Url))
+                                {
+                                    <a href="@reference.Url" target="_blank" class="ms-2 text-decoration-none text-primary">
+                                        <i class="bi bi-box-arrow-up-right"></i>
+                                    </a>
+                                }
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="text-muted">Chưa có tài liệu tham khảo.</p>
+                }
+            </div>
+        </div>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
@@ -458,15 +497,15 @@
         });
 
         // Add smooth scrolling and interaction effects
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Add hover effects to cards
             const cards = document.querySelectorAll('.stat-card, .info-box');
             cards.forEach(card => {
-                card.addEventListener('mouseenter', function() {
+                card.addEventListener('mouseenter', function () {
                     this.style.transform = 'translateY(-8px)';
                 });
-                
-                card.addEventListener('mouseleave', function() {
+
+                card.addEventListener('mouseleave', function () {
                     this.style.transform = 'translateY(0)';
                 });
             });
@@ -474,7 +513,7 @@
             // Add click effects to badges
             const badges = document.querySelectorAll('.badge-item');
             badges.forEach(badge => {
-                badge.addEventListener('click', function() {
+                badge.addEventListener('click', function () {
                     this.style.transform = 'scale(0.95)';
                     setTimeout(() => {
                         this.style.transform = 'scale(1)';
@@ -484,4 +523,5 @@
         });
     </script>
 </body>
+
 </html>

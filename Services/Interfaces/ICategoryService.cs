@@ -11,6 +11,7 @@ namespace PlantManagement.Services.Interfaces
     {
         public Task<ServiceResult<IEnumerable<Category>>> GetAllCategories();
         Task<ServiceResult<Category>> CreateAsync(Category category);
-
+        // Task<ServiceResult<Category>> GetByIdAsync(int id);
+        Task<IEnumerable<Category>> GetAllAsync();
     }
 }

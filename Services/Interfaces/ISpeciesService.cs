@@ -12,6 +12,6 @@ namespace PlantManagement.Services.Interfaces
     {
         Task<List<string>> GetDistinctOrderNameAsync();
         Task<ServiceResult<Species>> CreateAsync(Species species);
-
+        Task<IEnumerable<Species>> GetAllAsync();
     }
 }
