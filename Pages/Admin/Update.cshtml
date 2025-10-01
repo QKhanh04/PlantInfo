@@ -1,0 +1,331 @@
+@page "{id:int}"
+@model UpdateModel
+@{
+    ViewData["Title"]= "Cập nhật cây trồng";
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/create.css" />
+}
+<h2>@ViewData["Title"]</h2>
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Plant.PlantId" />
+ 
+    <!-- Tên thường gọi -->
+    <div class="mb-3">
+        <label class="form-label">Tên thường gọi</label>
+        <input asp-for="Plant.CommonName" class="form-control" />
+        <span asp-validation-for="Plant.CommonName" class="text-danger"></span>
+    </div>
+ 
+    <!-- Nguồn gốc -->
+    <div class="mb-3">
+        <label class="form-label">Nguồn gốc</label>
+        <input asp-for="Plant.Origin" class="form-control" />
+    </div>
+ 
+    <!-- Mô tả -->
+    <div class="mb-3">
+        <label class="form-label">Mô tả</label>
+        <textarea asp-for="Plant.Description" class="form-control"></textarea>
+    </div>
+ 
+    <!-- Loài (chọn hoặc thêm mới) -->
+    <div class="mb-3">
+        <label class="form-label">Loài (chọn có sẵn)</label>
+        <select asp-for="Plant.SpeciesId" class="form-select" asp-items="Model.SpeciesList">
+            <option value="">-- Chọn loài --</option>
+        </select>
+    </div>
+    <div class="mb-3 border p-2">
+        <label class="form-label">Hoặc thêm loài mới</label>
+        <input asp-for="Plant.Species.ScientificName" class="form-control" placeholder="Tên khoa học" />
+        <input asp-for="Plant.Species.Genus" class="form-control mt-2" placeholder="Chi" />
+        <input asp-for="Plant.Species.Family" class="form-control mt-2" placeholder="Họ" />
+        <input asp-for="Plant.Species.OrderName" class="form-control mt-2" placeholder="Bộ" />
+        <textarea asp-for="Plant.Species.Description" class="form-control mt-2" placeholder="Mô tả loài"></textarea>
+    </div>
+ 
+    <!-- Phân loại bằng checkbox -->
+    <div class="mb-3">
+        <label class="form-label">Phân loại (tick chọn)</label>
+        <div>
+            @foreach (var cat in Model.CategoryList)
+            {
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" class="form-check-input" name="Plant.CategoryIds" value="@cat.Value"
+                        id="cat_@cat.Value" @(Model.Plant?.CategoryIds?.Contains(int.Parse(cat.Value)) == true ? "checked" :
+                                                                "") />
+                    <label class="form-check-label" for="cat_@cat.Value">@cat.Text</label>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="mb-3 border p-2">
+        <label class="form-label">Thêm phân loại mới</label>
+        <div id="newCategories">
+            <div class="mb-2">
+                <input name="Plant.NewCategories[0].CategoryName" class="form-control" placeholder="Tên phân loại" />
+                <input name="Plant.NewCategories[0].Description" class="form-control mt-2" placeholder="Mô tả" />
+            </div>
+        </div>
+        <button type="button" class="btn btn-outline-primary mt-2" onclick="addCategory()">+ Thêm phân loại</button>
+    </div>
+ 
+    <!-- Công dụng bằng checkbox -->
+    <div class="mb-3">
+        <label class="form-label">Công dụng (tick chọn)</label>
+        <div>
+            @foreach (var use in Model.UseList)
+            {
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" class="form-check-input" name="Plant.UseIds" value="@use.Value"
+                        id="use_@use.Value" @(Model.Plant?.UseIds?.Contains(int.Parse(use.Value)) == true ? "checked" :
+                                                                "") />
+                    <label class="form-check-label" for="use_@use.Value">@use.Text</label>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="mb-3 border p-2">
+        <label class="form-label">Thêm công dụng mới</label>
+        <div id="newUses">
+            <div class="mb-2">
+                <input name="Plant.NewUses[0].UseName" class="form-control" placeholder="Tên công dụng" />
+                <input name="Plant.NewUses[0].Description" class="form-control mt-2" placeholder="Mô tả" />
+            </div>
+        </div>
+        <button type="button" class="btn btn-outline-primary mt-2" onclick="addUse()">+ Thêm công dụng</button>
+    </div>
+ 
+    <div class="mb-3">
+        <label class="form-label">Bệnh (tick chọn)</label>
+        <div>
+            @foreach (var disease in Model.DiseaseList)
+            {
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" class="form-check-input" name="Plant.DiseaseIds" value="@disease.Value"
+                        id="use_@disease.Value" @(Model.Plant?.DiseaseIds?.Contains(int.Parse(disease.Value)) == true ? "checked" :
+                                                                "") />
+                    <label class="form-check-label" for="use_@disease.Value">@disease.Text</label>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="mb-3 border p-2">
+        <label class="form-label">Thêm bệnh mới</label>
+        <div id="NewDiseases">
+            <div class="mb-2">
+                <input name="Plant.NewDiseases[0].UseName" class="form-control" placeholder="Tên bệnh" />
+                <input name="Plant.NewDiseases[0].Description" class="form-control mt-2" placeholder="Mô tả" />
+            </div>
+        </div>
+        <button type="button" class="btn btn-outline-primary mt-2" onclick="addDisease()">+ Thêm công dụng</button>
+    </div>
+ 
+    <!-- Điều kiện sinh trưởng -->
+    <h4>Điều kiện sinh trưởng</h4>
+    <div class="mb-3">
+        <input asp-for="Plant.GrowthCondition.SoilType" class="form-control" placeholder="Loại đất" />
+        <input asp-for="Plant.GrowthCondition.Climate" class="form-control mt-2" placeholder="Khí hậu" />
+        <input asp-for="Plant.GrowthCondition.TemperatureRange" class="form-control mt-2" placeholder="Nhiệt độ" />
+        <input asp-for="Plant.GrowthCondition.WaterRequirement" class="form-control mt-2" placeholder="Nhu cầu nước" />
+        <input asp-for="Plant.GrowthCondition.Sunlight" class="form-control mt-2" placeholder="Ánh sáng" />
+    </div>
+ 
+    <!-- Thêm ảnh -->
+   <h4>Ảnh cây trồng</h4>
+<div id="images">
+    @if (Model.Plant.Images != null && Model.Plant.Images.Count > 0)
+    {
+        for (int i = 0; i < Model.Plant.Images.Count; i++)
+        {
+            <div class="mb-2" id="imgRow_@i">
+                <input type="hidden" name="Plant.Images[@i].ImageId" value="@Model.Plant.Images[i].ImageId" />
+             <input name="Plant.Images[@i].ImageUrl" class="form-control mb-2"
+                value="@Model.Plant.Images[i].ImageUrl" placeholder="Đường dẫn ảnh (URL)"
+                oninput="previewUrlImage(this, 'urlImagePreview_@i')" />
+                <div id="urlImagePreview_@i" class="mt-2">
+    @if (!string.IsNullOrEmpty(Model.Plant.Images[i].ImageUrl))
+    {
+        <img src="@Model.Plant.Images[i].ImageUrl" style="max-width:120px;margin:5px;" />
+    }
+</div>
+                <input name="Plant.Images[@i].Caption" class="form-control mt-2" value="@Model.Plant.Images[i].Caption" placeholder="Chú thích" />
+                <div class="form-check mt-2">
+                    <input type="checkbox" name="Plant.Images[@i].IsPrimary" value="true" class="form-check-input"
+                    @(Model.Plant.Images[i].IsPrimary ? "checked" : "") />
+                    <label class="form-check-label">Ảnh chính</label>
+                </div>
+                <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('imgRow_@i')">Xóa ảnh</button>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="mb-2" id="imgRow_0">
+            <input name="Plant.Images[0].ImageUrl" class="form-control mb-2" placeholder="Đường dẫn ảnh (URL)" />
+            <input name="Plant.Images[0].Caption" class="form-control mt-2" placeholder="Chú thích" />
+            <div class="form-check mt-2">
+                <input type="checkbox" name="Plant.Images[0].IsPrimary" value="true" class="form-check-input" />
+                <label class="form-check-label">Ảnh chính</label>
+            </div>
+            <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('imgRow_0')">Xóa ảnh</button>
+        </div>
+    }
+</div>
+<button type="button" class="btn btn-outline-primary mt-2" onclick="addImage()">+ Thêm ảnh</button>
+ 
+<!-- THÊM PHẦN UPLOAD ẢNH TỪ FILE -->
+<div class="mb-3 mt-4 border p-2">
+    <label class="form-label">Hoặc tải ảnh từ máy tính</label>
+<input type="file" name="Plant.ImageFiles" multiple class="form-control" accept="image/*" onchange="previewFileImages(this)" />
+    <div id="fileImagePreview" class="mt-2"></div>
+</div>
+ 
+    <!-- Thêm nguồn tham khảo -->
+    <h4>Nguồn tham khảo</h4>
+    <div id="references">
+    @if (Model.Plant.References != null && Model.Plant.References.Count > 0)
+    {
+        for (int i = 0; i < Model.Plant.References.Count; i++)
+        {
+            <div class="mb-2" id="refRow_@i">
+                <input type="hidden" name="Plant.References[@i].ReferenceId" value="@Model.Plant.References[i].ReferenceId" />
+                <input name="Plant.References[@i].SourceName" class="form-control"
+                    value="@Model.Plant.References[i].SourceName" placeholder="Tên nguồn" />
+                <input name="Plant.References[@i].Url" class="form-control mt-2" value="@Model.Plant.References[i].Url"
+                    placeholder="Link" />
+                <input name="Plant.References[@i].Author" class="form-control mt-2"
+                    value="@Model.Plant.References[i].Author" placeholder="Tác giả" />
+                <input name="Plant.References[@i].PublishedYear" class="form-control mt-2"
+                    value="@Model.Plant.References[i].PublishedYear" placeholder="Năm xuất bản" />
+                <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('refRow_@i')">Xóa nguồn</button>
+            </div>
+        }
+    }
+    else
+    {
+        <div class="mb-2" id="refRow_0">
+            <input name="Plant.References[0].SourceName" class="form-control" placeholder="Tên nguồn" />
+            <input name="Plant.References[0].Url" class="form-control mt-2" placeholder="Link" />
+            <input name="Plant.References[0].Author" class="form-control mt-2" placeholder="Tác giả" />
+            <input name="Plant.References[0].PublishedYear" class="form-control mt-2" placeholder="Năm xuất bản" />
+            <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('refRow_0')">Xóa nguồn</button>
+        </div>
+    }
+</div>
+<button type="button" class="btn btn-outline-primary mt-2" onclick="addReference()">+ Thêm nguồn tham khảo</button>
+    <div>@TempData["ToastMessage"]</div>
+    <button type="submit" class="btn btn-success mt-4">Cập nhật cây</button>
+</form>
+ 
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+       // THÊM PHÂN LOẠI MỚI
+function addCategory() {
+    const container = document.getElementById('newCategories');
+    // Đếm số lượng input hiện tại theo CategoryName
+    const index = container.querySelectorAll('[name^="Plant.NewCategories["][name$="].CategoryName"]').length;
+    container.insertAdjacentHTML('beforeend',
+        `<div class="mb-2">
+            <input name="Plant.NewCategories[${index}].CategoryName" class="form-control" placeholder="Tên phân loại" />
+            <input name="Plant.NewCategories[${index}].Description" class="form-control mt-2" placeholder="Mô tả" />
+        </div>`);
+}
+ 
+// THÊM CÔNG DỤNG MỚI
+function addUse() {
+    const container = document.getElementById('newUses');
+    const index = container.querySelectorAll('[name^="Plant.NewUses["][name$="].UseName"]').length;
+    container.insertAdjacentHTML('beforeend',
+        `<div class="mb-2">
+            <input name="Plant.NewUses[${index}].UseName" class="form-control" placeholder="Tên công dụng" />
+            <input name="Plant.NewUses[${index}].Description" class="form-control mt-2" placeholder="Mô tả" />
+        </div>`);
+}
+ 
+// THÊM BỆNH MỚI
+function addDisease() {
+    const container = document.getElementById('NewDiseases');
+    const index = container.querySelectorAll('[name^="Plant.NewDiseases["][name$="].DiseaseName"]').length;
+    container.insertAdjacentHTML('beforeend',
+        `<div class="mb-2">
+            <input name="Plant.NewDiseases[${index}].DiseaseName" class="form-control" placeholder="Tên bệnh" />
+            <input name="Plant.NewDiseases[${index}].Description" class="form-control mt-2" placeholder="Mô tả" />
+        </div>`);
+}
+ 
+// THÊM ẢNH MỚI
+function addImage() {
+    const container = document.getElementById('images');
+    const index = container.querySelectorAll('[name^="Plant.Images["][name$="].ImageUrl"]').length;
+    container.insertAdjacentHTML('beforeend',
+        `<div class="mb-2">
+            <input name="Plant.Images[${index}].ImageUrl" class="form-control" placeholder="Đường dẫn ảnh"
+            oninput="previewUrlImage(this, 'urlImagePreview_${index}')" />
+            <div id="urlImagePreview_${index}" class="mt-2"></div>
+            <input name="Plant.Images[${index}].Caption" class="form-control mt-2" placeholder="Chú thích" />
+            <div class="form-check mt-2">
+                <input type="hidden" name="Plant.Images[${index}].IsPrimary" value="false" />
+                <input type="checkbox" name="Plant.Images[${index}].IsPrimary" value="true" class="form-check-input" />
+                <label class="form-check-label">Ảnh chính</label>
+            </div>
+                        <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('imgRow_${index}')">Xóa ảnh</button>
+ 
+        </div>`);
+}
+ 
+// THÊM NGUỒN THAM KHẢO MỚI
+function addReference() {
+    const container = document.getElementById('references');
+    const index = container.querySelectorAll('[name^="Plant.References["][name$="].SourceName"]').length;
+    container.insertAdjacentHTML('beforeend',
+        `<div class="mb-2">
+            <input name="Plant.References[${index}].SourceName" class="form-control" placeholder="Tên nguồn" />
+            <input name="Plant.References[${index}].Url" class="form-control mt-2" placeholder="Link" />
+            <input name="Plant.References[${index}].Author" class="form-control mt-2" placeholder="Tác giả" />
+            <input name="Plant.References[${index}].PublishedYear" class="form-control mt-2" placeholder="Năm xuất bản" />
+                        <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('refRow_${index}')">Xóa nguồn</button>
+ 
+        </div>`);
+}
+function removeRow(rowId) {
+    const row = document.getElementById(rowId);
+    if (row) {
+        row.remove();
+    }
+}
+function previewFileImages(input) {
+    const container = document.getElementById('fileImagePreview');
+    container.innerHTML = '';
+    if (input.files) {
+        Array.from(input.files).forEach(file => {
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.maxWidth = '120px';
+                    img.style.margin = '5px';
+                    container.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+}
+function previewUrlImage(input, previewDivId) {
+    const container = document.getElementById(previewDivId);
+    container.innerHTML = '';
+    const url = input.value.trim();
+    if (url) {
+        const img = document.createElement('img');
+        img.src = url;
+        img.style.maxWidth = '120px';
+        img.style.margin = '5px';
+        container.appendChild(img);
+    }
+}
+    </script>
+}

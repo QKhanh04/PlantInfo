@@ -49,16 +49,17 @@ namespace PlantManagement.DTOs
     }
 
     // DTO cho PlantImage
-    public class PlantImageDTO
-    {
-        public string ImageUrl { get; set; } = string.Empty;
-        public string? Caption { get; set; }
-        public bool IsPrimary { get; set; }
-    }
+    // public class PlantImageDTO
+    // {
+    //     public string ImageUrl { get; set; } = string.Empty;
+    //     public string? Caption { get; set; }
+    //     public bool IsPrimary { get; set; }
+    // }
 
     // DTO cho PlantReference
     public class PlantReferenceDTO
     {
+        public int? ReferenceId { get; set; }
         public string? SourceName { get; set; } = string.Empty;
         public string? Url { get; set; }
         public string? Author { get; set; }
@@ -78,14 +79,19 @@ namespace PlantManagement.DTOs
 
         public List<int>? CategoryIds { get; set; }
         public List<int>? UseIds { get; set; }
+        public List<int>? DiseaseIds { get; set; }
+
 
         public List<CategoryCreateDTO>? NewCategories { get; set; }
         public List<UseCreateDTO>? NewUses { get; set; }
+        public List<DiseaseDTO>? NewDiseases { get; set; }
 
 
         public GrowthConditionDTO? GrowthCondition { get; set; }
-        public List<DiseaseDTO>? Diseases { get; set; }
         public List<PlantImageDTO>? Images { get; set; }
         public List<PlantReferenceDTO>? References { get; set; }
+        public List<IFormFile>? ImageFiles { get; set; }
+
     }
+    
 }

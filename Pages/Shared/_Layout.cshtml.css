@@ -1,48 +1,75 @@
 ﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
-a.navbar-brand {
-  white-space: normal;
+body {
+  background-color: #ffffff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header */
+.navbar {
+  background-color: #ffffff;
+  /* trắng tinh */
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.navbar-brand {
+  color: #4CAF50 !important;
+  /* xanh lá nhấn */
+  font-weight: 600;
+}
+
+.navbar-brand:hover {
+  color: #388E3C !important;
+  /* xanh lá đậm hơn khi hover */
+}
+
+.navbar-nav .nav-link {
+  color: #555 !important;
+  /* xám nhẹ */
+  font-weight: 500;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #4CAF50 !important;
+}
+
+/* Footer */
+footer.footer {
+  background-color: #ffffff;
+  color: #555;
+  border-top: 1px solid #e0e0e0;
   text-align: center;
-  word-break: break-all;
-}
-
-a {
-  color: #0077cc;
-}
-
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
-
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
-}
-
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
-}
-
-.footer {
-  position: absolute;
+  padding: 15px 0;
+  position: fixed;
   bottom: 0;
   width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
+}
+
+footer.footer a {
+  color: #4CAF50;
+  text-decoration: none;
+}
+
+footer.footer a:hover {
+  text-decoration: underline;
+}
+
+
+
+/* Nút Logout */
+.btn-link {
+  color: #4CAF50 !important;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.btn-link:hover {
+  text-decoration: underline;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }

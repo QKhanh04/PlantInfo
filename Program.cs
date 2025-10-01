@@ -25,6 +25,8 @@ builder.Services.AddScoped<IGrowthConditionRepository, GrowthConditionRepository
 builder.Services.AddScoped<IDiseaseRepository, DiseaseRepository>();
 builder.Services.AddScoped<IPlantImageRepository, PlantImageRepository>();
 builder.Services.AddScoped<IPlantReferenceRepository, PlantReferenceRepository>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
+
 // // Nếu có bảng liên kết:
 // builder.Services.AddScoped<IPlantCategoryRepository, PlantCategoryRepository>();
 // builder.Services.AddScoped<IPlantUseRepository, PlantUseRepository>();

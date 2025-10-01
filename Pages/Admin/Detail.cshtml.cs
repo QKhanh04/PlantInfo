@@ -13,7 +13,6 @@ using PlantManagement.Services.Interfaces;
 namespace PlantManagement.Pages.Admin
 {
 
-    [Authorize(Roles = "Admin")]
     public class DetailModel : PageModel
     {
         private readonly ILogger<DetailModel> _logger;
@@ -31,7 +30,7 @@ namespace PlantManagement.Pages.Admin
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            var result = await _plantService.GetDetailAsync(id);
+            var result = await _plantService.GetDetailPlantAsync(id);
             if (!result.Success || result.Data == null)
             {
                 TempData["Error"] = result.Message;

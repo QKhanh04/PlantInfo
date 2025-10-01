@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "ZAk0NiX5djOHw4db1d7q25Cl372Wg3H+4nwAxhl7v/k=",
+  "Hash": "F3nExI7Oy89G5Nax5R3fItOYP/VDtJsVMXzBsdfB9V0=",
   "Source": "PlantManagement",
   "BasePath": "_content/PlantManagement",
   "Mode": "Default",
@@ -31,8 +31,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ApplicationBundle",
-      "Fingerprint": "pli35ehirz",
-      "Integrity": "E9KQd1YHqdy72uZrSHDCN6Ixktw4k45GXW3N2MOhL+E=",
+      "Fingerprint": "gsnjqsttnh",
+      "Integrity": "MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\Admin\\Desktop\\PlantManagement\\obj\\Debug\\net8.0\\scopedcss\\bundle\\PlantManagement.styles.css"
@@ -52,11 +52,32 @@
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ProjectBundle",
-      "Fingerprint": "pli35ehirz",
-      "Integrity": "E9KQd1YHqdy72uZrSHDCN6Ixktw4k45GXW3N2MOhL+E=",
+      "Fingerprint": "gsnjqsttnh",
+      "Integrity": "MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\Admin\\Desktop\\PlantManagement\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\PlantManagement.bundle.scp.css"
+    },
+    {
+      "Identity": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\create.css",
+      "SourceId": "PlantManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\",
+      "BasePath": "_content/PlantManagement",
+      "RelativePath": "css/admin/create#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "4r5dl0ewnu",
+      "Integrity": "YHOd4X+ot/g79xDcDbZ8M4ISFjXEhlB7qQvokNfRNHI=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\admin\\create.css"
     },
     {
       "Identity": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\index.css",
@@ -80,6 +101,27 @@
       "OriginalItemSpec": "wwwroot\\css\\admin\\index.css"
     },
     {
+      "Identity": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\report.css",
+      "SourceId": "PlantManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\",
+      "BasePath": "_content/PlantManagement",
+      "RelativePath": "css/admin/report#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "b0w5zxcbmx",
+      "Integrity": "S9j/Qon8froq+IGDTdBu13rxdEfwUl0sXK8a38hInDk=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\admin\\report.css"
+    },
+    {
       "Identity": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\auth.css",
       "SourceId": "PlantManagement",
       "SourceType": "Discovered",
@@ -101,6 +143,27 @@
       "OriginalItemSpec": "wwwroot\\css\\auth.css"
     },
     {
+      "Identity": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\detail.css",
+      "SourceId": "PlantManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\",
+      "BasePath": "_content/PlantManagement",
+      "RelativePath": "css/detail#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "3ph1xzrj1k",
+      "Integrity": "KVOmMGbZmevkTfAXFAHE5/SKvTKbLZtnjkuZPfK4ZbM=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\detail.css"
+    },
+    {
       "Identity": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\site.css",
       "SourceId": "PlantManagement",
       "SourceType": "Discovered",
@@ -115,8 +178,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "1i7jiox0on",
-      "Integrity": "R5EgMslbi5vH15bdCUHSsEapFF4kstft2gofdkGIjfM=",
+      "Fingerprint": "khundd5xyy",
+      "Integrity": "6PRbGc/8KD64YTSC6D3ysDqz1nUM7Vns5afSnRRb+7w=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
@@ -141,6 +204,69 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\images\\plants\\0acbd445-3753-4617-86c5-05adff984535.png",
+      "SourceId": "PlantManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\",
+      "BasePath": "_content/PlantManagement",
+      "RelativePath": "images/plants/0acbd445-3753-4617-86c5-05adff984535#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "6hc7sci36u",
+      "Integrity": "6mba86I4X0Nx2k0R2xxFEFXBVhmoXSVGLOlVxJ4WUGw=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\plants\\0acbd445-3753-4617-86c5-05adff984535.png"
+    },
+    {
+      "Identity": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\images\\plants\\7528baca-e1cf-4faf-a5ed-c511999cfe3d.png",
+      "SourceId": "PlantManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\",
+      "BasePath": "_content/PlantManagement",
+      "RelativePath": "images/plants/7528baca-e1cf-4faf-a5ed-c511999cfe3d#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "bhfwbwc7n3",
+      "Integrity": "of7eL/t/T+aed7P6Z+JgG+0CjwOCjgFp646za8yPWAE=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\plants\\7528baca-e1cf-4faf-a5ed-c511999cfe3d.png"
+    },
+    {
+      "Identity": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\images\\plants\\ed4dd4f9-b2d2-476b-b78d-d53a3595b414.png",
+      "SourceId": "PlantManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\",
+      "BasePath": "_content/PlantManagement",
+      "RelativePath": "images/plants/ed4dd4f9-b2d2-476b-b78d-d53a3595b414#[.{fingerprint}]?.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "dslvzyg83o",
+      "Integrity": "DUu3lG7r0ixv7M9xfmwxH+vi2y3cYhj7smRMaf34P9k=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\plants\\ed4dd4f9-b2d2-476b-b78d-d53a3595b414.png"
     },
     {
       "Identity": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\js\\auth.js",
@@ -1447,6 +1573,88 @@
   ],
   "Endpoints": [
     {
+      "Route": "css/admin/create.4r5dl0ewnu.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\create.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "11977"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"YHOd4X+ot/g79xDcDbZ8M4ISFjXEhlB7qQvokNfRNHI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 01 Oct 2025 14:42:51 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "4r5dl0ewnu"
+        },
+        {
+          "Name": "label",
+          "Value": "css/admin/create.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-YHOd4X+ot/g79xDcDbZ8M4ISFjXEhlB7qQvokNfRNHI="
+        }
+      ]
+    },
+    {
+      "Route": "css/admin/create.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\create.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "11977"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"YHOd4X+ot/g79xDcDbZ8M4ISFjXEhlB7qQvokNfRNHI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 01 Oct 2025 14:42:51 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-YHOd4X+ot/g79xDcDbZ8M4ISFjXEhlB7qQvokNfRNHI="
+        }
+      ]
+    },
+    {
       "Route": "css/admin/index.css",
       "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\index.css",
       "Selectors": [],
@@ -1525,6 +1733,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-WXO38n/BaynOOMH0hwNlTnJKx381P3E0L8iC7mv4nn8="
+        }
+      ]
+    },
+    {
+      "Route": "css/admin/report.b0w5zxcbmx.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\report.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5429"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"S9j/Qon8froq+IGDTdBu13rxdEfwUl0sXK8a38hInDk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 01 Oct 2025 15:02:42 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "b0w5zxcbmx"
+        },
+        {
+          "Name": "label",
+          "Value": "css/admin/report.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-S9j/Qon8froq+IGDTdBu13rxdEfwUl0sXK8a38hInDk="
+        }
+      ]
+    },
+    {
+      "Route": "css/admin/report.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\report.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5429"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"S9j/Qon8froq+IGDTdBu13rxdEfwUl0sXK8a38hInDk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 01 Oct 2025 15:02:42 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-S9j/Qon8froq+IGDTdBu13rxdEfwUl0sXK8a38hInDk="
         }
       ]
     },
@@ -1611,8 +1901,8 @@
       ]
     },
     {
-      "Route": "css/site.1i7jiox0on.css",
-      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\site.css",
+      "Route": "css/detail.3ph1xzrj1k.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\detail.css",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1621,7 +1911,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "910"
+          "Value": "7052"
         },
         {
           "Name": "Content-Type",
@@ -1629,11 +1919,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"R5EgMslbi5vH15bdCUHSsEapFF4kstft2gofdkGIjfM=\""
+          "Value": "\"KVOmMGbZmevkTfAXFAHE5/SKvTKbLZtnjkuZPfK4ZbM=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 28 Sep 2025 15:59:41 GMT"
+          "Value": "Wed, 01 Oct 2025 14:59:40 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1643,15 +1933,52 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "1i7jiox0on"
+          "Value": "3ph1xzrj1k"
         },
         {
           "Name": "label",
-          "Value": "css/site.css"
+          "Value": "css/detail.css"
         },
         {
           "Name": "integrity",
-          "Value": "sha256-R5EgMslbi5vH15bdCUHSsEapFF4kstft2gofdkGIjfM="
+          "Value": "sha256-KVOmMGbZmevkTfAXFAHE5/SKvTKbLZtnjkuZPfK4ZbM="
+        }
+      ]
+    },
+    {
+      "Route": "css/detail.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\detail.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "7052"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"KVOmMGbZmevkTfAXFAHE5/SKvTKbLZtnjkuZPfK4ZbM=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 01 Oct 2025 14:59:40 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-KVOmMGbZmevkTfAXFAHE5/SKvTKbLZtnjkuZPfK4ZbM="
         }
       ]
     },
@@ -1666,7 +1993,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "910"
+          "Value": "1065"
         },
         {
           "Name": "Content-Type",
@@ -1674,11 +2001,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"R5EgMslbi5vH15bdCUHSsEapFF4kstft2gofdkGIjfM=\""
+          "Value": "\"6PRbGc/8KD64YTSC6D3ysDqz1nUM7Vns5afSnRRb+7w=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 28 Sep 2025 15:59:41 GMT"
+          "Value": "Wed, 01 Oct 2025 14:23:19 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1688,7 +2015,52 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-R5EgMslbi5vH15bdCUHSsEapFF4kstft2gofdkGIjfM="
+          "Value": "sha256-6PRbGc/8KD64YTSC6D3ysDqz1nUM7Vns5afSnRRb+7w="
+        }
+      ]
+    },
+    {
+      "Route": "css/site.khundd5xyy.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\site.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1065"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"6PRbGc/8KD64YTSC6D3ysDqz1nUM7Vns5afSnRRb+7w=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 01 Oct 2025 14:23:19 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "khundd5xyy"
+        },
+        {
+          "Name": "label",
+          "Value": "css/site.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-6PRbGc/8KD64YTSC6D3ysDqz1nUM7Vns5afSnRRb+7w="
         }
       ]
     },
@@ -1771,6 +2143,252 @@
         {
           "Name": "integrity",
           "Value": "sha256-Jtxf9L+5ITKRc1gIRl4VbUpGkRNfOBXjYTdhJD4facM="
+        }
+      ]
+    },
+    {
+      "Route": "images/plants/0acbd445-3753-4617-86c5-05adff984535.6hc7sci36u.png",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\images\\plants\\0acbd445-3753-4617-86c5-05adff984535.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "59495"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"6mba86I4X0Nx2k0R2xxFEFXBVhmoXSVGLOlVxJ4WUGw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 01 Oct 2025 14:57:05 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "6hc7sci36u"
+        },
+        {
+          "Name": "label",
+          "Value": "images/plants/0acbd445-3753-4617-86c5-05adff984535.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-6mba86I4X0Nx2k0R2xxFEFXBVhmoXSVGLOlVxJ4WUGw="
+        }
+      ]
+    },
+    {
+      "Route": "images/plants/0acbd445-3753-4617-86c5-05adff984535.png",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\images\\plants\\0acbd445-3753-4617-86c5-05adff984535.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "59495"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"6mba86I4X0Nx2k0R2xxFEFXBVhmoXSVGLOlVxJ4WUGw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 01 Oct 2025 14:57:05 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-6mba86I4X0Nx2k0R2xxFEFXBVhmoXSVGLOlVxJ4WUGw="
+        }
+      ]
+    },
+    {
+      "Route": "images/plants/7528baca-e1cf-4faf-a5ed-c511999cfe3d.bhfwbwc7n3.png",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\images\\plants\\7528baca-e1cf-4faf-a5ed-c511999cfe3d.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "31741"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"of7eL/t/T+aed7P6Z+JgG+0CjwOCjgFp646za8yPWAE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 01 Oct 2025 14:57:05 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "bhfwbwc7n3"
+        },
+        {
+          "Name": "label",
+          "Value": "images/plants/7528baca-e1cf-4faf-a5ed-c511999cfe3d.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-of7eL/t/T+aed7P6Z+JgG+0CjwOCjgFp646za8yPWAE="
+        }
+      ]
+    },
+    {
+      "Route": "images/plants/7528baca-e1cf-4faf-a5ed-c511999cfe3d.png",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\images\\plants\\7528baca-e1cf-4faf-a5ed-c511999cfe3d.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "31741"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"of7eL/t/T+aed7P6Z+JgG+0CjwOCjgFp646za8yPWAE=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 01 Oct 2025 14:57:05 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-of7eL/t/T+aed7P6Z+JgG+0CjwOCjgFp646za8yPWAE="
+        }
+      ]
+    },
+    {
+      "Route": "images/plants/ed4dd4f9-b2d2-476b-b78d-d53a3595b414.dslvzyg83o.png",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\images\\plants\\ed4dd4f9-b2d2-476b-b78d-d53a3595b414.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "458120"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DUu3lG7r0ixv7M9xfmwxH+vi2y3cYhj7smRMaf34P9k=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 01 Oct 2025 14:57:05 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "dslvzyg83o"
+        },
+        {
+          "Name": "label",
+          "Value": "images/plants/ed4dd4f9-b2d2-476b-b78d-d53a3595b414.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-DUu3lG7r0ixv7M9xfmwxH+vi2y3cYhj7smRMaf34P9k="
+        }
+      ]
+    },
+    {
+      "Route": "images/plants/ed4dd4f9-b2d2-476b-b78d-d53a3595b414.png",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\images\\plants\\ed4dd4f9-b2d2-476b-b78d-d53a3595b414.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "458120"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"DUu3lG7r0ixv7M9xfmwxH+vi2y3cYhj7smRMaf34P9k=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 01 Oct 2025 14:57:05 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-DUu3lG7r0ixv7M9xfmwxH+vi2y3cYhj7smRMaf34P9k="
         }
       ]
     },
@@ -6869,7 +7487,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1133"
+          "Value": "1596"
         },
         {
           "Name": "Content-Type",
@@ -6877,11 +7495,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"E9KQd1YHqdy72uZrSHDCN6Ixktw4k45GXW3N2MOhL+E=\""
+          "Value": "\"MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 30 Sep 2025 23:51:55 GMT"
+          "Value": "Wed, 01 Oct 2025 14:31:39 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -6891,12 +7509,12 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-E9KQd1YHqdy72uZrSHDCN6Ixktw4k45GXW3N2MOhL+E="
+          "Value": "sha256-MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I="
         }
       ]
     },
     {
-      "Route": "PlantManagement.pli35ehirz.bundle.scp.css",
+      "Route": "PlantManagement.gsnjqsttnh.bundle.scp.css",
       "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\PlantManagement.bundle.scp.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -6906,7 +7524,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1133"
+          "Value": "1596"
         },
         {
           "Name": "Content-Type",
@@ -6914,11 +7532,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"E9KQd1YHqdy72uZrSHDCN6Ixktw4k45GXW3N2MOhL+E=\""
+          "Value": "\"MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 30 Sep 2025 23:51:55 GMT"
+          "Value": "Wed, 01 Oct 2025 14:31:39 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -6928,7 +7546,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "pli35ehirz"
+          "Value": "gsnjqsttnh"
         },
         {
           "Name": "label",
@@ -6936,12 +7554,12 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-E9KQd1YHqdy72uZrSHDCN6Ixktw4k45GXW3N2MOhL+E="
+          "Value": "sha256-MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I="
         }
       ]
     },
     {
-      "Route": "PlantManagement.pli35ehirz.styles.css",
+      "Route": "PlantManagement.gsnjqsttnh.styles.css",
       "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\obj\\Debug\\net8.0\\scopedcss\\bundle\\PlantManagement.styles.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -6951,7 +7569,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1133"
+          "Value": "1596"
         },
         {
           "Name": "Content-Type",
@@ -6959,11 +7577,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"E9KQd1YHqdy72uZrSHDCN6Ixktw4k45GXW3N2MOhL+E=\""
+          "Value": "\"MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 30 Sep 2025 23:51:55 GMT"
+          "Value": "Wed, 01 Oct 2025 14:31:39 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -6973,7 +7591,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "pli35ehirz"
+          "Value": "gsnjqsttnh"
         },
         {
           "Name": "label",
@@ -6981,7 +7599,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-E9KQd1YHqdy72uZrSHDCN6Ixktw4k45GXW3N2MOhL+E="
+          "Value": "sha256-MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I="
         }
       ]
     },
@@ -6996,7 +7614,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1133"
+          "Value": "1596"
         },
         {
           "Name": "Content-Type",
@@ -7004,11 +7622,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"E9KQd1YHqdy72uZrSHDCN6Ixktw4k45GXW3N2MOhL+E=\""
+          "Value": "\"MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 30 Sep 2025 23:51:55 GMT"
+          "Value": "Wed, 01 Oct 2025 14:31:39 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -7018,7 +7636,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-E9KQd1YHqdy72uZrSHDCN6Ixktw4k45GXW3N2MOhL+E="
+          "Value": "sha256-MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I="
         }
       ]
     }

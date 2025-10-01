@@ -19,16 +19,16 @@ namespace PlantManagement.Mappings
 
 
             CreateMap<Plant, PlantDetailDTO>()
-                .ForMember(dest => dest.CategoryNames, opt => opt.MapFrom(src => src.Categories.Select(c => c.CategoryName).ToList()))
-                .ForMember(dest => dest.ImageUrls, opt => opt.MapFrom(src => src.PlantImages.Select(img => img.ImageUrl).ToList()));
-
+                .ForMember(dest => dest.ImageUrls, opt => opt.MapFrom(src => src.PlantImages.Select(img => img.ImageUrl).ToList()))
+                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.PlantImages))
+                .ForMember(dest => dest.References, opt => opt.MapFrom(src => src.PlantReferences));
 
             CreateMap<Disease, DiseasesDTO>();
-            CreateMap<Use, UseDTO>();
+            // CreateMap<Use, UseDTO>();
             CreateMap<Species, SpeciesDTO>();
             CreateMap<GrowthCondition, GrowthConditionDTO>();
             CreateMap<PlantImage, PlantImageDTO>();
-            CreateMap<Category, CategoryDTO>();
+            // CreateMap<Category, CategoryDTO>();
 
             CreateMap<PlantCreateDTO, Plant>()
                 .ForMember(d => d.CreateAt, o => o.MapFrom(_ => DateTime.UtcNow))
@@ -59,7 +59,12 @@ namespace PlantManagement.Mappings
             CreateMap<UseDTO, Use>();
 
             CreateMap<SpeciesCreateDTO, Species>();
-            CreateMap<PlantReference, ReferenceDTO>();
+            CreateMap<PlantUpdateDTO, Plant>();
+            CreateMap<Plant, PlantUpdateDTO>()
+            .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.PlantImages))
+            .ForMember(dest => dest.References, opt => opt.MapFrom(src => src.PlantReferences));
+            CreateMap<PlantDetailDTO, PlantUpdateDTO>();
+
 
         }
     }

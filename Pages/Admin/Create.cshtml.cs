@@ -16,7 +16,7 @@ using PlantManagement.Services.Interfaces;
 namespace PlantManagement.Pages.Admin
 {
 
-    [Authorize(Roles = "Admin")]
+     [Authorize(Roles = "Admin")]
     public class CreateModel : PageModel
     {
         private readonly ILogger<CreateModel> _logger;
@@ -24,6 +24,7 @@ namespace PlantManagement.Pages.Admin
         private readonly ICategoryService _categoryService;
         private readonly IUseService _useService;
         private readonly ISpeciesService _speciesService;
+        private readonly IDiseaseService _diseaseService;
 
         private readonly IMapper _mapper;
 
@@ -32,6 +33,7 @@ namespace PlantManagement.Pages.Admin
         ICategoryService categoryService,
         IUseService useService,
         ISpeciesService speciesService,
+        IDiseaseService diseaseService,
 
 
         IMapper mapper)
@@ -41,17 +43,17 @@ namespace PlantManagement.Pages.Admin
             _categoryService = categoryService;
             _speciesService = speciesService;
             _useService = useService;
+            _diseaseService = diseaseService;
 
             _mapper = mapper;
         }
 
         [BindProperty]
         public PlantCreateDTO Plant { get; set; }
-        [BindProperty]
-        public List<IFormFile> ImageFiles { get; set; }    // File upload
         public List<SelectListItem> CategoryList { get; set; } = new();
         public List<SelectListItem> UseList { get; set; } = new();
         public List<SelectListItem> SpeciesList { get; set; } = new();
+        public List<SelectListItem> DiseaseList { get; set; } = new();
 
         public async Task OnGetAsync()
         {
@@ -72,6 +74,13 @@ namespace PlantManagement.Pages.Admin
             {
                 Value = s.SpeciesId.ToString(),
                 Text = s.ScientificName
+            }).ToList();
+
+            var disease = await _diseaseService.GetAllAsync();
+            DiseaseList = disease.Select(s => new SelectListItem
+            {
+                Value = s.DiseaseId.ToString(),
+                Text = s.DiseaseName
             }).ToList();
         }
 
@@ -98,12 +107,12 @@ namespace PlantManagement.Pages.Admin
                     return Page();
                 }
 
-                if (ImageFiles != null && ImageFiles.Count > 0)
+                if (Plant.ImageFiles != null && Plant.ImageFiles.Count > 0)
                 {
                     var saveDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/plants");
                     if (!Directory.Exists(saveDir)) Directory.CreateDirectory(saveDir);
 
-                    foreach (var file in ImageFiles)
+                    foreach (var file in Plant.ImageFiles)
                     {
                         if (file.Length > 0)
                         {

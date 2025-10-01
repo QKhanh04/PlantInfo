@@ -2,15 +2,27 @@
   "Files": [
     {
       "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\PlantManagement.bundle.scp.css",
-      "PackagePath": "staticwebassets\\PlantManagement.pli35ehirz.bundle.scp.css"
+      "PackagePath": "staticwebassets\\PlantManagement.gsnjqsttnh.bundle.scp.css"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\create.css",
+      "PackagePath": "staticwebassets\\css\\admin\\create.css"
     },
     {
       "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\index.css",
       "PackagePath": "staticwebassets\\css\\admin\\index.css"
     },
     {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\report.css",
+      "PackagePath": "staticwebassets\\css\\admin\\report.css"
+    },
+    {
       "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\auth.css",
       "PackagePath": "staticwebassets\\css\\auth.css"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\detail.css",
+      "PackagePath": "staticwebassets\\css\\detail.css"
     },
     {
       "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\site.css",
@@ -19,6 +31,18 @@
     {
       "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\images\\plants\\0acbd445-3753-4617-86c5-05adff984535.png",
+      "PackagePath": "staticwebassets\\images\\plants\\0acbd445-3753-4617-86c5-05adff984535.png"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\images\\plants\\7528baca-e1cf-4faf-a5ed-c511999cfe3d.png",
+      "PackagePath": "staticwebassets\\images\\plants\\7528baca-e1cf-4faf-a5ed-c511999cfe3d.png"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\images\\plants\\ed4dd4f9-b2d2-476b-b78d-d53a3595b414.png",
+      "PackagePath": "staticwebassets\\images\\plants\\ed4dd4f9-b2d2-476b-b78d-d53a3595b414.png"
     },
     {
       "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\js\\auth.js",
