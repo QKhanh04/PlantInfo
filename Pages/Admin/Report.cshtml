@@ -1,0 +1,811 @@
+@page
+@model PlantManagement.Pages.Admin.Report
+@{
+    ViewData["Title"] = "Report";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thống Kê Admin - Quản Lý Cây Trồng</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #f5f7fa;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #2d3748;
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #718096;
+            font-size: 16px;
+        }
+
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-group label {
+            color: #4a5568;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        select {
+            padding: 10px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn-export {
+            margin-left: auto;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-export:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .stat-card-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .stat-info h3 {
+            color: #718096;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .stat-trend {
+            color: #48bb78;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-header h2 {
+            color: #2d3748;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .btn-download {
+            background: none;
+            border: none;
+            color: #667eea;
+            cursor: pointer;
+            font-size: 20px;
+            transition: color 0.3s;
+        }
+
+        .btn-download:hover {
+            color: #764ba2;
+        }
+
+        .keywords-list {
+            list-style: none;
+        }
+
+        .keyword-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .keyword-item:last-child {
+            border-bottom: none;
+        }
+
+        .keyword-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .keyword-rank {
+            font-size: 18px;
+            font-weight: 700;
+            color: #cbd5e0;
+        }
+
+        .keyword-name {
+            color: #2d3748;
+            font-weight: 500;
+        }
+
+        .keyword-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .progress-bar {
+            width: 120px;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s ease;
+        }
+
+        .keyword-count {
+            color: #4a5568;
+            font-weight: 600;
+            width: 50px;
+            text-align: right;
+        }
+
+        .summary-table {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f7fafc;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 15px;
+            color: #4a5568;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        tbody tr:hover {
+            background: #f7fafc;
+        }
+
+        .trend-up {
+            color: #48bb78;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        @* @media (max-width: 768px) { *@
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .btn-export {
+                margin-left: 0;
+            }
+        }
+
+        .icon {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>📊 Thống Kê Quản Lý Cây Trồng</h1>
+            <p>Tổng quan và phân tích dữ liệu hệ thống</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+            <div class="filter-group">
+                <label>📅 Thời gian:</label>
+                <select id="dateRange">
+                    <option value="today">Hôm nay</option>
+                    <option value="thisWeek">Tuần này</option>
+                    <option value="thisMonth" selected>Tháng này</option>
+                    <option value="thisYear">Năm này</option>
+                    <option value="all">Tất cả</option>
+                </select>
+            </div>
+            
+            <div class="filter-group">
+                <label>🔍 Danh mục:</label>
+                <select id="categoryFilter">
+                    <option value="all">Tất cả danh mục</option>
+                    <option value="fruit">Cây ăn quả</option>
+                    <option value="industrial">Cây công nghiệp</option>
+                    <option value="medicinal">Cây dược liệu</option>
+                    <option value="ornamental">Cây cảnh</option>
+                </select>
+            </div>
+
+            <button class="btn-export" onclick="exportReport()">
+                <span>📥</span>
+                <span>Xuất báo cáo</span>
+            </button>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-card-content">
+                    <div class="stat-info">
+                        <h3>Tổng số cây trồng</h3>
+                        <div class="stat-value" style="color: #10b981;">245</div>
+                        <div class="stat-trend">
+                            <span>↗</span>
+                            <span>+6.5% so với tháng trước</span>
+                        </div>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1);">
+                        <span style="color: #10b981;">🌱</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-content">
+                    <div class="stat-info">
+                        <h3>Tổng số người dùng</h3>
+                        <div class="stat-value" style="color: #3b82f6;">1,523</div>
+                        <div class="stat-trend">
+                            <span>↗</span>
+                            <span>+12.3% so với tháng trước</span>
+                        </div>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(59, 130, 246, 0.1);">
+                        <span style="color: #3b82f6;">👥</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-content">
+                    <div class="stat-info">
+                        <h3>Lượt tìm kiếm</h3>
+                        <div class="stat-value" style="color: #f59e0b;">8,947</div>
+                        <div class="stat-trend">
+                            <span>↗</span>
+                            <span>+8.1% so với tháng trước</span>
+                        </div>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1);">
+                        <span style="color: #f59e0b;">🔍</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-content">
+                    <div class="stat-info">
+                        <h3>Cây yêu thích</h3>
+                        <div class="stat-value" style="color: #ef4444;">1,963</div>
+                        <div class="stat-trend">
+                            <span>↗</span>
+                            <span>+15.7% so với tháng trước</span>
+                        </div>
+                    </div>
+                    <div class="stat-icon" style="background: rgba(239, 68, 68, 0.1);">
+                        <span style="color: #ef4444;">❤️</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 1 -->
+        <div class="charts-grid">
+            <!-- Pie Chart -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2>Phân bố theo danh mục</h2>
+                    <button class="btn-download" onclick="downloadChart('pieChart')">📥</button>
+                </div>
+                <canvas id="pieChart"></canvas>
+            </div>
+
+            <!-- Line Chart -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2>Xu hướng tìm kiếm</h2>
+                    <button class="btn-download" onclick="downloadChart('lineChart')">📥</button>
+                </div>
+                <canvas id="lineChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Charts Row 2 -->
+        <div class="charts-grid">
+            <!-- Bar Chart -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2>Top cây được yêu thích</h2>
+                    <button class="btn-download" onclick="downloadChart('barChart')">📥</button>
+                </div>
+                <canvas id="barChart"></canvas>
+            </div>
+
+            <!-- Keywords List -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2>Từ khóa tìm kiếm phổ biến</h2>
+                    <button class="btn-download" onclick="exportKeywords()">📥</button>
+                </div>
+                <ul class="keywords-list" id="keywordsList"></ul>
+            </div>
+        </div>
+
+        <!-- Charts Row 3 -->
+        <div class="charts-grid">
+            <!-- New Plants Chart -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2>Cây trồng mới theo tháng</h2>
+                    <button class="btn-download" onclick="downloadChart('newPlantsChart')">📥</button>
+                </div>
+                <canvas id="newPlantsChart"></canvas>
+            </div>
+
+            <!-- User Activity Chart -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2>Hoạt động người dùng</h2>
+                    <button class="btn-download" onclick="downloadChart('userActivityChart')">📥</button>
+                </div>
+                <canvas id="userActivityChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Summary Table -->
+        <div class="summary-table">
+            <div class="chart-header">
+                <h2>Bảng tổng hợp chi tiết</h2>
+                <button class="btn-export" onclick="exportTableToExcel()">
+                    <span>📥</span>
+                    <span>Xuất Excel</span>
+                </button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Danh mục</th>
+                        <th style="text-align: right;">Số lượng</th>
+                        <th style="text-align: right;">Tỷ lệ</th>
+                        <th style="text-align: right;">Xu hướng</th>
+                    </tr>
+                </thead>
+                <tbody id="summaryTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Mock Data
+        const data = {
+            categories: [
+                { name: 'Cây ăn quả', count: 85, percentage: 34.7 },
+                { name: 'Cây công nghiệp', count: 62, percentage: 25.3 },
+                { name: 'Cây dược liệu', count: 48, percentage: 19.6 },
+                { name: 'Cây cảnh', count: 35, percentage: 14.3 },
+                { name: 'Cây khác', count: 15, percentage: 6.1 }
+            ],
+            topFavorites: [
+                { name: 'Hoa hồng', favorites: 342 },
+                { name: 'Lan hồ điệp', favorites: 298 },
+                { name: 'Sen đá', favorites: 256 },
+                { name: 'Phong lan', favorites: 234 },
+                { name: 'Xương rồng', favorites: 189 },
+                { name: 'Bonsai', favorites: 167 },
+                { name: 'Cây xanh VP', favorites: 145 },
+                { name: 'Cây thuốc', favorites: 132 }
+            ],
+            searchTrends: [
+                { month: 'T1', searches: 680 },
+                { month: 'T2', searches: 720 },
+                { month: 'T3', searches: 850 },
+                { month: 'T4', searches: 920 },
+                { month: 'T5', searches: 1100 },
+                { month: 'T6', searches: 1050 },
+                { month: 'T7', searches: 980 },
+                { month: 'T8', searches: 1150 },
+                { month: 'T9', searches: 1200 },
+                { month: 'T10', searches: 890 }
+            ],
+            newPlants: [
+                { month: 'T1', plants: 12 },
+                { month: 'T2', plants: 15 },
+                { month: 'T3', plants: 18 },
+                { month: 'T4', plants: 22 },
+                { month: 'T5', plants: 25 },
+                { month: 'T6', plants: 20 },
+                { month: 'T7', plants: 16 },
+                { month: 'T8', plants: 19 },
+                { month: 'T9', plants: 23 },
+                { month: 'T10', plants: 15 }
+            ],
+            topKeywords: [
+                { keyword: 'cây cảnh', count: 523 },
+                { keyword: 'cây dược liệu', count: 487 },
+                { keyword: 'sen đá', count: 456 },
+                { keyword: 'hoa hồng', count: 423 },
+                { keyword: 'lan', count: 398 },
+                { keyword: 'bonsai', count: 367 },
+                { keyword: 'cây văn phòng', count: 334 },
+                { keyword: 'xương rồng', count: 298 }
+            ],
+            userActivity: {
+                months: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10'],
+                newUsers: [142, 156, 178, 192, 203, 187, 165, 198, 215, 176],
+                activeUsers: [890, 920, 985, 1050, 1120, 1090, 1010, 1150, 1280, 1200]
+            }
+        };
+
+        // Initialize Pie Chart
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: data.categories.map(c => c.name),
+                datasets: [{
+                    data: data.categories.map(c => c.count),
+                    backgroundColor: [
+                        '#10b981',
+                        '#3b82f6',
+                        '#f59e0b',
+                        '#ef4444',
+                        '#8b5cf6'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // Initialize Line Chart
+        const lineCtx = document.getElementById('lineChart').getContext('2d');
+        new Chart(lineCtx, {
+            type: 'line',
+            data: {
+                labels: data.searchTrends.map(s => s.month),
+                datasets: [{
+                    label: 'Lượt tìm kiếm',
+                    data: data.searchTrends.map(s => s.searches),
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Initialize Bar Chart
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: data.topFavorites.map(f => f.name),
+                datasets: [{
+                    label: 'Lượt yêu thích',
+                    data: data.topFavorites.map(f => f.favorites),
+                    backgroundColor: '#ef4444'
+                }]
+            },
+            options: {
+                responsive: true,
+                indexAxis: 'y',
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Initialize New Plants Chart
+        const newPlantsCtx = document.getElementById('newPlantsChart').getContext('2d');
+        new Chart(newPlantsCtx, {
+            type: 'bar',
+            data: {
+                labels: data.newPlants.map(p => p.month),
+                datasets: [{
+                    label: 'Số lượng cây mới',
+                    data: data.newPlants.map(p => p.plants),
+                    backgroundColor: '#10b981'
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Initialize User Activity Chart
+        const userActivityCtx = document.getElementById('userActivityChart').getContext('2d');
+        new Chart(userActivityCtx, {
+            type: 'line',
+            data: {
+                labels: data.userActivity.months,
+                datasets: [{
+                    label: 'Người dùng mới',
+                    data: data.userActivity.newUsers,
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.4
+                }, {
+                    label: 'Người dùng hoạt động',
+                    data: data.userActivity.activeUsers,
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Render Keywords List
+        const keywordsList = document.getElementById('keywordsList');
+        const maxCount = data.topKeywords[0].count;
+        data.topKeywords.forEach((item, index) => {
+            const percentage = (item.count / maxCount) * 100;
+            keywordsList.innerHTML += `
+                <li class="keyword-item">
+                    <div class="keyword-left">
+                        <span class="keyword-rank">#${index + 1}</span>
+                        <span class="keyword-name">${item.keyword}</span>
+                    </div>
+                    <div class="keyword-right">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${percentage}%"></div>
+                        </div>
+                        <span class="keyword-count">${item.count}</span>
+                    </div>
+                </li>
+            `;
+        });
+
+        // Render Summary Table
+        const tableBody = document.getElementById('summaryTableBody');
+        data.categories.forEach(item => {
+            const trend = (Math.random() * 10).toFixed(1);
+            tableBody.innerHTML += `
+                <tr>
+                    <td>${item.name}</td>
+                    <td style="text-align: right;">${item.count}</td>
+                    <td style="text-align: right;">${item.percentage}%</td>
+                    <td style="text-align: right;">
+                        <span class="trend-up">↗ +${trend}%</span>
+                    </td>
+                </tr>
+            `;
+        });
+
+        // Export Functions
+        function downloadChart(chartId) {
+            const canvas = document.getElementById(chartId);
+            const url = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.download = `${chartId}_${new Date().toISOString().split('T')[0]}.png`;
+            link.href = url;
+            link.click();
+            alert('Đã tải xuống biểu đồ!');
+        }
+
+        function exportKeywords() {
+            const csv = 'STT,Từ khóa,Số lượt tìm\n' + 
+                data.topKeywords.map((k, i) => `${i+1},${k.keyword},${k.count}`).join('\n');
+            downloadCSV(csv, 'tu-khoa-tim-kiem');
+        }
+
+        function exportReport() {
+            const csv = 'Danh mục,Số lượng,Tỷ lệ\n' + 
+                data.categories.map(c => `${c.name},${c.count},${c.percentage}%`).join('\n');
+            downloadCSV(csv, 'bao-cao-tong-quan');
+        }
+
+        function exportTableToExcel() {
+            const csv = 'Danh mục,Số lượng,Tỷ lệ,Xu hướng\n' + 
+                data.categories.map(c => {
+                    const trend = (Math.random() * 10).toFixed(1);
+                    return `${c.name},${c.count},${c.percentage}%,+${trend}%`;
+                }).join('\n');
+            downloadCSV(csv, 'bang-tong-hop');
+        }
+
+        function downloadCSV(content, filename) {
+            const BOM = '\uFEFF';
+            const blob = new Blob([BOM + content], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `${filename}_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+            alert('Đã xuất báo cáo thành công!');
+        }
+    </script>
+</body>
+</html>
