@@ -62,6 +62,14 @@
               "target": "Package",
               "version": "[4.0.3, )"
             },
+            "GrapeCity.ActiveReports.Aspnetcore.Viewer": {
+              "target": "Package",
+              "version": "[18.2.2, )"
+            },
+            "GrapeCity.ActiveReports.Export.Pdf": {
+              "target": "Package",
+              "version": "[18.2.2, )"
+            },
             "Microsoft.EntityFrameworkCore.Tools": {
               "target": "Package",
               "version": "[8.0.6, )"

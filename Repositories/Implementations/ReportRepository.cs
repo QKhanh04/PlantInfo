@@ -16,110 +16,137 @@ namespace PlantManagement.Repositories.Implementations
         {
             _context = context;
         }
-
-        // 1. Thống kê theo phân loại
-        public async Task<List<CategoryStatDto>> GetCategoryStatsAsync()
+        public async Task<PlantSummaryDto> GetPlantSummaryAsync(DateTime? startDate, DateTime? endDate)
         {
-            var total = await _context.Plants.CountAsync();
+            var query = _context.Plants.AsQueryable();
+            if (startDate.HasValue)
+                query = query.Where(p => p.CreateAt >= startDate.Value);
+            if (endDate.HasValue)
+                query = query.Where(p => p.CreateAt <= endDate.Value);
 
-            return await _context.Plants
-                .SelectMany(p => p.Categories)
-                .GroupBy(c => c.CategoryName)
-                .Select(g => new CategoryStatDto
-                {
-                    Name = g.Key,
-                    Count = g.Count(),
-                    Percentage = total == 0 ? 0 : Math.Round((double)g.Count() / total * 100, 1)
-                })
-                .ToListAsync();
+            int totalPlants = await query.CountAsync();
+            // int totalActivePlants = await query.CountAsync(p => p.IsActive);
+
+            return new PlantSummaryDto
+            {
+                TotalPlants = totalPlants,
+                // TotalActivePlants = totalActivePlants,
+                StartDate = startDate,
+                EndDate = endDate
+            };
         }
 
-        // 2. Top cây được yêu thích
-        public async Task<List<FavoriteStatDto>> GetTopFavoritesAsync()
+        public async Task<UserSummaryDto> GetUserSummaryAsync(DateTime? startDate, DateTime? endDate)
         {
-            return await _context.Favorites
-                .GroupBy(f => f.Plant)
-                .Select(g => new FavoriteStatDto
-                {
-                    Name = g.Key.CommonName,
-                    Favorites = g.Count()
-                })
-                .OrderByDescending(x => x.Favorites)
-                .Take(10)
-                .ToListAsync();
+            var query = _context.Users.AsQueryable();
+            if (startDate.HasValue)
+                query = query.Where(u => u.CreateAt >= startDate.Value);
+            if (endDate.HasValue)
+                query = query.Where(u => u.CreateAt <= endDate.Value);
+
+            int totalUsers = await query.CountAsync();
+
+            // Số user mới trong khoảng thời gian
+            int newUsers = 0;
+            if (startDate.HasValue && endDate.HasValue)
+            {
+                newUsers = await _context.Users
+                    .Where(u => u.CreateAt >= startDate.Value && u.CreateAt <= endDate.Value)
+                    .CountAsync();
+            }
+
+            return new UserSummaryDto
+            {
+                TotalUsers = totalUsers,
+                NewUsers = newUsers,
+                StartDate = startDate,
+                EndDate = endDate
+            };
         }
 
-        // 3. Xu hướng tìm kiếm (theo ngày)
-        public async Task<List<SearchTrendDto>> GetSearchTrendsAsync()
+        public async Task<List<CategoryStatDto>> GetPlantCountByCategoryAsync(DateTime? startDate, DateTime? endDate)
         {
-            return await _context.SearchLogs
-                .Where(s => s.SearchDate.HasValue)
-                .GroupBy(s => s.SearchDate.Value.Date)
-                .Select(g => new SearchTrendDto
+            // Lấy danh sách cây theo khoảng thời gian
+            var plantQuery = _context.Plants.AsQueryable();
+            if (startDate.HasValue)
+                plantQuery = plantQuery.Where(p => p.CreateAt >= startDate.Value);
+            if (endDate.HasValue)
+                plantQuery = plantQuery.Where(p => p.CreateAt <= endDate.Value);
+
+            var plantIds = await plantQuery.Select(p => p.PlantId).ToListAsync();
+            var total = plantIds.Count;
+
+            var stats = await _context.Categories
+                .Select(c => new CategoryStatDto
                 {
-                    Date = g.Key,
-                    Searches = g.Count()
+                    CategoryId = c.CategoryId,
+                    CategoryName = c.CategoryName,
+                    PlantCount = c.Plants.Count(pc => plantIds.Contains(pc.PlantId)),
+                    Percentage = total > 0 ? Math.Round(100.0 * c.Plants.Count(pc => plantIds.Contains(pc.PlantId)) / total, 1) : 0
                 })
-                .OrderBy(x => x.Date)
                 .ToListAsync();
+
+            return stats;
         }
 
-        // 4. Cây mới thêm (theo ngày)
-        public async Task<List<NewPlantDto>> GetNewPlantsAsync()
+        public async Task<List<FavoriteStatDto>> GetTopFavoritePlantsAsync(int topN, DateTime? startDate, DateTime? endDate)
         {
-            return await _context.Plants
-                .GroupBy(p => p.CreateAt.Value.Date)
-                .Select(g => new NewPlantDto
+            var favQuery = _context.Favorites.AsQueryable();
+            if (startDate.HasValue)
+                favQuery = favQuery.Where(f => f.CreateAt >= startDate.Value);
+            if (endDate.HasValue)
+                favQuery = favQuery.Where(f => f.CreateAt <= endDate.Value);
+
+            var favGroup = await favQuery
+                .GroupBy(f => f.PlantId)
+                .Select(g => new
                 {
-                    Date = g.Key,
-                    Plants = g.Count()
+                    PlantId = g.Key,
+                    Count = g.Count()
                 })
-                .OrderBy(x => x.Date)
+                .OrderByDescending(x => x.Count)
+                .Take(topN)
                 .ToListAsync();
+
+            var plantIds = favGroup.Select(x => x.PlantId).ToList();
+            var plants = await _context.Plants
+                .Where(p => plantIds.Contains(p.PlantId))
+                .ToListAsync();
+
+            return favGroup
+                .Select(x => new FavoriteStatDto
+                {
+                    PlantId = x.PlantId,
+                    PlantName = plants.FirstOrDefault(p => p.PlantId == x.PlantId)?.CommonName ?? "",
+                    FavoriteCount = x.Count
+                })
+                .ToList();
         }
 
-        // 5. Top từ khóa tìm kiếm
-        public async Task<List<KeywordStatDto>> GetTopKeywordsAsync()
+        public async Task<List<KeywordStatDto>> GetTopSearchKeywordsAsync(int topN, DateTime? startDate, DateTime? endDate)
         {
-            return await _context.SearchLogs
-                .Where(s => !string.IsNullOrEmpty(s.Keyword))
+            var query = _context.SearchLogs.AsQueryable();
+            if (startDate.HasValue)
+                query = query.Where(s => s.SearchDate >= startDate.Value);
+            if (endDate.HasValue)
+                query = query.Where(s => s.SearchDate <= endDate.Value);
+
+            // Tổng số lượt tìm kiếm để tính phần trăm nếu cần
+            var total = await query.CountAsync();
+
+            var topKeywords = await query
                 .GroupBy(s => s.Keyword)
                 .Select(g => new KeywordStatDto
                 {
                     Keyword = g.Key,
-                    Count = g.Count()
+                    Count = g.Count(),
+                    Percentage = total > 0 ? Math.Round(100.0 * g.Count() / total, 1) : 0
                 })
-                .OrderByDescending(x => x.Count)
-                .Take(10)
-                .ToListAsync();
-        }
-
-        // 6. Hoạt động người dùng (user mới + active theo ngày)
-        public async Task<UserActivityDto> GetUserActivityAsync()
-        {
-            var userActivity = new UserActivityDto();
-
-            // Người dùng mới
-            var newUsers = await _context.Users
-                .GroupBy(u => u.CreateAt.Value.Date)
-                .Select(g => new { Date = g.Key, Count = g.Count() })
-                .OrderBy(x => x.Date)
+                .OrderByDescending(k => k.Count)
+                .Take(topN)
                 .ToListAsync();
 
-            userActivity.Dates = newUsers.Select(x => x.Date).ToList();
-            userActivity.NewUsers = newUsers.Select(x => x.Count).ToList();
-
-            // Người dùng active (có search log)
-            var activeUsers = await _context.SearchLogs
-                .Where(s => s.SearchDate.HasValue)
-                .GroupBy(s => s.SearchDate.Value.Date)
-                .Select(g => new { Date = g.Key, Count = g.Select(s => s.UserId).Distinct().Count() })
-                .OrderBy(x => x.Date)
-                .ToListAsync();
-
-            userActivity.ActiveUsers = activeUsers.Select(x => x.Count).ToList();
-
-            return userActivity;
+            return topKeywords;
         }
     }
 }

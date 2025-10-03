@@ -293,6 +293,38 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.slim.min.map"
     },
     {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\uploads\\0a108351-5fac-45c2-ba8e-81a832100d63.png",
+      "PackagePath": "staticwebassets\\uploads\\0a108351-5fac-45c2-ba8e-81a832100d63.png"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\uploads\\1ffbd618-ae84-43c9-9438-b47c46fcfe64.png",
+      "PackagePath": "staticwebassets\\uploads\\1ffbd618-ae84-43c9-9438-b47c46fcfe64.png"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\uploads\\5af72be5-06f6-4d5e-baa0-9962a5b82265.png",
+      "PackagePath": "staticwebassets\\uploads\\5af72be5-06f6-4d5e-baa0-9962a5b82265.png"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\uploads\\6164632f-7bc6-4a6b-8143-31e5cce120d2.png",
+      "PackagePath": "staticwebassets\\uploads\\6164632f-7bc6-4a6b-8143-31e5cce120d2.png"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\uploads\\bbbd22ae-cfaa-4fc1-a7a8-75576c5e2d5f.png",
+      "PackagePath": "staticwebassets\\uploads\\bbbd22ae-cfaa-4fc1-a7a8-75576c5e2d5f.png"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\uploads\\d7be8544-56e2-4654-adec-29305abdbba2.png",
+      "PackagePath": "staticwebassets\\uploads\\d7be8544-56e2-4654-adec-29305abdbba2.png"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\uploads\\eac1da8f-b961-411d-9ccf-14907083ea55.png",
+      "PackagePath": "staticwebassets\\uploads\\eac1da8f-b961-411d-9ccf-14907083ea55.png"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\uploads\\f8acd575-d017-4443-a693-669c73f96383.png",
+      "PackagePath": "staticwebassets\\uploads\\f8acd575-d017-4443-a693-669c73f96383.png"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.PlantManagement.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
     },

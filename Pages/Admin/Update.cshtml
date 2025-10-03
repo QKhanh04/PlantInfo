@@ -2,33 +2,34 @@
 @model UpdateModel
 @{
     ViewData["Title"]= "Cập nhật cây trồng";
-}
+} 
+
 @section Styles {
-    <link rel="stylesheet" href="~/css/admin/create.css" />
+    <link rel="stylesheet" href="~/css/admin/create.css">
 }
 <h2>@ViewData["Title"]</h2>
 <form method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="Plant.PlantId" />
- 
+
     <!-- Tên thường gọi -->
     <div class="mb-3">
         <label class="form-label">Tên thường gọi</label>
         <input asp-for="Plant.CommonName" class="form-control" />
         <span asp-validation-for="Plant.CommonName" class="text-danger"></span>
     </div>
- 
+
     <!-- Nguồn gốc -->
     <div class="mb-3">
         <label class="form-label">Nguồn gốc</label>
         <input asp-for="Plant.Origin" class="form-control" />
     </div>
- 
+
     <!-- Mô tả -->
     <div class="mb-3">
         <label class="form-label">Mô tả</label>
         <textarea asp-for="Plant.Description" class="form-control"></textarea>
     </div>
- 
+
     <!-- Loài (chọn hoặc thêm mới) -->
     <div class="mb-3">
         <label class="form-label">Loài (chọn có sẵn)</label>
@@ -44,7 +45,7 @@
         <input asp-for="Plant.Species.OrderName" class="form-control mt-2" placeholder="Bộ" />
         <textarea asp-for="Plant.Species.Description" class="form-control mt-2" placeholder="Mô tả loài"></textarea>
     </div>
- 
+
     <!-- Phân loại bằng checkbox -->
     <div class="mb-3">
         <label class="form-label">Phân loại (tick chọn)</label>
@@ -70,7 +71,7 @@
         </div>
         <button type="button" class="btn btn-outline-primary mt-2" onclick="addCategory()">+ Thêm phân loại</button>
     </div>
- 
+
     <!-- Công dụng bằng checkbox -->
     <div class="mb-3">
         <label class="form-label">Công dụng (tick chọn)</label>
@@ -96,7 +97,7 @@
         </div>
         <button type="button" class="btn btn-outline-primary mt-2" onclick="addUse()">+ Thêm công dụng</button>
     </div>
- 
+
     <div class="mb-3">
         <label class="form-label">Bệnh (tick chọn)</label>
         <div>
@@ -121,7 +122,7 @@
         </div>
         <button type="button" class="btn btn-outline-primary mt-2" onclick="addDisease()">+ Thêm công dụng</button>
     </div>
- 
+
     <!-- Điều kiện sinh trưởng -->
     <h4>Điều kiện sinh trưởng</h4>
     <div class="mb-3">
@@ -131,7 +132,7 @@
         <input asp-for="Plant.GrowthCondition.WaterRequirement" class="form-control mt-2" placeholder="Nhu cầu nước" />
         <input asp-for="Plant.GrowthCondition.Sunlight" class="form-control mt-2" placeholder="Ánh sáng" />
     </div>
- 
+
     <!-- Thêm ảnh -->
    <h4>Ảnh cây trồng</h4>
 <div id="images">
@@ -140,20 +141,21 @@
         for (int i = 0; i < Model.Plant.Images.Count; i++)
         {
             <div class="mb-2" id="imgRow_@i">
+            
                 <input type="hidden" name="Plant.Images[@i].ImageId" value="@Model.Plant.Images[i].ImageId" />
-             <input name="Plant.Images[@i].ImageUrl" class="form-control mb-2"
-                value="@Model.Plant.Images[i].ImageUrl" placeholder="Đường dẫn ảnh (URL)"
-                oninput="previewUrlImage(this, 'urlImagePreview_@i')" />
+                <input name="Plant.Images[@i].ImageUrl" class="form-control mb-2"
+                    value="@Model.Plant.Images[i].ImageUrl" placeholder="Đường dẫn ảnh (URL)"
+                    oninput="previewUrlImage(this, 'urlImagePreview_@i')" />
                 <div id="urlImagePreview_@i" class="mt-2">
-    @if (!string.IsNullOrEmpty(Model.Plant.Images[i].ImageUrl))
-    {
-        <img src="@Model.Plant.Images[i].ImageUrl" style="max-width:120px;margin:5px;" />
-    }
-</div>
+                    @if (!string.IsNullOrEmpty(Model.Plant.Images[i].ImageUrl))
+                    {
+                        <img src="@Model.Plant.Images[i].ImageUrl" style="max-width:120px;margin:5px;" />
+                    }
+                </div>
                 <input name="Plant.Images[@i].Caption" class="form-control mt-2" value="@Model.Plant.Images[i].Caption" placeholder="Chú thích" />
                 <div class="form-check mt-2">
                     <input type="checkbox" name="Plant.Images[@i].IsPrimary" value="true" class="form-check-input"
-                    @(Model.Plant.Images[i].IsPrimary ? "checked" : "") />
+                        @(Model.Plant.Images[i].IsPrimary ? "checked" : "") />
                     <label class="form-check-label">Ảnh chính</label>
                 </div>
                 <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('imgRow_@i')">Xóa ảnh</button>
@@ -163,7 +165,8 @@
     else
     {
         <div class="mb-2" id="imgRow_0">
-            <input name="Plant.Images[0].ImageUrl" class="form-control mb-2" placeholder="Đường dẫn ảnh (URL)" />
+            <input name="Plant.Images[0].ImageUrl" class="form-control mb-2" placeholder="Đường dẫn ảnh (URL)" oninput="previewUrlImage(this, 'urlImagePreview_0')" />
+            <div id="urlImagePreview_0" class="mt-2"></div>
             <input name="Plant.Images[0].Caption" class="form-control mt-2" placeholder="Chú thích" />
             <div class="form-check mt-2">
                 <input type="checkbox" name="Plant.Images[0].IsPrimary" value="true" class="form-check-input" />
@@ -174,17 +177,17 @@
     }
 </div>
 <button type="button" class="btn btn-outline-primary mt-2" onclick="addImage()">+ Thêm ảnh</button>
- 
-<!-- THÊM PHẦN UPLOAD ẢNH TỪ FILE -->
+
+<!-- UPLOAD ẢNH TỪ FILE -->
 <div class="mb-3 mt-4 border p-2">
     <label class="form-label">Hoặc tải ảnh từ máy tính</label>
-<input type="file" name="Plant.ImageFiles" multiple class="form-control" accept="image/*" onchange="previewFileImages(this)" />
+    <input type="file" name="Plant.ImageFiles" multiple class="form-control" accept="image/*" onchange="previewFileImages(this)" />
     <div id="fileImagePreview" class="mt-2"></div>
 </div>
- 
-    <!-- Thêm nguồn tham khảo -->
-    <h4>Nguồn tham khảo</h4>
-    <div id="references">
+
+<!-- NGUỒN THAM KHẢO -->
+<h4>Nguồn tham khảo</h4>
+<div id="references">
     @if (Model.Plant.References != null && Model.Plant.References.Count > 0)
     {
         for (int i = 0; i < Model.Plant.References.Count; i++)
@@ -215,10 +218,10 @@
     }
 </div>
 <button type="button" class="btn btn-outline-primary mt-2" onclick="addReference()">+ Thêm nguồn tham khảo</button>
-    <div>@TempData["ToastMessage"]</div>
-    <button type="submit" class="btn btn-success mt-4">Cập nhật cây</button>
+<div>@TempData["ToastMessage"]</div>
+<button type="submit" class="btn btn-success mt-4">Cập nhật cây</button>
 </form>
- 
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
@@ -233,7 +236,7 @@ function addCategory() {
             <input name="Plant.NewCategories[${index}].Description" class="form-control mt-2" placeholder="Mô tả" />
         </div>`);
 }
- 
+
 // THÊM CÔNG DỤNG MỚI
 function addUse() {
     const container = document.getElementById('newUses');
@@ -244,7 +247,7 @@ function addUse() {
             <input name="Plant.NewUses[${index}].Description" class="form-control mt-2" placeholder="Mô tả" />
         </div>`);
 }
- 
+
 // THÊM BỆNH MỚI
 function addDisease() {
     const container = document.getElementById('NewDiseases');
@@ -255,77 +258,74 @@ function addDisease() {
             <input name="Plant.NewDiseases[${index}].Description" class="form-control mt-2" placeholder="Mô tả" />
         </div>`);
 }
- 
+
 // THÊM ẢNH MỚI
 function addImage() {
-    const container = document.getElementById('images');
-    const index = container.querySelectorAll('[name^="Plant.Images["][name$="].ImageUrl"]').length;
-    container.insertAdjacentHTML('beforeend',
-        `<div class="mb-2">
-            <input name="Plant.Images[${index}].ImageUrl" class="form-control" placeholder="Đường dẫn ảnh"
-            oninput="previewUrlImage(this, 'urlImagePreview_${index}')" />
-            <div id="urlImagePreview_${index}" class="mt-2"></div>
-            <input name="Plant.Images[${index}].Caption" class="form-control mt-2" placeholder="Chú thích" />
-            <div class="form-check mt-2">
-                <input type="hidden" name="Plant.Images[${index}].IsPrimary" value="false" />
-                <input type="checkbox" name="Plant.Images[${index}].IsPrimary" value="true" class="form-check-input" />
-                <label class="form-check-label">Ảnh chính</label>
-            </div>
-                        <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('imgRow_${index}')">Xóa ảnh</button>
- 
-        </div>`);
-}
- 
-// THÊM NGUỒN THAM KHẢO MỚI
-function addReference() {
-    const container = document.getElementById('references');
-    const index = container.querySelectorAll('[name^="Plant.References["][name$="].SourceName"]').length;
-    container.insertAdjacentHTML('beforeend',
-        `<div class="mb-2">
-            <input name="Plant.References[${index}].SourceName" class="form-control" placeholder="Tên nguồn" />
-            <input name="Plant.References[${index}].Url" class="form-control mt-2" placeholder="Link" />
-            <input name="Plant.References[${index}].Author" class="form-control mt-2" placeholder="Tác giả" />
-            <input name="Plant.References[${index}].PublishedYear" class="form-control mt-2" placeholder="Năm xuất bản" />
-                        <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('refRow_${index}')">Xóa nguồn</button>
- 
-        </div>`);
-}
-function removeRow(rowId) {
-    const row = document.getElementById(rowId);
-    if (row) {
-        row.remove();
-    }
-}
-function previewFileImages(input) {
-    const container = document.getElementById('fileImagePreview');
-    container.innerHTML = '';
-    if (input.files) {
-        Array.from(input.files).forEach(file => {
-            if (file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const img = document.createElement('img');
-                    img.src = e.target.result;
-                    img.style.maxWidth = '120px';
-                    img.style.margin = '5px';
-                    container.appendChild(img);
-                };
-                reader.readAsDataURL(file);
+            const container = document.getElementById('images');
+            const index = container.querySelectorAll('[id^="imgRow_"]').length;
+            container.insertAdjacentHTML('beforeend',
+                `<div class="mb-2" id="imgRow_${index}">
+                    <input name="Plant.Images[${index}].ImageUrl" class="form-control mb-2" placeholder="Đường dẫn ảnh (URL)"
+                        oninput="previewUrlImage(this, 'urlImagePreview_${index}')" />
+                    <div id="urlImagePreview_${index}" class="mt-2"></div>
+                    <input name="Plant.Images[${index}].Caption" class="form-control mt-2" placeholder="Chú thích" />
+                    <div class="form-check mt-2">
+                        <input type="checkbox" name="Plant.Images[${index}].IsPrimary" value="true" class="form-check-input" />
+                        <label class="form-check-label">Ảnh chính</label>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('imgRow_${index}')">Xóa ảnh</button>
+                </div>`);
+        }
+
+        // XÓA DÒNG
+        function removeRow(rowId) {
+            const row = document.getElementById(rowId);
+            if (row) row.remove();
+        }
+
+        // THÊM NGUỒN THAM KHẢO MỚI
+        function addReference() {
+            const container = document.getElementById('references');
+            const index = container.querySelectorAll('[id^="refRow_"]').length;;
+            container.insertAdjacentHTML('beforeend',
+                `<div class="mb-2" id="refRow_${index}">
+                    <input name="Plant.References[${index}].SourceName" class="form-control" placeholder="Tên nguồn" />
+                    <input name="Plant.References[${index}].Url" class="form-control mt-2" placeholder="Link" />
+                    <input name="Plant.References[${index}].Author" class="form-control mt-2" placeholder="Tác giả" />
+                    <input name="Plant.References[${index}].PublishedYear" class="form-control mt-2" placeholder="Năm xuất bản" />
+                    <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('refRow_${index}')">Xóa nguồn</button>
+                </div>`);
+        }
+        function previewFileImages(input) {
+            const container = document.getElementById('fileImagePreview');
+            container.innerHTML = '';
+            if (input.files) {
+                Array.from(input.files).forEach(file => {
+                    if (file.type.startsWith('image/')) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.style.maxWidth = '150px';
+                            img.style.margin = '5px';
+                            container.appendChild(img);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
             }
-        });
-    }
-}
-function previewUrlImage(input, previewDivId) {
-    const container = document.getElementById(previewDivId);
-    container.innerHTML = '';
-    const url = input.value.trim();
-    if (url) {
-        const img = document.createElement('img');
-        img.src = url;
-        img.style.maxWidth = '120px';
-        img.style.margin = '5px';
-        container.appendChild(img);
-    }
-}
+        }
+        function previewUrlImage(input, previewDivId) {
+            const container = document.getElementById(previewDivId);
+            container.innerHTML = '';
+            const url = input.value.trim();
+            if (url) {
+                const img = document.createElement('img');
+                img.src = url;
+                img.style.maxWidth = '150px';
+                img.style.margin = '5px';
+                container.appendChild(img);
+            }
+        }
     </script>
 }

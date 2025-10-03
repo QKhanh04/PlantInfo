@@ -41,6 +41,7 @@ builder.Services.AddScoped<IGrowthConditionService, GrowthConditionService>();
 builder.Services.AddScoped<IDiseaseService, DiseaseService>();
 builder.Services.AddScoped<IPlantImageService, PlantImageService>();
 builder.Services.AddScoped<IPlantReferenceService, PlantReferenceService>();
+builder.Services.AddScoped<IReportService, ReportService>();
 // Nếu có bảng liên kết:
 // builder.Services.AddScoped<IPlantCategoryService, PlantCategoryService>();
 // builder.Services.AddScoped<IPlantUseService, PlantUseService>();

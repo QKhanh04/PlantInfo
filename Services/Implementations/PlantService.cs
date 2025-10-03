@@ -371,7 +371,7 @@ namespace PlantManagement.Services.Implementations
                     plant.Categories.Clear();
                     foreach (var cat in newCats)
                     {
-                        plant.Categories.Add(cat);
+                        plant.Categories = newCats;
                     }
                 }
                 if (dto.NewCategories?.Any() == true)

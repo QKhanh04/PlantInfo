@@ -1,10 +1,850 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Tra cứu cây trồng";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khám Phá Cây Trồng - Tempi Plants</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.0/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+
+
+        /* Hero Section */
+        .hero-section {
+            height: 70vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+                url('https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=1600') center/cover;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: left;
+            margin-top: 80px;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            padding: 0 40px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+
+        .hero-title {
+            font-size: 56px;
+            font-weight: 300;
+            line-height: 1.3;
+            margin-bottom: 25px;
+        }
+
+        .hero-description {
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 35px;
+            max-width: 700px;
+        }
+
+        .hero-btn {
+            background-color: #5cb5a4;
+            color: white;
+            padding: 15px 50px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+        }
+
+        .hero-btn:hover {
+            background-color: #4a9688;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(92, 181, 164, 0.4);
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background-color: white;
+            padding: 40px;
+            margin: 60px auto;
+            max-width: 1200px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .filter-title {
+            font-size: 24px;
+            margin-bottom: 30px;
+            font-weight: 300;
+            color: #333;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            padding: 12px 15px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #5cb5a4;
+            box-shadow: 0 0 0 3px rgba(92, 181, 164, 0.1);
+        }
+
+        .btn-filter {
+            background-color: #5cb5a4;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-filter:hover {
+            background-color: #4a9688;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(92, 181, 164, 0.3);
+        }
+
+        .btn-reset {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-reset:hover {
+            background-color: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+        }
+
+        /* Plant Cards */
+        .plants-container {
+            max-width: 1200px;
+            margin: 0 auto 80px;
+            padding: 0 40px;
+        }
+
+        .section-title {
+            font-size: 42px;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #333;
+        }
+
+        .plant-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            border: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            height: 100%;
+        }
+
+        .plant-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 35px rgba(92, 181, 164, 0.2);
+        }
+
+        .plant-image {
+            height: 250px;
+            overflow: hidden;
+            background-color: #f0f0f0;
+            position: relative;
+            border-radius: 0;
+        }
+
+        .favorite-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .favorite-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        .favorite-btn i {
+            font-size: 20px;
+            color: #ccc;
+            transition: all 0.3s ease;
+        }
+
+        .favorite-btn.active i {
+            color: #ff4757;
+            animation: heartBeat 0.5s ease;
+        }
+
+        @* @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(1.3); }
+            50% { transform: scale(1.1); }
+            75% { transform: scale(1.2); }
+        } *@
+
+        .plant-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .plant-card:hover .plant-image img {
+            transform: scale(1.08);
+        }
+
+        .plant-image-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .plant-image-placeholder i {
+            font-size: 60px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .plant-title {
+            font-size: 22px;
+            font-weight: 400;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .plant-species {
+            font-size: 14px;
+            color: #5cb5a4;
+            font-style: italic;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .plant-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .category-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .category-badge {
+            background-color: #f0f9f7;
+            color: #5cb5a4;
+            padding: 5px 12px;
+            font-size: 12px;
+            border-radius: 20px;
+            border: 1px solid #5cb5a4;
+        }
+
+        .view-detail-btn {
+            background-color: transparent;
+            color: #5cb5a4;
+            border: 2px solid #5cb5a4;
+            padding: 10px 25px;
+            width: 100%;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            border-radius: 8px;
+        }
+
+        .view-detail-btn:hover {
+            background-color: #5cb5a4;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(92, 181, 164, 0.3);
+        }
+
+        /* Pagination */
+        .pagination-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .pagination .page-link {
+            color: #333;
+            border: 1px solid #e0e0e0;
+            padding: 10px 18px;
+            border-radius: 8px;
+            margin: 0 5px;
+            transition: all 0.3s ease;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #5cb5a4;
+            border-color: #5cb5a4;
+            color: white;
+            box-shadow: 0 3px 10px rgba(92, 181, 164, 0.3);
+        }
+
+        .pagination .page-link:hover {
+            background-color: #f0f9f7;
+            color: #5cb5a4;
+            border-color: #5cb5a4;
+            transform: translateY(-2px);
+        }
+
+        /* About Section */
+        .about-section {
+            background-color: #f8f9fa;
+            padding: 100px 0;
+            margin-bottom: 80px;
+        }
+
+        .about-title {
+            font-size: 42px;
+            font-weight: 300;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .about-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .about-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 600;
+            color: #5cb5a4;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin: 0;
+        }
+
+        .about-images {
+            position: relative;
+            height: 500px;
+        }
+
+        .about-image-main {
+            position: absolute;
+            width: 65%;
+            height: 70%;
+            top: 0;
+            left: 0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .about-image-main img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .about-image-secondary {
+            position: absolute;
+            width: 55%;
+            height: 60%;
+            bottom: 0;
+            right: 0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .about-image-secondary img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Responsive */
+        @* @media (max-width: 992px) {
+            .about-images {
+                height: 400px;
+                margin-top: 50px;
+            }
+
+            .about-stats {
+                justify-content: space-around;
+            }
+        } *@
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #5cb5a4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @* @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 36px;
+            }
+            
+            .navbar .nav-links {
+                gap: 20px;
+            }
+            
+            .filter-section {
+                padding: 25px;
+            }
+        } *@
+    </style>
+</head>
+
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-subtitle">Chào mừng đến với Tempi</div>
+            <h1 class="hero-title">Khám Phá Thế Giới<br>Cây Trồng Xanh</h1>
+            <p class="hero-description">
+                Tìm hiểu về hàng trăm loài cây trồng khác nhau, từ cây ăn quả, cây cảnh đến cây dược liệu.
+                Chúng tôi cung cấp thông tin chi tiết về đặc điểm, cách chăm sóc và lợi ích của từng loại cây.
+            </p>
+            <a href="#explore" class="hero-btn">Khám Phá Ngay</a>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-5">
+                    <h2 class="about-title">Về Chúng Tôi</h2>
+                    <p class="about-text">
+                        Chúng tôi là đội ngũ đam mê cây trồng và thiên nhiên, cam kết mang đến
+                        cho bạn những thông tin chính xác và hữu ích nhất về thế giới thực vật.
+                        Với kinh nghiệm nhiều năm trong lĩnh vực nông nghiệp và sinh học thực vật,
+                        chúng tôi hiểu rằng mỗi loại cây đều có câu chuyện và giá trị riêng.
+                    </p>
+                    <p class="about-text">
+                        Sứ mệnh của chúng tôi là giúp mọi người kết nối với thiên nhiên,
+                        hiểu biết và yêu thích cây trồng hơn. Từ những người mới bắt đầu
+                        đến các nhà làm vườn chuyên nghiệp, chúng tôi cung cấp kiến thức
+                        phù hợp cho mọi cấp độ.
+                    </p>
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <h3 class="stat-number">500+</h3>
+                            <p class="stat-label">Loài cây</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3 class="stat-number">10K+</h3>
+                            <p class="stat-label">Người dùng</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3 class="stat-number">5+</h3>
+                            <p class="stat-label">Năm kinh nghiệm</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="about-images">
+                        <div class="about-image-main">
+                            <img src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=600" alt="Forest">
+                        </div>
+                        <div class="about-image-secondary">
+                            <img src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=400"
+                                alt="Sunlight through trees">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Filter Section -->
+    <h2 class="section-title">Bộ Sưu Tập Cây Trồng</h2>
+
+    <section class="filter-section" id="plants">
+        <h3 class="filter-title"><i class="bi bi-funnel me-2"></i>Tìm Kiếm Cây Trồng</h3>
+        <form id="filter-form">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" id="keyword" placeholder="Nhập tên cây trồng...">
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="category">
+                        <option value="">Tất cả danh mục</option>
+                        <option value="1">Cây ăn quả</option>
+                        <option value="2">Cây cảnh</option>
+                        <option value="3">Cây dược liệu</option>
+                        <option value="4">Cây rau củ</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="order">
+                        <option value="">Tất cả bộ</option>
+                        <option value="Rosales">Rosales</option>
+                        <option value="Poales">Poales</option>
+                        <option value="Fabales">Fabales</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-reset w-100" id="resetBtn">
+                        <i class="bi bi-arrow-counterclockwise me-2"></i>Xóa
+                    </button>
+                </div>
+            </div>
+        </form>
+    </section>
+    <!-- Plants Section -->
+    <section class="plants-container" id="explore">
+        <div class="row g-4" id="plantsGrid">
+            <!-- Plant Card 1 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="plant-card">
+                    <div class="plant-image">
+                        <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=500" alt="Cây táo">
+                        <button class="favorite-btn" data-id="1">
+                            <i class="bi bi-heart-fill"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="plant-title">Cây Táo</h5>
+                        <span class="plant-species">Malus domestica</span>
+                        <p class="plant-description">
+                            Cây táo là loại cây ăn quả phổ biến, có nguồn gốc từ Trung Á.
+                            Quả táo giàu vitamin và khoáng chất, có thể trồng ở nhiều vùng khí hậu ôn đới.
+                        </p>
+                        <div class="category-badges">
+                            <span class="category-badge">Cây ăn quả</span>
+                            <span class="category-badge">Ôn đới</span>
+                        </div>
+                        <a href="#" class="view-detail-btn">Xem Chi Tiết</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plant Card 2 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="plant-card">
+                    <div class="plant-image">
+                        <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=500"
+                            alt="Cây hoa hồng">
+                        <button class="favorite-btn" data-id="2">
+                            <i class="bi bi-heart-fill"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="plant-title">Hoa Hồng</h5>
+                        <span class="plant-species">Rosa rubiginosa</span>
+                        <p class="plant-description">
+                            Hoa hồng là biểu tượng của tình yêu và vẻ đẹp. Có hàng nghìn giống hoa hồng
+                            với nhiều màu sắc và hương thơm khác nhau, thích hợp làm cây cảnh.
+                        </p>
+                        <div class="category-badges">
+                            <span class="category-badge">Cây cảnh</span>
+                            <span class="category-badge">Hoa</span>
+                        </div>
+                        <a href="#" class="view-detail-btn">Xem Chi Tiết</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plant Card 3 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="plant-card">
+                    <div class="plant-image">
+                        <img src="https://images.unsplash.com/photo-1628556270448-4d4e4148e1b1?w=500" alt="Cây bạc hà">
+                        <button class="favorite-btn" data-id="3">
+                            <i class="bi bi-heart-fill"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="plant-title">Bạc Hà</h5>
+                        <span class="plant-species">Mentha arvensis</span>
+                        <p class="plant-description">
+                            Bạc hà là loại thảo mộc dược liệu có hương thơm mát, được sử dụng
+                            trong ẩm thực và y học truyền thống. Dễ trồng và chăm sóc.
+                        </p>
+                        <div class="category-badges">
+                            <span class="category-badge">Dược liệu</span>
+                            <span class="category-badge">Thảo mộc</span>
+                        </div>
+                        <a href="#" class="view-detail-btn">Xem Chi Tiết</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plant Card 4 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="plant-card">
+                    <div class="plant-image">
+                        <img src="https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=500" alt="Cà chua">
+                        <button class="favorite-btn" data-id="4">
+                            <i class="bi bi-heart-fill"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="plant-title">Cà Chua</h5>
+                        <span class="plant-species">Solanum lycopersicum</span>
+                        <p class="plant-description">
+                            Cà chua là loại rau quả giàu dinh dưỡng, chứa nhiều vitamin C và lycopene.
+                            Được trồng rộng rãi trên toàn thế giới cho mục đích ẩm thực.
+                        </p>
+                        <div class="category-badges">
+                            <span class="category-badge">Rau củ</span>
+                            <span class="category-badge">Ăn quả</span>
+                        </div>
+                        <a href="#" class="view-detail-btn">Xem Chi Tiết</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plant Card 5 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="plant-card">
+                    <div class="plant-image">
+                        <img src="https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=500" alt="Hoa lan">
+                        <button class="favorite-btn" data-id="5">
+                            <i class="bi bi-heart-fill"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="plant-title">Hoa Lan</h5>
+                        <span class="plant-species">Orchidaceae</span>
+                        <p class="plant-description">
+                            Hoa lan là một trong những họ thực vật có hoa lớn nhất, với vẻ đẹp tinh tế
+                            và đa dạng. Được ưa chuộng làm cây cảnh trong nhà.
+                        </p>
+                        <div class="category-badges">
+                            <span class="category-badge">Cây cảnh</span>
+                            <span class="category-badge">Hoa</span>
+                        </div>
+                        <a href="#" class="view-detail-btn">Xem Chi Tiết</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Plant Card 6 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="plant-card">
+                    <div class="plant-image">
+                        <img src="https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?w=500" alt="Xương rồng">
+                        <button class="favorite-btn" data-id="6">
+                            <i class="bi bi-heart-fill"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="plant-title">Xương Rồng</h5>
+                        <span class="plant-species">Cactaceae</span>
+                        <p class="plant-description">
+                            Xương rồng là loại cây mọng nước, chịu hạn tốt, thích hợp cho
+                            người bận rộn. Có nhiều hình dạng và kích thước độc đáo.
+                        </p>
+                        <div class="category-badges">
+                            <span class="category-badge">Cây cảnh</span>
+                            <span class="category-badge">Sen đá</span>
+                        </div>
+                        <a href="#" class="view-detail-btn">Xem Chi Tiết</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination-wrapper">
+            <nav>
+                <ul class="pagination mb-0">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#"><i class="bi bi-chevron-left"></i> Trước</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Sau <i class="bi bi-chevron-right"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Initialize favorites from memory
+            var favorites = {};
+
+            // Smooth scrolling for anchor links
+            $('a[href^="#"]').on('click', function (e) {
+                e.preventDefault();
+                var target = $(this.getAttribute('href'));
+                if (target.length) {
+                    $('html, body').stop().animate({
+                        scrollTop: target.offset().top - 100
+                    }, 800);
+                }
+            });
+
+            // Filter form handling
+            $('#keyword, #category, #order').on('change', function () {
+                filterPlants();
+            });
+
+            // Reset button
+            $('#resetBtn').on('click', function () {
+                $('#keyword').val('');
+                $('#category').val('');
+                $('#order').val('');
+                filterPlants();
+            });
+
+            function filterPlants() {
+                $('#loadingOverlay').addClass('show');
+
+                // Simulate AJAX call
+                setTimeout(function () {
+                    $('#loadingOverlay').removeClass('show');
+
+                    $('html, body').animate({
+                        scrollTop: $('#plantsGrid').offset().top - 150
+                    }, 500);
+                }, 500);
+            }
+
+            // Favorite button functionality
+            $('.favorite-btn').on('click', function (e) {
+                e.preventDefault();
+                var btn = $(this);
+                var plantId = btn.data('id');
+
+                // Toggle favorite status
+                if (favorites[plantId]) {
+                    delete favorites[plantId];
+                    btn.removeClass('active');
+                } else {
+                    favorites[plantId] = true;
+                    btn.addClass('active');
+                }
+
+                // Store in memory (in real app, would save to backend)
+                console.log('Favorites:', favorites);
+            });
+
+            // Add hover effect to cards
+            $('.plant-card').hover(
+                function () {
+                    $(this).addClass('shadow-lg');
+                },
+                function () {
+                    $(this).removeClass('shadow-lg');
+                }
+            );
+        });
+    </script>
+</body>
+
+</html>

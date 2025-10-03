@@ -9,11 +9,10 @@ namespace PlantManagement.Repositories.Interfaces
 {
     public interface IReportRepository
     {
-        // Task<List<CategoryStatDto>> GetCategoryStatsAsync();
-        // Task<List<FavoriteStatDto>> GetTopFavoritesAsync();
-        // Task<List<SearchTrendDto>> GetSearchTrendsAsync();
-        // Task<List<NewPlantDto>> GetNewPlantsAsync();
-        // Task<List<KeywordStatDto>> GetTopKeywordsAsync();
-        // Task<UserActivityDto> GetUserActivityAsync();
+        Task<PlantSummaryDto> GetPlantSummaryAsync(DateTime? startDate, DateTime? endDate);
+        Task<UserSummaryDto> GetUserSummaryAsync(DateTime? startDate, DateTime? endDate);
+        Task<List<CategoryStatDto>> GetPlantCountByCategoryAsync(DateTime? startDate, DateTime? endDate);
+        Task<List<FavoriteStatDto>> GetTopFavoritePlantsAsync(int topN, DateTime? startDate, DateTime? endDate);
+        Task<List<KeywordStatDto>> GetTopSearchKeywordsAsync(int topN, DateTime? startDate, DateTime? endDate);
     }
 }

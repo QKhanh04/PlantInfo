@@ -1,10 +1,10 @@
 @page
-@model PlantManagement.Pages.Admin.Report
+@model ReportModel
 @{
     ViewData["Title"] = "Report";
 }
 
-<h1>@ViewData["Title"]</h1>
+
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -14,12 +14,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thống Kê Admin - Quản Lý Cây Trồng</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <link rel="stylesheet" href="~/css/admin/report.css" />
-
+    <link rel="stylesheet" href="~/css/admin/report.css">
 </head>
 
 <body>
-    <div class="container">
+    <div class="container-report">
         <!-- Header -->
         <div class="header">
             <h1>📊 Thống Kê Quản Lý Cây Trồng</h1>
@@ -28,8 +27,9 @@
 
         <!-- Filters -->
         <div class="filters">
+            <!-- Bộ lọc thời gian nhanh -->
             <div class="filter-group">
-                <label>📅 Thời gian:</label>
+                <label>📅 Thời gian nhanh:</label>
                 <select id="dateRange">
                     <option value="today">Hôm nay</option>
                     <option value="thisWeek">Tuần này</option>
@@ -39,22 +39,30 @@
                 </select>
             </div>
 
+            <!-- Bộ lọc chọn ngày cụ thể -->
             <div class="filter-group">
-                <label>🔍 Danh mục:</label>
-                <select id="categoryFilter">
-                    <option value="all">Tất cả danh mục</option>
-                    <option value="fruit">Cây ăn quả</option>
-                    <option value="industrial">Cây công nghiệp</option>
-                    <option value="medicinal">Cây dược liệu</option>
-                    <option value="ornamental">Cây cảnh</option>
-                </select>
+                <label>📆 Từ ngày:</label>
+                <input type="date" id="startDate" />
+            </div>
+            <div class="filter-group">
+                <label>📆 Đến ngày:</label>
+                <input type="date" id="endDate" />
             </div>
 
+            <!-- Nút xuất -->
+            <button class="btn-export" onclick="applyFilter()">
+                <span>🔄</span>
+                <span>Lọc</span>
+            </button>
             <button class="btn-export" onclick="exportReport()">
                 <span>📥</span>
                 <span>Xuất báo cáo</span>
             </button>
+            <a href="/Admin/Report?handler=ExportAllPlantDetails" class="btn btn-success">
+                Xuất tất cả cây trồng
+            </a>
         </div>
+
 
         <!-- Stats Cards -->
         <div class="stats-grid">
@@ -62,11 +70,8 @@
                 <div class="stat-card-content">
                     <div class="stat-info">
                         <h3>Tổng số cây trồng</h3>
-                        <div class="stat-value" style="color: #10b981;">245</div>
-                        <div class="stat-trend">
-                            <span>↗</span>
-                            <span>+6.5% so với tháng trước</span>
-                        </div>
+                        <div class="stat-value" style="color: #10b981;">@Model.PlantSummary?.TotalPlants</div>
+
                     </div>
                     <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1);">
                         <span style="color: #10b981;">🌱</span>
@@ -78,11 +83,8 @@
                 <div class="stat-card-content">
                     <div class="stat-info">
                         <h3>Tổng số người dùng</h3>
-                        <div class="stat-value" style="color: #3b82f6;">1,523</div>
-                        <div class="stat-trend">
-                            <span>↗</span>
-                            <span>+12.3% so với tháng trước</span>
-                        </div>
+                        <div class="stat-value" style="color: #3b82f6;">@Model.UserSummary.TotalUsers</div>
+
                     </div>
                     <div class="stat-icon" style="background: rgba(59, 130, 246, 0.1);">
                         <span style="color: #3b82f6;">👥</span>
@@ -94,11 +96,8 @@
                 <div class="stat-card-content">
                     <div class="stat-info">
                         <h3>Lượt tìm kiếm</h3>
-                        <div class="stat-value" style="color: #f59e0b;">8,947</div>
-                        <div class="stat-trend">
-                            <span>↗</span>
-                            <span>+8.1% so với tháng trước</span>
-                        </div>
+                        <div class="stat-value" style="color: #f59e0b;">@Model.TopKeywords.Count</div>
+
                     </div>
                     <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1);">
                         <span style="color: #f59e0b;">🔍</span>
@@ -110,11 +109,7 @@
                 <div class="stat-card-content">
                     <div class="stat-info">
                         <h3>Cây yêu thích</h3>
-                        <div class="stat-value" style="color: #ef4444;">1,963</div>
-                        <div class="stat-trend">
-                            <span>↗</span>
-                            <span>+15.7% so với tháng trước</span>
-                        </div>
+                        <div class="stat-value" style="color: #ef4444;">@Model.TopFavorites.Count</div>
                     </div>
                     <div class="stat-icon" style="background: rgba(239, 68, 68, 0.1);">
                         <span style="color: #ef4444;">❤️</span>
@@ -165,26 +160,6 @@
             </div>
         </div>
 
-        <!-- Charts Row 3 -->
-        <div class="charts-grid">
-            <!-- New Plants Chart -->
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h2>Cây trồng mới theo tháng</h2>
-                    <button class="btn-download" onclick="downloadChart('newPlantsChart')">📥</button>
-                </div>
-                <canvas id="newPlantsChart"></canvas>
-            </div>
-
-            <!-- User Activity Chart -->
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h2>Hoạt động người dùng</h2>
-                    <button class="btn-download" onclick="downloadChart('userActivityChart')">📥</button>
-                </div>
-                <canvas id="userActivityChart"></canvas>
-            </div>
-        </div>
 
         <!-- Summary Table -->
         <div class="summary-table">
@@ -210,74 +185,33 @@
     </div>
 
     <script>
-        // Mock Data
-        const data = {
-            categories: [
-                { name: 'Cây ăn quả', count: 85, percentage: 34.7 },
-                { name: 'Cây công nghiệp', count: 62, percentage: 25.3 },
-                { name: 'Cây dược liệu', count: 48, percentage: 19.6 },
-                { name: 'Cây cảnh', count: 35, percentage: 14.3 },
-                { name: 'Cây khác', count: 15, percentage: 6.1 }
-            ],
-            topFavorites: [
-                { name: 'Hoa hồng', favorites: 342 },
-                { name: 'Lan hồ điệp', favorites: 298 },
-                { name: 'Sen đá', favorites: 256 },
-                { name: 'Phong lan', favorites: 234 },
-                { name: 'Xương rồng', favorites: 189 },
-                { name: 'Bonsai', favorites: 167 },
-                { name: 'Cây xanh VP', favorites: 145 },
-                { name: 'Cây thuốc', favorites: 132 }
-            ],
-            searchTrends: [
-                { month: 'T1', searches: 680 },
-                { month: 'T2', searches: 720 },
-                { month: 'T3', searches: 850 },
-                { month: 'T4', searches: 920 },
-                { month: 'T5', searches: 1100 },
-                { month: 'T6', searches: 1050 },
-                { month: 'T7', searches: 980 },
-                { month: 'T8', searches: 1150 },
-                { month: 'T9', searches: 1200 },
-                { month: 'T10', searches: 890 }
-            ],
-            newPlants: [
-                { month: 'T1', plants: 12 },
-                { month: 'T2', plants: 15 },
-                { month: 'T3', plants: 18 },
-                { month: 'T4', plants: 22 },
-                { month: 'T5', plants: 25 },
-                { month: 'T6', plants: 20 },
-                { month: 'T7', plants: 16 },
-                { month: 'T8', plants: 19 },
-                { month: 'T9', plants: 23 },
-                { month: 'T10', plants: 15 }
-            ],
-            topKeywords: [
-                { keyword: 'cây cảnh', count: 523 },
-                { keyword: 'cây dược liệu', count: 487 },
-                { keyword: 'sen đá', count: 456 },
-                { keyword: 'hoa hồng', count: 423 },
-                { keyword: 'lan', count: 398 },
-                { keyword: 'bonsai', count: 367 },
-                { keyword: 'cây văn phòng', count: 334 },
-                { keyword: 'xương rồng', count: 298 }
-            ],
-            userActivity: {
-                months: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10'],
-                newUsers: [142, 156, 178, 192, 203, 187, 165, 198, 215, 176],
-                activeUsers: [890, 920, 985, 1050, 1120, 1090, 1010, 1150, 1280, 1200]
-            }
-        };
+        const categories = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CategoryStats));
+
+        const topFavorites = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TopFavorites));
+        const topKeywords = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TopKeywords));
+
+
+        // Ví dụ cho tổng số, bạn có thể gán trực tiếp
+        const totalPlants = @Model.PlantSummary?.TotalPlants ?? 0;
+        const totalUsers = @Model.UserSummary?.TotalUsers ?? 0;
+
+        console.log('categories:', categories);
+        console.log('topFavorites:', topFavorites);
+        console.log('topKeywords:', topKeywords);
+        console.log('totalPlants:', totalPlants);
+        console.log('totalUsers:', totalUsers);
+
+
+
 
         // Initialize Pie Chart
         const pieCtx = document.getElementById('pieChart').getContext('2d');
         new Chart(pieCtx, {
             type: 'pie',
             data: {
-                labels: data.categories.map(c => c.name),
+                labels: categories.map(c => c.CategoryName),
                 datasets: [{
-                    data: data.categories.map(c => c.count),
+                    data: categories.map(c => c.PlantCount),
                     backgroundColor: [
                         '#10b981',
                         '#3b82f6',
@@ -332,10 +266,10 @@
         new Chart(barCtx, {
             type: 'bar',
             data: {
-                labels: data.topFavorites.map(f => f.name),
+                labels: topFavorites.map(f => f.PlantName),
                 datasets: [{
                     label: 'Lượt yêu thích',
-                    data: data.topFavorites.map(f => f.favorites),
+                    data: topFavorites.map(f => f.FavoriteCount),
                     backgroundColor: '#ef4444'
                 }]
             },
@@ -382,40 +316,7 @@
             }
         });
 
-        // Initialize User Activity Chart
-        const userActivityCtx = document.getElementById('userActivityChart').getContext('2d');
-        new Chart(userActivityCtx, {
-            type: 'line',
-            data: {
-                labels: data.userActivity.months,
-                datasets: [{
-                    label: 'Người dùng mới',
-                    data: data.userActivity.newUsers,
-                    borderColor: '#3b82f6',
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                    tension: 0.4
-                }, {
-                    label: 'Người dùng hoạt động',
-                    data: data.userActivity.activeUsers,
-                    borderColor: '#10b981',
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
+       
 
         // Render Keywords List
         const keywordsList = document.getElementById('keywordsList');
@@ -463,6 +364,20 @@
             link.href = url;
             link.click();
             alert('Đã tải xuống biểu đồ!');
+        }
+
+        const today = new Date().toISOString().split("T")[0];
+        document.getElementById("startDate").setAttribute("max", today);
+        document.getElementById("endDate").setAttribute("max", today);
+
+        function applyFilter() {
+            const range = document.getElementById("dateRange").value;
+            const start = document.getElementById("startDate").value;
+            const end = document.getElementById("endDate").value;
+            let url = "/Admin/Report?dateRange=" + range;
+            if (start) url += "&startDate=" + start;
+            if (end) url += "&endDate=" + end;
+            window.location.href = url;
         }
 
         function exportKeywords() {
