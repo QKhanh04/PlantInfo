@@ -26,7 +26,7 @@ builder.Services.AddScoped<IDiseaseRepository, DiseaseRepository>();
 builder.Services.AddScoped<IPlantImageRepository, PlantImageRepository>();
 builder.Services.AddScoped<IPlantReferenceRepository, PlantReferenceRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
-
+builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
 // // Nếu có bảng liên kết:
 // builder.Services.AddScoped<IPlantCategoryRepository, PlantCategoryRepository>();
 // builder.Services.AddScoped<IPlantUseRepository, PlantUseRepository>();
@@ -42,6 +42,7 @@ builder.Services.AddScoped<IDiseaseService, DiseaseService>();
 builder.Services.AddScoped<IPlantImageService, PlantImageService>();
 builder.Services.AddScoped<IPlantReferenceService, PlantReferenceService>();
 builder.Services.AddScoped<IReportService, ReportService>();
+builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 // Nếu có bảng liên kết:
 // builder.Services.AddScoped<IPlantCategoryService, PlantCategoryService>();
 // builder.Services.AddScoped<IPlantUseService, PlantUseService>();
@@ -49,8 +50,8 @@ builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Auth";          // Trang login khi chưa đăng nhập
-        options.AccessDeniedPath = "/Denied";  // Trang khi không có quyền
+        options.LoginPath = "/Auth/Authentication";          // Trang login khi chưa đăng nhập
+        options.AccessDeniedPath = "/Auth/Authentication";  // Trang khi không có quyền
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
     });
 // Add AutoMapper for all profiles in the assembly

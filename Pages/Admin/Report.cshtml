@@ -15,6 +15,8 @@
     <title>Thống Kê Admin - Quản Lý Cây Trồng</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <link rel="stylesheet" href="~/css/admin/report.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
 </head>
 
 <body>
@@ -27,43 +29,100 @@
 
         <!-- Filters -->
         <div class="filters">
-            <!-- Bộ lọc thời gian nhanh -->
-            <div class="filter-group">
-                <label>📅 Thời gian nhanh:</label>
-                <select id="dateRange">
-                    <option value="today">Hôm nay</option>
-                    <option value="thisWeek">Tuần này</option>
-                    <option value="thisMonth" selected>Tháng này</option>
-                    <option value="thisYear">Năm này</option>
-                    <option value="all">Tất cả</option>
-                </select>
-            </div>
+            <form method="get" class="filters" style="display:flex;gap:16px;align-items:center;">
+                <div class="filter-group">
+                    <label for="startDate">📅 Từ ngày:</label>
+                    <input type="text" id="startDate" name="startDate" value="@Request.Query["startDate"]"
+                        autocomplete="off" />
+                </div>
+                <div class="filter-group">
+                    <label for="endDate">📅 Đến ngày:</label>
+                    <input type="text" id="endDate" name="endDate" value="@Request.Query["endDate"]"
+                        autocomplete="off" />
+                </div>
+                <button type="submit" class="btn btn-info">Lọc</button>
+            </form>
 
-            <!-- Bộ lọc chọn ngày cụ thể -->
-            <div class="filter-group">
-                <label>📆 Từ ngày:</label>
-                <input type="date" id="startDate" />
+        </div>
+        <div id="categoryTableModal" class="modal-bg" style="display:none;">
+            <div class="modal-content">
+                <span class="modal-close" id="closeCategoryModal">&times;</span>
+                <h2>Bảng phân bố cây trồng theo danh mục</h2>
+                <table class="category-table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Danh mục</th>
+                            <th>Số lượng cây</th>
+                            <th>Tỷ lệ (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.CategoryStats != null && Model.CategoryStats.Count > 0)
+                        {
+                            int total = Model.CategoryStats.Sum(x => x.PlantCount);
+                            int idx = 1;
+                            foreach (var cat in Model.CategoryStats)
+                            {
+                                <tr>
+                                    <td>@idx</td>
+                                    <td>@cat.CategoryName</td>
+                                    <td>@cat.PlantCount</td>
+                                    <td>
+                                        @((total > 0 ? (cat.PlantCount * 100.0 / total) : 0).ToString("0.##"))
+                                    </td>
+                                </tr>
+                                idx++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" style="text-align:center;">Không có dữ liệu phân bố</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             </div>
-            <div class="filter-group">
-                <label>📆 Đến ngày:</label>
-                <input type="date" id="endDate" />
-            </div>
-
-            <!-- Nút xuất -->
-            <button class="btn-export" onclick="applyFilter()">
-                <span>🔄</span>
-                <span>Lọc</span>
-            </button>
-            <button class="btn-export" onclick="exportReport()">
-                <span>📥</span>
-                <span>Xuất báo cáo</span>
-            </button>
-            <a href="/Admin/Report?handler=ExportAllPlantDetails" class="btn btn-success">
-                Xuất tất cả cây trồng
-            </a>
         </div>
 
-
+        <div id="favoriteTableModal" class="modal-bg" style="display:none;">
+            <div class="modal-content">
+                <span class="modal-close" id="closeFavoriteModal">&times;</span>
+                <h2>Bảng top cây được yêu thích</h2>
+                <button class="btn-export-pdf" onclick="exportFavoriteTableToPDF()">Xuất PDF</button>
+                <table class="favorite-table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Tên cây</th>
+                            <th>Lượt yêu thích</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.TopFavorites != null && Model.TopFavorites.Count > 0)
+                        {
+                            int idx = 1;
+                            foreach (var fav in Model.TopFavorites)
+                            {
+                                <tr>
+                                    <td>@idx</td>
+                                    <td>@fav.PlantName</td>
+                                    <td>@fav.FavoriteCount</td>
+                                </tr>
+                                idx++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3" style="text-align:center;">Không có dữ liệu yêu thích</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <!-- Stats Cards -->
         <div class="stats-grid">
             <div class="stat-card">
@@ -109,7 +168,7 @@
                 <div class="stat-card-content">
                     <div class="stat-info">
                         <h3>Cây yêu thích</h3>
-                        <div class="stat-value" style="color: #ef4444;">@Model.TopFavorites.Count</div>
+                        <div class="stat-value" style="color: #ef4444;">@Model.FavoriteTotal.Data</div>
                     </div>
                     <div class="stat-icon" style="background: rgba(239, 68, 68, 0.1);">
                         <span style="color: #ef4444;">❤️</span>
@@ -125,31 +184,17 @@
                 <div class="chart-header">
                     <h2>Phân bố theo danh mục</h2>
                     <button class="btn-download" onclick="downloadChart('pieChart')">📥</button>
+                    <button id="btnShowCategoryTable" class="btn btn-info" style="">
+                        Xem chi tiết
+                    </button>
+                    <a href="/Admin/Report?handler=ExportCategoryReport&startDate=@Request.Query["startDate"]&endDate=@Request.Query["endDate"]"
+                        class="btn btn-danger">
+                        Xuất PDF
+                    </a>
+
                 </div>
                 <canvas id="pieChart"></canvas>
             </div>
-
-            <!-- Line Chart -->
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h2>Xu hướng tìm kiếm</h2>
-                    <button class="btn-download" onclick="downloadChart('lineChart')">📥</button>
-                </div>
-                <canvas id="lineChart"></canvas>
-            </div>
-        </div>
-
-        <!-- Charts Row 2 -->
-        <div class="charts-grid">
-            <!-- Bar Chart -->
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h2>Top cây được yêu thích</h2>
-                    <button class="btn-download" onclick="downloadChart('barChart')">📥</button>
-                </div>
-                <canvas id="barChart"></canvas>
-            </div>
-
             <!-- Keywords List -->
             <div class="chart-card">
                 <div class="chart-header">
@@ -158,7 +203,38 @@
                 </div>
                 <ul class="keywords-list" id="keywordsList"></ul>
             </div>
+
         </div>
+
+        <!-- Charts Row 2 -->
+        <div class="charts-grid">
+            <!-- Bar Chart -->
+
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2>Top 5 cây được yêu thích</h2>
+                    <button class="btn-download" onclick="downloadChart('barChart')">📥</button>
+                    <button id="btnShowFavoriteTable" class="btn btn-info" style="">
+                        Xem chi tiết
+                    </button>
+                    <a href="/Admin/Report?handler=ExportTopFavoritesReport&startDate=@Request.Query["startDate"]&endDate=@Request.Query["endDate"]"
+                        class="btn btn-danger" target="_blank">
+                        Xuất PDF
+                    </a>
+                </div>
+                <canvas id="barChart"></canvas>
+            </div>
+            <!-- Line Chart -->
+            <div class="chart-card">
+                <div class="chart-header">
+                    <h2>Số cây thêm mới mỗi tháng</h2>
+                    <button class="btn-download" onclick="downloadChart('lineChart')">📥</button>
+                </div>
+                <canvas id="lineChart"></canvas>
+            </div>
+
+        </div>
+
 
 
         <!-- Summary Table -->
@@ -183,13 +259,100 @@
             </table>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
+        flatpickr("#startDate", {
+            dateFormat: "Y-m-d",
+            allowInput: true
+        });
+        flatpickr("#endDate", {
+            dateFormat: "Y-m-d",
+            allowInput: true
+        });
+    </script>
+    <script>
+        const data = {
+            overview: {
+                totalPlants: 245,
+                totalSpecies: 180,
+                totalUsers: 1523,
+                totalSearches: 8947,
+                activePlants: 230,
+                newPlantsThisMonth: 15
+            },
+            plantsByCategory: [
+                { name: 'Cây ăn quả', count: 85, percentage: 34.7 },
+                { name: 'Cây công nghiệp', count: 62, percentage: 25.3 },
+                { name: 'Cây dược liệu', count: 48, percentage: 19.6 },
+                { name: 'Cây cảnh', count: 35, percentage: 14.3 },
+                { name: 'Cây khác', count: 15, percentage: 6.1 }
+            ],
+            topFavorites: [
+                { name: 'Hoa hồng', favorites: 342 },
+                { name: 'Lan hồ điệp', favorites: 298 },
+                { name: 'Sen đá', favorites: 256 },
+                { name: 'Phong lan', favorites: 234 },
+                { name: 'Xương rồng', favorites: 189 },
+                { name: 'Bonsai', favorites: 167 },
+                { name: 'Cây xanh văn phòng', favorites: 145 },
+                { name: 'Cây thuốc', favorites: 132 }
+            ],
+            searchTrends: [
+                { month: 'T1', searches: 6 },
+                { month: 'T2', searches: 7 },
+                { month: 'T3', searches: 8 },
+                { month: 'T4', searches: 9 },
+                { month: 'T5', searches: 11 },
+                { month: 'T6', searches: 10 },
+                { month: 'T7', searches: 9 },
+                { month: 'T8', searches: 11 },
+                { month: 'T9', searches: 12 },
+                { month: 'T10', searches: 8 }
+            ],
+            newPlantsMonthly: [
+                { month: 'T1', plants: 12 },
+                { month: 'T2', plants: 15 },
+                { month: 'T3', plants: 18 },
+                { month: 'T4', plants: 22 },
+                { month: 'T5', plants: 25 },
+                { month: 'T6', plants: 20 },
+                { month: 'T7', plants: 16 },
+                { month: 'T8', plants: 19 },
+                { month: 'T9', plants: 23 },
+                { month: 'T10', plants: 15 }
+            ],
+            topSearchKeywords: [
+                { keyword: 'cây cảnh', count: 523 },
+                { keyword: 'cây dược liệu', count: 487 },
+                { keyword: 'sen đá', count: 456 },
+                { keyword: 'hoa hồng', count: 423 },
+                { keyword: 'lan', count: 398 },
+                { keyword: 'bonsai', count: 367 },
+                { keyword: 'cây văn phòng', count: 334 },
+                { keyword: 'xương rồng', count: 298 }
+            ],
+            userActivity: [
+                { month: 'T1', newUsers: 142, activeUsers: 890 },
+                { month: 'T2', newUsers: 156, activeUsers: 920 },
+                { month: 'T3', newUsers: 178, activeUsers: 985 },
+                { month: 'T4', newUsers: 192, activeUsers: 1050 },
+                { month: 'T5', newUsers: 203, activeUsers: 1120 },
+                { month: 'T6', newUsers: 187, activeUsers: 1090 },
+                { month: 'T7', newUsers: 165, activeUsers: 1010 },
+                { month: 'T8', newUsers: 198, activeUsers: 1150 },
+                { month: 'T9', newUsers: 215, activeUsers: 1280 },
+                { month: 'T10', newUsers: 176, activeUsers: 1200 }
+            ]
+        };
         const categories = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CategoryStats));
 
         const topFavorites = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TopFavorites));
-        const topKeywords = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TopKeywords));
 
+        const topKeywords = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TopKeywords));
+        @* const newPlants = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.NewPlantsPerMonth)); *@
+            @* const userActivity = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.UserActivityStats)); *@
 
         // Ví dụ cho tổng số, bạn có thể gán trực tiếp
         const totalPlants = @Model.PlantSummary?.TotalPlants ?? 0;
@@ -217,7 +380,22 @@
                         '#3b82f6',
                         '#f59e0b',
                         '#ef4444',
-                        '#8b5cf6'
+                        '#8b5cf6',
+                        '#6366f1',
+                        '#f43f5e',
+                        '#22d3ee',
+                        '#fbbf24',
+                        '#84cc16',
+                        '#eab308',
+                        '#0ea5e9',
+                        '#f87171',
+                        '#a3e635',
+                        '#f472b6',
+                        '#d946ef',
+                        '#818cf8',
+                        '#fb7185',
+                        '#fde68a',
+                        '#4ade80'
                     ]
                 }]
             },
@@ -230,6 +408,26 @@
                 }
             }
         });
+
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: topFavorites.map(f => f.PlantName),
+                datasets: [{
+                    label: 'Lượt yêu thích',
+                    data: topFavorites.map(f => Number(f.FavoriteCount)),
+                    backgroundColor: '#10b981'
+                }]
+            },
+            options: {
+                responsive: true,
+                indexAxis: 'x',
+                plugins: { legend: { display: false } },
+                scales: { x: { beginAtZero: true } }
+            }
+        });
+
 
         // Initialize Line Chart
         const lineCtx = document.getElementById('lineChart').getContext('2d');
@@ -261,35 +459,9 @@
             }
         });
 
-        // Initialize Bar Chart
-        const barCtx = document.getElementById('barChart').getContext('2d');
-        new Chart(barCtx, {
-            type: 'bar',
-            data: {
-                labels: topFavorites.map(f => f.PlantName),
-                datasets: [{
-                    label: 'Lượt yêu thích',
-                    data: topFavorites.map(f => f.FavoriteCount),
-                    backgroundColor: '#ef4444'
-                }]
-            },
-            options: {
-                responsive: true,
-                indexAxis: 'y',
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    x: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
 
-        // Initialize New Plants Chart
+
+        @* // Initialize New Plants Chart
         const newPlantsCtx = document.getElementById('newPlantsChart').getContext('2d');
         new Chart(newPlantsCtx, {
             type: 'bar',
@@ -314,9 +486,42 @@
                     }
                 }
             }
-        });
+        }); *@
 
-       
+            @* // Initialize User Activity Chart
+        const userActivityCtx = document.getElementById('userActivityChart').getContext('2d');
+        new Chart(userActivityCtx, {
+            type: 'line',
+            data: {
+                labels: data.userActivity.months,
+                datasets: [{
+                    label: 'Người dùng mới',
+                    data: data.userActivity.newUsers,
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.4
+                }, {
+                    label: 'Người dùng hoạt động',
+                    data: data.userActivity.activeUsers,
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        }); *@
 
         // Render Keywords List
         const keywordsList = document.getElementById('keywordsList');
@@ -366,20 +571,6 @@
             alert('Đã tải xuống biểu đồ!');
         }
 
-        const today = new Date().toISOString().split("T")[0];
-        document.getElementById("startDate").setAttribute("max", today);
-        document.getElementById("endDate").setAttribute("max", today);
-
-        function applyFilter() {
-            const range = document.getElementById("dateRange").value;
-            const start = document.getElementById("startDate").value;
-            const end = document.getElementById("endDate").value;
-            let url = "/Admin/Report?dateRange=" + range;
-            if (start) url += "&startDate=" + start;
-            if (end) url += "&endDate=" + end;
-            window.location.href = url;
-        }
-
         function exportKeywords() {
             const csv = 'STT,Từ khóa,Số lượt tìm\n' +
                 data.topKeywords.map((k, i) => `${i + 1},${k.keyword},${k.count}`).join('\n');
@@ -410,6 +601,36 @@
             link.click();
             alert('Đã xuất báo cáo thành công!');
         }
+    </script>
+
+    <script>
+        document.getElementById("btnShowCategoryTable").onclick = function () {
+            document.getElementById("categoryTableModal").style.display = "flex";
+        };
+        document.getElementById("closeCategoryModal").onclick = function () {
+            document.getElementById("categoryTableModal").style.display = "none";
+        };
+        // Đóng khi click ra ngoài modal-content
+        document.getElementById("categoryTableModal").onclick = function (e) {
+            if (e.target === this) {
+                this.style.display = "none";
+            }
+        }
+    </script>
+
+    <script>
+        document.getElementById("btnShowFavoriteTable").onclick = function () {
+            document.getElementById("favoriteTableModal").style.display = "flex";
+        };
+        document.getElementById("closeFavoriteModal").onclick = function () {
+            document.getElementById("favoriteTableModal").style.display = "none";
+        };
+        // Đóng khi click ra ngoài modal-content
+        document.getElementById("favoriteTableModal").onclick = function (e) {
+            if (e.target === this) {
+                this.style.display = "none";
+            }
+        };
     </script>
 </body>
 

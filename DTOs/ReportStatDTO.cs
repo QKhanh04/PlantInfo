@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace PlantManagement.DTOs
 {
-     public class PlantSummaryDto
+    public class PlantSummaryDto
     {
         public int TotalPlants { get; set; }
         public int TotalActivePlants { get; set; }
@@ -24,7 +24,7 @@ namespace PlantManagement.DTOs
     public class CategoryStatDto
     {
         public int CategoryId { get; set; }
-        public string CategoryName { get; set; }
+        public string? CategoryName { get; set; }
         public int PlantCount { get; set; }
         public double Percentage { get; set; }
     }
@@ -32,13 +32,13 @@ namespace PlantManagement.DTOs
     public class FavoriteStatDto
     {
         public int PlantId { get; set; }
-        public string PlantName { get; set; }
+        public string? PlantName { get; set; }
         public int FavoriteCount { get; set; }
     }
 
     public class KeywordStatDto
     {
-        public string Keyword { get; set; }
+        public string? Keyword { get; set; }
         public int Count { get; set; }
         public double Percentage { get; set; }
     }

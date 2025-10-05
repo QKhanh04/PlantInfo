@@ -10,11 +10,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Khám Phá Cây Trồng - Tempi Plants</title>
+    <title>Khám Phá Cây Trồng - Plants</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.0/font/bootstrap-icons.min.css"
         rel="stylesheet">
     <style>
+        :root {
+            --primary-green: #2d5016;
+            --light-green: #4a7c59;
+            --accent-green: #7fb069;
+            --soft-green: #f0f7ed;
+            --warm-white: #fafafa;
+            --text-dark: #2c3e50;
+            --text-muted: #6c757d;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.15);
+            --border-radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --gradient-bg: linear-gradient(135deg, #f8fffe 0%, #e8f5e8 50%, #f0f7ed 100%);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -23,14 +38,13 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
+            background: var(--gradient-bg);
         }
-
-
 
         /* Hero Section */
         .hero-section {
-            height: 70vh;
+            height: 75vh;
+            width: 100%;
             background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
                 url('https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=1600') center/cover;
             display: flex;
@@ -38,12 +52,13 @@
             justify-content: center;
             color: white;
             text-align: left;
-            margin-top: 80px;
+            margin-top: 50px;
         }
 
         .hero-content {
-            max-width: 1200px;
-            padding: 0 40px;
+            width: 100%;
+            max-width: 100%;
+            padding: 0 15px;
         }
 
         .hero-subtitle {
@@ -67,7 +82,7 @@
         }
 
         .hero-btn {
-            background-color: #5cb5a4;
+            background-color: var(--accent-green);
             color: white;
             padding: 15px 50px;
             border: none;
@@ -75,32 +90,167 @@
             cursor: pointer;
             text-decoration: none;
             display: inline-block;
-            transition: all 0.3s ease;
-            border-radius: 8px;
+            transition: var(--transition);
+            border-radius: var(--border-radius);
         }
 
         .hero-btn:hover {
-            background-color: #4a9688;
+            background-color: var(--light-green);
             color: white;
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(92, 181, 164, 0.4);
+            box-shadow: 0 6px 20px rgba(127, 176, 105, 0.4);
         }
 
-        /* Filter Section */
-        .filter-section {
-            background-color: white;
-            padding: 40px;
-            margin: 60px auto;
-            max-width: 1200px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        /* About Section */
+        .about-section {
+            background-color: var(--soft-green);
+            padding: 100px 0;
+            margin-bottom: 80px;
         }
 
-        .filter-title {
-            font-size: 24px;
-            margin-bottom: 30px;
+        .about-title {
+            font-size: 42px;
             font-weight: 300;
-            color: #333;
+            margin-bottom: 30px;
+            color: var(--text-dark);
+        }
+
+        .about-text {
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .about-images {
+            position: relative;
+            height: 500px;
+        }
+
+        .about-image-main {
+            position: absolute;
+            width: 65%;
+            height: 70%;
+            top: 0;
+            left: 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 10px 40px var(--shadow-medium);
+        }
+
+        .about-image-main img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .about-image-secondary {
+            position: absolute;
+            width: 55%;
+            height: 60%;
+            bottom: 0;
+            right: 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 10px 40px var(--shadow-medium);
+        }
+
+        .about-image-secondary img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Filter & Plants Section */
+        .plants-section {
+            padding: 60px 0 80px;
+        }
+
+        .section-title {
+            font-size: 42px;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--text-dark);
+        }
+
+        /* Sidebar Filter */
+        .filter-sidebar {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: 0 5px 20px var(--shadow-light);
+            position: sticky;
+            top: 80px;
+            height: fit-content;
+        }
+
+        .filter-sidebar h3 {
+            font-size: 24px;
+            margin-bottom: 25px;
+            font-weight: 400;
+            color: var(--text-dark);
+        }
+
+        .filter-group {
+            margin-bottom: 25px;
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .checkbox-group {
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            background-color: var(--soft-green);
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .checkbox-group::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .checkbox-group::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .checkbox-group::-webkit-scrollbar-thumb {
+            background: var(--accent-green);
+            border-radius: 10px;
+        }
+
+        .form-check {
+            margin-bottom: 10px;
+        }
+
+        .form-check-input {
+            border: 2px solid var(--accent-green);
+            cursor: pointer;
+        }
+
+        .form-check-input:checked {
+            background-color: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .form-check-input:focus {
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 3px rgba(127, 176, 105, 0.1);
+        }
+
+        .form-check-label {
+            font-size: 14px;
+            color: var(--text-dark);
+            cursor: pointer;
+            user-select: none;
         }
 
         .form-control,
@@ -109,39 +259,43 @@
             border: 1px solid #e0e0e0;
             padding: 12px 15px;
             font-size: 15px;
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            width: 100%;
         }
 
         .form-control:focus,
         .form-select:focus {
-            border-color: #5cb5a4;
-            box-shadow: 0 0 0 3px rgba(92, 181, 164, 0.1);
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 3px rgba(127, 176, 105, 0.1);
         }
 
         .btn-filter {
-            background-color: #5cb5a4;
+            background-color: var(--accent-green);
             color: white;
             border: none;
             padding: 12px 30px;
             border-radius: 8px;
             font-size: 15px;
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            width: 100%;
+            margin-bottom: 10px;
         }
 
         .btn-filter:hover {
-            background-color: #4a9688;
+            background-color: var(--light-green);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(92, 181, 164, 0.3);
+            box-shadow: 0 4px 12px rgba(127, 176, 105, 0.3);
         }
 
         .btn-reset {
-            background-color: #6c757d;
+            background-color: var(--text-muted);
             color: white;
             border: none;
             padding: 12px 30px;
             border-radius: 8px;
             font-size: 15px;
-            transition: all 0.3s ease;
+            transition: var(--transition);
+            width: 100%;
         }
 
         .btn-reset:hover {
@@ -150,34 +304,33 @@
             box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
         }
 
+        /* Mobile Filter Toggle */
+        .filter-toggle-btn {
+            display: none;
+            background-color: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-size: 15px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
         /* Plant Cards */
-        .plants-container {
-            max-width: 1200px;
-            margin: 0 auto 80px;
-            padding: 0 40px;
-        }
-
-        .section-title {
-            font-size: 42px;
-            font-weight: 300;
-            text-align: center;
-            margin-bottom: 50px;
-            color: #333;
-        }
-
         .plant-card {
             background: white;
-            border-radius: 20px;
+            border-radius: var(--border-radius);
             overflow: hidden;
-            transition: all 0.4s ease;
+            transition: var(--transition);
             border: none;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 4px 20px var(--shadow-light);
             height: 100%;
         }
 
         .plant-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 8px 35px rgba(92, 181, 164, 0.2);
+            box-shadow: 0 8px 35px rgba(127, 176, 105, 0.2);
         }
 
         .plant-image {
@@ -185,7 +338,6 @@
             overflow: hidden;
             background-color: #f0f0f0;
             position: relative;
-            border-radius: 0;
         }
 
         .favorite-btn {
@@ -201,8 +353,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px var(--shadow-medium);
+            transition: var(--transition);
             z-index: 10;
         }
 
@@ -214,20 +366,12 @@
         .favorite-btn i {
             font-size: 20px;
             color: #ccc;
-            transition: all 0.3s ease;
+            transition: var(--transition);
         }
 
         .favorite-btn.active i {
             color: #ff4757;
-            animation: heartBeat 0.5s ease;
         }
-
-        @* @keyframes heartBeat {
-            0%, 100% { transform: scale(1); }
-            25% { transform: scale(1.3); }
-            50% { transform: scale(1.1); }
-            75% { transform: scale(1.2); }
-        } *@
 
         .plant-image img {
             width: 100%;
@@ -245,12 +389,12 @@
             align-items: center;
             justify-content: center;
             height: 100%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: transparent;
         }
 
         .plant-image-placeholder i {
             font-size: 60px;
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(0, 0, 0, 0.2);
         }
 
         .card-body {
@@ -261,26 +405,15 @@
             font-size: 22px;
             font-weight: 400;
             margin-bottom: 10px;
-            color: #333;
+            color: var(--text-dark);
         }
 
         .plant-species {
             font-size: 14px;
-            color: #5cb5a4;
+            color: var(--accent-green);
             font-style: italic;
             margin-bottom: 15px;
             display: block;
-        }
-
-        .plant-description {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
         }
 
         .category-badges {
@@ -291,33 +424,33 @@
         }
 
         .category-badge {
-            background-color: #f0f9f7;
-            color: #5cb5a4;
+            background-color: var(--soft-green);
+            color: var(--primary-green);
             padding: 5px 12px;
             font-size: 12px;
             border-radius: 20px;
-            border: 1px solid #5cb5a4;
+            border: 1px solid var(--accent-green);
         }
 
         .view-detail-btn {
             background-color: transparent;
-            color: #5cb5a4;
-            border: 2px solid #5cb5a4;
+            color: var(--accent-green);
+            border: 2px solid var(--accent-green);
             padding: 10px 25px;
             width: 100%;
             text-decoration: none;
             display: inline-block;
             text-align: center;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             font-size: 14px;
             border-radius: 8px;
         }
 
         .view-detail-btn:hover {
-            background-color: #5cb5a4;
+            background-color: var(--accent-green);
             color: white;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(92, 181, 164, 0.3);
+            box-shadow: 0 4px 12px rgba(127, 176, 105, 0.3);
         }
 
         /* Pagination */
@@ -328,122 +461,27 @@
         }
 
         .pagination .page-link {
-            color: #333;
+            color: var(--text-dark);
             border: 1px solid #e0e0e0;
             padding: 10px 18px;
             border-radius: 8px;
             margin: 0 5px;
-            transition: all 0.3s ease;
+            transition: var(--transition);
         }
 
         .pagination .page-item.active .page-link {
-            background-color: #5cb5a4;
-            border-color: #5cb5a4;
+            background-color: var(--accent-green);
+            border-color: var(--accent-green);
             color: white;
-            box-shadow: 0 3px 10px rgba(92, 181, 164, 0.3);
+            box-shadow: 0 3px 10px rgba(127, 176, 105, 0.3);
         }
 
         .pagination .page-link:hover {
-            background-color: #f0f9f7;
-            color: #5cb5a4;
-            border-color: #5cb5a4;
+            background-color: var(--soft-green);
+            color: var(--primary-green);
+            border-color: var(--accent-green);
             transform: translateY(-2px);
         }
-
-        /* About Section */
-        .about-section {
-            background-color: #f8f9fa;
-            padding: 100px 0;
-            margin-bottom: 80px;
-        }
-
-        .about-title {
-            font-size: 42px;
-            font-weight: 300;
-            margin-bottom: 30px;
-            color: #333;
-        }
-
-        .about-text {
-            font-size: 16px;
-            line-height: 1.8;
-            color: #666;
-            margin-bottom: 20px;
-        }
-
-        .about-stats {
-            display: flex;
-            gap: 40px;
-            margin-top: 40px;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 36px;
-            font-weight: 600;
-            color: #5cb5a4;
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            color: #666;
-            margin: 0;
-        }
-
-        .about-images {
-            position: relative;
-            height: 500px;
-        }
-
-        .about-image-main {
-            position: absolute;
-            width: 65%;
-            height: 70%;
-            top: 0;
-            left: 0;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .about-image-main img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .about-image-secondary {
-            position: absolute;
-            width: 55%;
-            height: 60%;
-            bottom: 0;
-            right: 0;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-        }
-
-        .about-image-secondary img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* Responsive */
-        @* @media (max-width: 992px) {
-            .about-images {
-                height: 400px;
-                margin-top: 50px;
-            }
-
-            .about-stats {
-                justify-content: space-around;
-            }
-        } *@
 
         /* Loading Overlay */
         .loading-overlay {
@@ -467,7 +505,7 @@
             width: 60px;
             height: 60px;
             border: 4px solid #f3f3f3;
-            border-top: 4px solid #5cb5a4;
+            border-top: 4px solid var(--accent-green);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -478,17 +516,45 @@
         }
 
         /* Responsive */
+        @media (max-width: 992px) {
+            .about-images {
+                height: 400px;
+                margin-top: 50px;
+            }
+
+            .filter-sidebar {
+                position: static;
+                margin-bottom: 30px;
+            }
+        }
+
         @media (max-width: 768px) {
             .hero-title {
                 font-size: 36px;
             }
-            
-            .navbar .nav-links {
-                gap: 20px;
+
+            .hero-content {
+                padding: 0 20px;
             }
-            
-            .filter-section {
-                padding: 25px;
+
+            .filter-toggle-btn {
+                display: block;
+            }
+
+            .filter-sidebar {
+                display: none;
+            }
+
+            .filter-sidebar.show {
+                display: block;
+            }
+
+            .about-title {
+                font-size: 32px;
+            }
+
+            .section-title {
+                font-size: 32px;
             }
         } *@
     </style>
@@ -500,24 +566,24 @@
         <div class="loading-spinner"></div>
     </div>
 
-
-
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="hero-content">
-            <div class="hero-subtitle">Chào mừng đến với Tempi</div>
-            <h1 class="hero-title">Khám Phá Thế Giới<br>Cây Trồng Xanh</h1>
-            <p class="hero-description">
-                Tìm hiểu về hàng trăm loài cây trồng khác nhau, từ cây ăn quả, cây cảnh đến cây dược liệu.
-                Chúng tôi cung cấp thông tin chi tiết về đặc điểm, cách chăm sóc và lợi ích của từng loại cây.
-            </p>
-            <a href="#explore" class="hero-btn">Khám Phá Ngay</a>
+            <div class="container-fluid">
+                <div class="hero-subtitle">Chào mừng đến với Plants</div>
+                <h1 class="hero-title">Khám Phá Thế Giới<br>Cây Trồng Xanh</h1>
+                <p class="hero-description">
+                    Tìm hiểu về hàng trăm loài cây trồng khác nhau, từ cây ăn quả, cây cảnh đến cây dược liệu.
+                    Chúng tôi cung cấp thông tin chi tiết về đặc điểm, cách chăm sóc và lợi ích của từng loại cây.
+                </p>
+                <a href="#explore" class="hero-btn">Khám Phá Ngay</a>
+            </div>
         </div>
     </section>
 
     <!-- About Us Section -->
     <section class="about-section" id="about">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row align-items-center">
                 <div class="col-lg-5">
                     <h2 class="about-title">Về Chúng Tôi</h2>
@@ -533,20 +599,6 @@
                         đến các nhà làm vườn chuyên nghiệp, chúng tôi cung cấp kiến thức
                         phù hợp cho mọi cấp độ.
                     </p>
-                    <div class="about-stats">
-                        <div class="stat-item">
-                            <h3 class="stat-number">500+</h3>
-                            <p class="stat-label">Loài cây</p>
-                        </div>
-                        <div class="stat-item">
-                            <h3 class="stat-number">10K+</h3>
-                            <p class="stat-label">Người dùng</p>
-                        </div>
-                        <div class="stat-item">
-                            <h3 class="stat-number">5+</h3>
-                            <p class="stat-label">Năm kinh nghiệm</p>
-                        </div>
-                    </div>
                 </div>
                 <div class="col-lg-7">
                     <div class="about-images">
@@ -562,223 +614,249 @@
             </div>
         </div>
     </section>
-    <!-- Filter Section -->
-    <h2 class="section-title">Bộ Sưu Tập Cây Trồng</h2>
 
-    <section class="filter-section" id="plants">
-        <h3 class="filter-title"><i class="bi bi-funnel me-2"></i>Tìm Kiếm Cây Trồng</h3>
-        <form id="filter-form">
-            <div class="row g-3">
-                <div class="col-md-4">
-                    <input type="text" class="form-control" id="keyword" placeholder="Nhập tên cây trồng...">
-                </div>
-                <div class="col-md-3">
-                    <select class="form-select" id="category">
-                        <option value="">Tất cả danh mục</option>
-                        <option value="1">Cây ăn quả</option>
-                        <option value="2">Cây cảnh</option>
-                        <option value="3">Cây dược liệu</option>
-                        <option value="4">Cây rau củ</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <select class="form-select" id="order">
-                        <option value="">Tất cả bộ</option>
-                        <option value="Rosales">Rosales</option>
-                        <option value="Poales">Poales</option>
-                        <option value="Fabales">Fabales</option>
-                    </select>
-                </div>
-                <div class="col-md-2">
-                    <button type="button" class="btn btn-reset w-100" id="resetBtn">
-                        <i class="bi bi-arrow-counterclockwise me-2"></i>Xóa
+    <!-- Plants Section with Sidebar Filter -->
+    <section class="plants-section" id="explore">
+        <div class="container-fluid">
+            <h2 class="section-title">Bộ Sưu Tập Cây Trồng</h2>
+            
+            <div class="row">
+                <!-- Sidebar Filter -->
+                <div class="col-lg-3 col-md-4">
+                    <!-- Mobile Filter Toggle -->
+                    <button class="filter-toggle-btn" id="filterToggleBtn">
+                        <i class="bi bi-funnel me-2"></i>Bộ Lọc Tìm Kiếm
                     </button>
-                </div>
-            </div>
-        </form>
-    </section>
-    <!-- Plants Section -->
-    <section class="plants-container" id="explore">
-        <div class="row g-4" id="plantsGrid">
-            <!-- Plant Card 1 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="plant-card">
-                    <div class="plant-image">
-                        <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=500" alt="Cây táo">
-                        <button class="favorite-btn" data-id="1">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="plant-title">Cây Táo</h5>
-                        <span class="plant-species">Malus domestica</span>
-                        <p class="plant-description">
-                            Cây táo là loại cây ăn quả phổ biến, có nguồn gốc từ Trung Á.
-                            Quả táo giàu vitamin và khoáng chất, có thể trồng ở nhiều vùng khí hậu ôn đới.
-                        </p>
-                        <div class="category-badges">
-                            <span class="category-badge">Cây ăn quả</span>
-                            <span class="category-badge">Ôn đới</span>
-                        </div>
-                        <a href="#" class="view-detail-btn">Xem Chi Tiết</a>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Plant Card 2 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="plant-card">
-                    <div class="plant-image">
-                        <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=500"
-                            alt="Cây hoa hồng">
-                        <button class="favorite-btn" data-id="2">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="plant-title">Hoa Hồng</h5>
-                        <span class="plant-species">Rosa rubiginosa</span>
-                        <p class="plant-description">
-                            Hoa hồng là biểu tượng của tình yêu và vẻ đẹp. Có hàng nghìn giống hoa hồng
-                            với nhiều màu sắc và hương thơm khác nhau, thích hợp làm cây cảnh.
-                        </p>
-                        <div class="category-badges">
-                            <span class="category-badge">Cây cảnh</span>
-                            <span class="category-badge">Hoa</span>
-                        </div>
-                        <a href="#" class="view-detail-btn">Xem Chi Tiết</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Plant Card 3 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="plant-card">
-                    <div class="plant-image">
-                        <img src="https://images.unsplash.com/photo-1628556270448-4d4e4148e1b1?w=500" alt="Cây bạc hà">
-                        <button class="favorite-btn" data-id="3">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="plant-title">Bạc Hà</h5>
-                        <span class="plant-species">Mentha arvensis</span>
-                        <p class="plant-description">
-                            Bạc hà là loại thảo mộc dược liệu có hương thơm mát, được sử dụng
-                            trong ẩm thực và y học truyền thống. Dễ trồng và chăm sóc.
-                        </p>
-                        <div class="category-badges">
-                            <span class="category-badge">Dược liệu</span>
-                            <span class="category-badge">Thảo mộc</span>
-                        </div>
-                        <a href="#" class="view-detail-btn">Xem Chi Tiết</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Plant Card 4 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="plant-card">
-                    <div class="plant-image">
-                        <img src="https://images.unsplash.com/photo-1592150621744-aca64f48394a?w=500" alt="Cà chua">
-                        <button class="favorite-btn" data-id="4">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="plant-title">Cà Chua</h5>
-                        <span class="plant-species">Solanum lycopersicum</span>
-                        <p class="plant-description">
-                            Cà chua là loại rau quả giàu dinh dưỡng, chứa nhiều vitamin C và lycopene.
-                            Được trồng rộng rãi trên toàn thế giới cho mục đích ẩm thực.
-                        </p>
-                        <div class="category-badges">
-                            <span class="category-badge">Rau củ</span>
-                            <span class="category-badge">Ăn quả</span>
-                        </div>
-                        <a href="#" class="view-detail-btn">Xem Chi Tiết</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Plant Card 5 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="plant-card">
-                    <div class="plant-image">
-                        <img src="https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=500" alt="Hoa lan">
-                        <button class="favorite-btn" data-id="5">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                    </div>
-                    <div class="card-body">
-                        <h5 class="plant-title">Hoa Lan</h5>
-                        <span class="plant-species">Orchidaceae</span>
-                        <p class="plant-description">
-                            Hoa lan là một trong những họ thực vật có hoa lớn nhất, với vẻ đẹp tinh tế
-                            và đa dạng. Được ưa chuộng làm cây cảnh trong nhà.
-                        </p>
-                        <div class="category-badges">
-                            <span class="category-badge">Cây cảnh</span>
-                            <span class="category-badge">Hoa</span>
-                        </div>
-                        <a href="#" class="view-detail-btn">Xem Chi Tiết</a>
+                    <div class="filter-sidebar" id="filterSidebar">
+                        <h3><i class="bi bi-funnel me-2"></i>Tìm Kiếm</h3>
+                        <form id="filter-form">
+                            <div class="filter-group">
+                                <label for="keyword">Tên cây trồng</label>
+                                <input type="text" class="form-control" id="keyword" 
+                                       placeholder="Nhập tên cây...">
+                            </div>
+                            
+                            <div class="filter-group">
+                                <label>Danh mục</label>
+                                <div class="checkbox-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="1" id="cat1" name="categories">
+                                        <label class="form-check-label" for="cat1">Cây ăn quả</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="2" id="cat2" name="categories">
+                                        <label class="form-check-label" for="cat2">Cây cảnh</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="3" id="cat3" name="categories">
+                                        <label class="form-check-label" for="cat3">Cây dược liệu</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="4" id="cat4" name="categories">
+                                        <label class="form-check-label" for="cat4">Cây rau củ</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="filter-group">
+                                <label>Công dụng</label>
+                                <div class="checkbox-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="food" id="use1" name="usages">
+                                        <label class="form-check-label" for="use1">Ăn quả/Thực phẩm</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="medicine" id="use2" name="usages">
+                                        <label class="form-check-label" for="use2">Chữa bệnh</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="decoration" id="use3" name="usages">
+                                        <label class="form-check-label" for="use3">Trang trí</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="shade" id="use4" name="usages">
+                                        <label class="form-check-label" for="use4">Che bóng mát</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="air" id="use5" name="usages">
+                                        <label class="form-check-label" for="use5">Lọc không khí</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="filter-group">
+                                <label for="order">Bộ</label>
+                                <select class="form-select" id="order">
+                                    <option value="">Tất cả bộ</option>
+                                    <option value="Rosales">Rosales</option>
+                                    <option value="Poales">Poales</option>
+                                    <option value="Fabales">Fabales</option>
+                                </select>
+                            </div>
+                            
+                            <div class="filter-group">
+                                <button type="button" class="btn btn-filter" id="applyBtn">
+                                    <i class="bi bi-search me-2"></i>Tìm Kiếm
+                                </button>
+                                <button type="button" class="btn btn-reset" id="resetBtn">
+                                    <i class="bi bi-arrow-counterclockwise me-2"></i>Xóa Bộ Lọc
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
-            </div>
 
-            <!-- Plant Card 6 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="plant-card">
-                    <div class="plant-image">
-                        <img src="https://images.unsplash.com/photo-1582794543139-8ac9cb0f7b11?w=500" alt="Xương rồng">
-                        <button class="favorite-btn" data-id="6">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
+                <!-- Plants Grid -->
+                <div class="col-lg-9 col-md-8">
+                    <div class="row g-4" id="plantsGrid">
+                        @foreach (DTOs.PlantListDTO plant in Model.Plants.Items)
+                        {
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <div class="plant-card">
+                                    <div class="plant-image">
+                                        @if (plant.ImageUrls != null && plant.ImageUrls.Any())
+                                        {
+                                            <img src="@plant.ImageUrls.First()" alt="@plant.CommonName">
+                                        }
+                                        else
+                                        {
+                                            <div class="plant-image-placeholder">
+                                                <i class="bi bi-image"></i>
+                                            </div>
+                                        }
+                                        <button class="favorite-btn" data-id="@plant.PlantId">
+                                            <i class="bi bi-heart-fill"></i>
+                                        </button>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="plant-title">@plant.CommonName</h5>
+                                        <span class="plant-species">@plant.SpeciesName</span>
+                                        <div class="category-badges">
+                                            @foreach (var categoryName in plant.CategoryNames)
+                                            {
+                                                <span class="category-badge">@categoryName</span>
+                                            }
+                                        </div>
+                                        <a asp-page="/Detail" asp-route-id="@plant.PlantId" class="view-detail-btn">
+                                            <i class="bi bi-eye"></i> Chi tiết
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
-                    <div class="card-body">
-                        <h5 class="plant-title">Xương Rồng</h5>
-                        <span class="plant-species">Cactaceae</span>
-                        <p class="plant-description">
-                            Xương rồng là loại cây mọng nước, chịu hạn tốt, thích hợp cho
-                            người bận rộn. Có nhiều hình dạng và kích thước độc đáo.
-                        </p>
-                        <div class="category-badges">
-                            <span class="category-badge">Cây cảnh</span>
-                            <span class="category-badge">Sen đá</span>
+
+                    <!-- Pagination -->
+                    @if (Model.TotalPages > 1)
+                    {
+                        <div class="pagination-wrapper">
+                            <nav aria-label="Phân trang">
+                                <ul class="pagination mb-0">
+                                    <li class="page-item @(Model.CurrentPage <= 1 ? "disabled" : "")">
+                                        <a class="page-link"
+                                           href="@(Model.CurrentPage > 1 
+                                               ? Url.Page("/Index", null, new {
+                                                   page = Model.CurrentPage - 1,
+                                                   keyword = Model.FilterVM?.Keyword,
+                                                   categoryId = Model.FilterVM?.CategoryId,
+                                                   orderName = Model.FilterVM?.OrderName
+                                               }, null)
+                                               : "#")">
+                                            <i class="bi bi-chevron-left"></i> Trước
+                                        </a>
+                                    </li>
+                                    @{
+                                        int start = Math.Max(1, Model.CurrentPage - 2);
+                                        int end = Math.Min(Model.TotalPages, Model.CurrentPage + 2);
+                                        if (Model.CurrentPage <= 3)
+                                        {
+                                            start = 1;
+                                            end = Math.Min(5, Model.TotalPages);
+                                        }
+                                        else if (Model.CurrentPage >= Model.TotalPages - 2)
+                                        {
+                                            end = Model.TotalPages;
+                                            start = Math.Max(1, Model.TotalPages - 4);
+                                        }
+                                    }
+                                    @if (start > 1)
+                                    {
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                               href="@Url.Page("/Index", null, new {
+                                                   page = 1,
+                                                   keyword = Model.FilterVM?.Keyword,
+                                                   categoryId = Model.FilterVM?.CategoryId,
+                                                   orderName = Model.FilterVM?.OrderName
+                                               }, null)">
+                                                1
+                                            </a>
+                                        </li>
+                                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    }
+                                    @for (int i = start; i <= end; i++)
+                                    {
+                                        <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                            <a class="page-link"
+                                               href="@Url.Page("/Index", null, new {
+                                                   page = i,
+                                                   keyword = Model.FilterVM?.Keyword,
+                                                   categoryId = Model.FilterVM?.CategoryId,
+                                                   orderName = Model.FilterVM?.OrderName
+                                               }, null)">
+                                                @i
+                                            </a>
+                                        </li>
+                                    }
+                                    @if (end < Model.TotalPages)
+                                    {
+                                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                                        <li class="page-item">
+                                            <a class="page-link"
+                                               href="@Url.Page("/Index", null, new {
+                                                   page = Model.TotalPages,
+                                                   keyword = Model.FilterVM?.Keyword,
+                                                   categoryId = Model.FilterVM?.CategoryId,
+                                                   orderName = Model.FilterVM?.OrderName
+                                               }, null)">
+                                                @Model.TotalPages
+                                            </a>
+                                        </li>
+                                    }
+                                    <li class="page-item @(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
+                                        <a class="page-link"
+                                           href="@(Model.CurrentPage < Model.TotalPages
+                                               ? Url.Page("/Index", null, new {
+                                                   page = Model.CurrentPage + 1,
+                                                   keyword = Model.FilterVM?.Keyword,
+                                                   categoryId = Model.FilterVM?.CategoryId,
+                                                   orderName = Model.FilterVM?.OrderName
+                                               }, null)
+                                               : "#")">
+                                            Sau <i class="bi bi-chevron-right"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
-                        <a href="#" class="view-detail-btn">Xem Chi Tiết</a>
-                    </div>
+                    }
                 </div>
             </div>
-        </div>
-
-        <!-- Pagination -->
-        <div class="pagination-wrapper">
-            <nav>
-                <ul class="pagination mb-0">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#"><i class="bi bi-chevron-left"></i> Trước</a>
-                    </li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">4</a></li>
-                    <li class="page-item"><a class="page-link" href="#">5</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Sau <i class="bi bi-chevron-right"></i></a>
-                    </li>
-                </ul>
-            </nav>
         </div>
     </section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
-            // Initialize favorites from memory
             var favorites = {};
 
-            // Smooth scrolling for anchor links
+            // Mobile filter toggle
+            $('#filterToggleBtn').on('click', function () {
+                $('#filterSidebar').toggleClass('show');
+            });
+
+            // Smooth scrolling
             $('a[href^="#"]').on('click', function (e) {
                 e.preventDefault();
                 var target = $(this.getAttribute('href'));
@@ -789,15 +867,16 @@
                 }
             });
 
-            // Filter form handling
-            $('#keyword, #category, #order').on('change', function () {
+            // Apply filter button
+            $('#applyBtn').on('click', function () {
                 filterPlants();
             });
 
             // Reset button
             $('#resetBtn').on('click', function () {
                 $('#keyword').val('');
-                $('#category').val('');
+                $('input[name="categories"]').prop('checked', false);
+                $('input[name="usages"]').prop('checked', false);
                 $('#order').val('');
                 filterPlants();
             });
@@ -805,23 +884,41 @@
             function filterPlants() {
                 $('#loadingOverlay').addClass('show');
 
-                // Simulate AJAX call
+                // Collect selected categories
+                var selectedCategories = [];
+                $('input[name="categories"]:checked').each(function() {
+                    selectedCategories.push($(this).val());
+                });
+
+                // Collect selected usages
+                var selectedUsages = [];
+                $('input[name="usages"]:checked').each(function() {
+                    selectedUsages.push($(this).val());
+                });
+
+                var filterData = {
+                    keyword: $('#keyword').val(),
+                    categories: selectedCategories,
+                    usages: selectedUsages,
+                    order: $('#order').val()
+                };
+
+                console.log('Filter data:', filterData);
+
                 setTimeout(function () {
                     $('#loadingOverlay').removeClass('show');
-
                     $('html, body').animate({
                         scrollTop: $('#plantsGrid').offset().top - 150
                     }, 500);
                 }, 500);
             }
 
-            // Favorite button functionality
+            // Favorite functionality
             $('.favorite-btn').on('click', function (e) {
                 e.preventDefault();
                 var btn = $(this);
                 var plantId = btn.data('id');
 
-                // Toggle favorite status
                 if (favorites[plantId]) {
                     delete favorites[plantId];
                     btn.removeClass('active');
@@ -830,11 +927,10 @@
                     btn.addClass('active');
                 }
 
-                // Store in memory (in real app, would save to backend)
                 console.log('Favorites:', favorites);
             });
 
-            // Add hover effect to cards
+            // Card hover effect
             $('.plant-card').hover(
                 function () {
                     $(this).addClass('shadow-lg');

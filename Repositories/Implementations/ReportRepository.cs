@@ -84,6 +84,7 @@ namespace PlantManagement.Repositories.Implementations
                     PlantCount = c.Plants.Count(pc => plantIds.Contains(pc.PlantId)),
                     Percentage = total > 0 ? Math.Round(100.0 * c.Plants.Count(pc => plantIds.Contains(pc.PlantId)) / total, 1) : 0
                 })
+                .OrderByDescending(c => c.PlantCount)
                 .ToListAsync();
 
             return stats;
