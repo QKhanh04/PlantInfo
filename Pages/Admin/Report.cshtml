@@ -8,17 +8,471 @@
 
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thống Kê Admin - Quản Lý Cây Trồng</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <link rel="stylesheet" href="~/css/admin/report.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: #f8f9f7;
+            color: #2d3436;
+            min-height: 100vh;
+        }
+
+        .container-report {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .header {
+            margin-bottom: 32px;
+            border-bottom: 2px solid #e8f0e8;
+            padding-bottom: 24px;
+        }
+
+        .header h1 {
+            color: #1b5e20;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            color: #627d6b;
+            font-size: 14px;
+            font-weight: 400;
+        }
+
+        .filters {
+            background: white;
+            padding: 20px 24px;
+            border-radius: 8px;
+            margin-bottom: 28px;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+            border: 1px solid #e8f0e8;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-group label {
+            color: #2d3436;
+            font-weight: 500;
+            font-size: 13px;
+        }
+
+        .filter-group input {
+            padding: 8px 12px;
+            border: 1px solid #d4dbd4;
+            border-radius: 6px;
+            font-size: 13px;
+            background: white;
+            color: #2d3436;
+            transition: border-color 0.2s;
+        }
+
+        .filter-group input:focus {
+            outline: none;
+            border-color: #558b2f;
+            box-shadow: 0 0 0 3px rgba(85, 139, 47, 0.06);
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-filter {
+            background: #558b2f;
+            color: white;
+            border: 1px solid #558b2f;
+        }
+
+        .btn-filter:hover {
+            background: #457424;
+            border-color: #457424;
+        }
+
+        .btn-info {
+            background: white;
+            color: #558b2f;
+            border: 1px solid #d4dbd4;
+        }
+
+        .btn-info:hover {
+            background: #f1f8f1;
+            border-color: #558b2f;
+        }
+
+        .btn-danger {
+            background: white;
+            color: #d97706;
+            border: 1px solid #d4dbd4;
+        }
+
+        .btn-danger:hover {
+            background: #fffbf0;
+            border-color: #d97706;
+        }
+
+        .btn-download {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            font-size: 16px;
+            padding: 6px;
+            transition: color 0.2s;
+        }
+
+        .btn-download:hover {
+            color: #558b2f;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            border: 1px solid #e8f0e8;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            border-color: #558b2f;
+            box-shadow: 0 4px 12px rgba(85, 139, 47, 0.08);
+        }
+
+        .stat-info h3 {
+            color: #627d6b;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 600;
+            color: #1b5e20;
+        }
+
+        .stat-icon {
+            font-size: 32px;
+            opacity: 0.7;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .chart-card {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            border: 1px solid #e8f0e8;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .chart-header h2 {
+            color: #1b5e20;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .keywords-list {
+            list-style: none;
+        }
+
+        .keyword-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #f0f5f0;
+        }
+
+        .keyword-item:last-child {
+            border-bottom: none;
+        }
+
+        .keyword-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+        }
+
+        .keyword-rank {
+            font-size: 14px;
+            font-weight: 600;
+            color: #adb8a5;
+            width: 24px;
+            text-align: center;
+        }
+
+        .keyword-name {
+            color: #2d3436;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .keyword-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .progress-bar {
+            width: 100px;
+            height: 6px;
+            background: #e8f0e8;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #558b2f 0%, #7cb342 100%);
+            transition: width 0.5s ease;
+        }
+
+        .keyword-count {
+            color: #627d6b;
+            font-weight: 500;
+            font-size: 13px;
+            width: 40px;
+            text-align: right;
+        }
+
+        .summary-table {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            border: 1px solid #e8f0e8;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f8f9f7;
+        }
+
+        th {
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #1b5e20;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e8f0e8;
+        }
+
+        td {
+            padding: 12px 16px;
+            color: #2d3436;
+            font-size: 14px;
+            border-bottom: 1px solid #f0f5f0;
+        }
+
+        tbody tr:hover {
+            background: #fafbf9;
+        }
+
+        .trend-up {
+            color: #558b2f;
+            font-weight: 500;
+        }
+
+        .modal-bg {
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-bg.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 28px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            font-size: 24px;
+            color: #999;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px 8px;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: #2d3436;
+        }
+
+        .modal-content h2 {
+            color: #1b5e20;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .category-table,
+        .favorite-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            background: white;
+        }
+
+        .category-table th,
+        .favorite-table th {
+            background: #f8f9f7;
+            color: #1b5e20;
+            font-weight: 600;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #e8f0e8;
+        }
+
+        .category-table td,
+        .favorite-table td {
+            padding: 10px 12px;
+            color: #2d3436;
+            border-bottom: 1px solid #f0f5f0;
+        }
+
+        .category-table tbody tr:hover,
+        .favorite-table tbody tr:hover {
+            background: #fafbf9;
+        }
+
+        .btn-export {
+            padding: 8px 16px;
+            background: #558b2f;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-export:hover {
+            background: #457424;
+        }
+
+        @* @media (max-width: 768px) {
+            .container-report {
+                padding: 16px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .filters {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .filter-group input {
+                width: 100%;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .chart-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        } *@
+    </style>
 </head>
-
 <body>
     <div class="container-report">
         <!-- Header -->
@@ -29,68 +483,41 @@
 
         <!-- Filters -->
         <div class="filters">
-            <form method="get" class="filters" style="display:flex;gap:16px;align-items:center;">
-                <div class="filter-group">
-                    <label for="startDate">📅 Từ ngày:</label>
-                    <input type="text" id="startDate" name="startDate" value="@Request.Query["startDate"]"
-                        autocomplete="off" />
-                </div>
-                <div class="filter-group">
-                    <label for="endDate">📅 Đến ngày:</label>
-                    <input type="text" id="endDate" name="endDate" value="@Request.Query["endDate"]"
-                        autocomplete="off" />
-                </div>
-                <button type="submit" class="btn btn-info">Lọc</button>
-            </form>
-
+            <div class="filter-group">
+                <label for="startDate">Từ ngày</label>
+                <input type="text" id="startDate" placeholder="Chọn ngày bắt đầu">
+            </div>
+            <div class="filter-group">
+                <label for="endDate">Đến ngày</label>
+                <input type="text" id="endDate" placeholder="Chọn ngày kết thúc">
+            </div>
+            <button class="btn btn-filter">Lọc</button>
         </div>
-        <div id="categoryTableModal" class="modal-bg" style="display:none;">
+
+        <!-- Modals -->
+        <div id="categoryTableModal" class="modal-bg">
             <div class="modal-content">
-                <span class="modal-close" id="closeCategoryModal">&times;</span>
-                <h2>Bảng phân bố cây trồng theo danh mục</h2>
+                <button class="modal-close" onclick="closeCategoryModal()">&times;</button>
+                <h2>Phân bố cây trồng theo danh mục</h2>
                 <table class="category-table">
                     <thead>
                         <tr>
                             <th>STT</th>
                             <th>Danh mục</th>
-                            <th>Số lượng cây</th>
-                            <th>Tỷ lệ (%)</th>
+                            <th>Số lượng</th>
+                            <th>Tỷ lệ</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @if (Model.CategoryStats != null && Model.CategoryStats.Count > 0)
-                        {
-                            int total = Model.CategoryStats.Sum(x => x.PlantCount);
-                            int idx = 1;
-                            foreach (var cat in Model.CategoryStats)
-                            {
-                                <tr>
-                                    <td>@idx</td>
-                                    <td>@cat.CategoryName</td>
-                                    <td>@cat.PlantCount</td>
-                                    <td>
-                                        @((total > 0 ? (cat.PlantCount * 100.0 / total) : 0).ToString("0.##"))
-                                    </td>
-                                </tr>
-                                idx++;
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="4" style="text-align:center;">Không có dữ liệu phân bố</td>
-                            </tr>
-                        }
+                    <tbody id="categoryTableBody">
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div id="favoriteTableModal" class="modal-bg" style="display:none;">
+        <div id="favoriteTableModal" class="modal-bg">
             <div class="modal-content">
-                <span class="modal-close" id="closeFavoriteModal">&times;</span>
-                <h2>Bảng top cây được yêu thích</h2>
-                <button class="btn-export-pdf" onclick="exportFavoriteTableToPDF()">Xuất PDF</button>
+                <button class="modal-close" onclick="closeFavoriteModal()">&times;</button>
+                <h2>Top cây được yêu thích</h2>
                 <table class="favorite-table">
                     <thead>
                         <tr>
@@ -99,103 +526,60 @@
                             <th>Lượt yêu thích</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @if (Model.TopFavorites != null && Model.TopFavorites.Count > 0)
-                        {
-                            int idx = 1;
-                            foreach (var fav in Model.TopFavorites)
-                            {
-                                <tr>
-                                    <td>@idx</td>
-                                    <td>@fav.PlantName</td>
-                                    <td>@fav.FavoriteCount</td>
-                                </tr>
-                                idx++;
-                            }
-                        }
-                        else
-                        {
-                            <tr>
-                                <td colspan="3" style="text-align:center;">Không có dữ liệu yêu thích</td>
-                            </tr>
-                        }
+                    <tbody id="favoriteTableBody">
                     </tbody>
                 </table>
             </div>
         </div>
+
         <!-- Stats Cards -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-card-content">
-                    <div class="stat-info">
-                        <h3>Tổng số cây trồng</h3>
-                        <div class="stat-value" style="color: #10b981;">@Model.PlantSummary?.TotalPlants</div>
-
-                    </div>
-                    <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1);">
-                        <span style="color: #10b981;">🌱</span>
-                    </div>
+                <div class="stat-info">
+                    <h3>Tổng số cây trồng</h3>
+                    <div class="stat-value">245</div>
                 </div>
+                <div class="stat-icon">🌱</div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-card-content">
-                    <div class="stat-info">
-                        <h3>Tổng số người dùng</h3>
-                        <div class="stat-value" style="color: #3b82f6;">@Model.UserSummary.TotalUsers</div>
-
-                    </div>
-                    <div class="stat-icon" style="background: rgba(59, 130, 246, 0.1);">
-                        <span style="color: #3b82f6;">👥</span>
-                    </div>
+                <div class="stat-info">
+                    <h3>Tổng số người dùng</h3>
+                    <div class="stat-value">1,523</div>
                 </div>
+                <div class="stat-icon">👥</div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-card-content">
-                    <div class="stat-info">
-                        <h3>Lượt tìm kiếm</h3>
-                        <div class="stat-value" style="color: #f59e0b;">@Model.TopKeywords.Count</div>
-
-                    </div>
-                    <div class="stat-icon" style="background: rgba(245, 158, 11, 0.1);">
-                        <span style="color: #f59e0b;">🔍</span>
-                    </div>
+                <div class="stat-info">
+                    <h3>Lượt tìm kiếm</h3>
+                    <div class="stat-value">8,947</div>
                 </div>
+                <div class="stat-icon">🔍</div>
             </div>
 
             <div class="stat-card">
-                <div class="stat-card-content">
-                    <div class="stat-info">
-                        <h3>Cây yêu thích</h3>
-                        <div class="stat-value" style="color: #ef4444;">@Model.FavoriteTotal.Data</div>
-                    </div>
-                    <div class="stat-icon" style="background: rgba(239, 68, 68, 0.1);">
-                        <span style="color: #ef4444;">❤️</span>
-                    </div>
+                <div class="stat-info">
+                    <h3>Cây yêu thích</h3>
+                    <div class="stat-value">2,145</div>
                 </div>
+                <div class="stat-icon">❤️</div>
             </div>
         </div>
 
         <!-- Charts Row 1 -->
         <div class="charts-grid">
-            <!-- Pie Chart -->
             <div class="chart-card">
                 <div class="chart-header">
                     <h2>Phân bố theo danh mục</h2>
-                    <button class="btn-download" onclick="downloadChart('pieChart')">📥</button>
-                    <button id="btnShowCategoryTable" class="btn btn-info" style="">
-                        Xem chi tiết
-                    </button>
-                    <a href="/Admin/Report?handler=ExportCategoryReport&startDate=@Request.Query["startDate"]&endDate=@Request.Query["endDate"]"
-                        class="btn btn-danger">
-                        Xuất PDF
-                    </a>
-
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn-download" onclick="downloadChart('pieChart')">📥</button>
+                        <button class="btn btn-info" onclick="openCategoryModal()">Chi tiết</button>
+                    </div>
                 </div>
                 <canvas id="pieChart"></canvas>
             </div>
-            <!-- Keywords List -->
+
             <div class="chart-card">
                 <div class="chart-header">
                     <h2>Từ khóa tìm kiếm phổ biến</h2>
@@ -203,28 +587,21 @@
                 </div>
                 <ul class="keywords-list" id="keywordsList"></ul>
             </div>
-
         </div>
 
         <!-- Charts Row 2 -->
         <div class="charts-grid">
-            <!-- Bar Chart -->
-
             <div class="chart-card">
                 <div class="chart-header">
                     <h2>Top 5 cây được yêu thích</h2>
-                    <button class="btn-download" onclick="downloadChart('barChart')">📥</button>
-                    <button id="btnShowFavoriteTable" class="btn btn-info" style="">
-                        Xem chi tiết
-                    </button>
-                    <a href="/Admin/Report?handler=ExportTopFavoritesReport&startDate=@Request.Query["startDate"]&endDate=@Request.Query["endDate"]"
-                        class="btn btn-danger" target="_blank">
-                        Xuất PDF
-                    </a>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn-download" onclick="downloadChart('barChart')">📥</button>
+                        <button class="btn btn-info" onclick="openFavoriteModal()">Chi tiết</button>
+                    </div>
                 </div>
                 <canvas id="barChart"></canvas>
             </div>
-            <!-- Line Chart -->
+
             <div class="chart-card">
                 <div class="chart-header">
                     <h2>Số cây thêm mới mỗi tháng</h2>
@@ -232,19 +609,13 @@
                 </div>
                 <canvas id="lineChart"></canvas>
             </div>
-
         </div>
-
-
 
         <!-- Summary Table -->
         <div class="summary-table">
-            <div class="chart-header">
+            <div class="chart-header" style="margin-bottom: 20px;">
                 <h2>Bảng tổng hợp chi tiết</h2>
-                <button class="btn-export" onclick="exportTableToExcel()">
-                    <span>📥</span>
-                    <span>Xuất Excel</span>
-                </button>
+                <button class="btn-export" onclick="exportTableToExcel()">📥 Xuất Excel</button>
             </div>
             <table>
                 <thead>
@@ -259,30 +630,10 @@
             </table>
         </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script>
-        flatpickr("#startDate", {
-            dateFormat: "Y-m-d",
-            allowInput: true
-        });
-        flatpickr("#endDate", {
-            dateFormat: "Y-m-d",
-            allowInput: true
-        });
-    </script>
     <script>
         const data = {
-            overview: {
-                totalPlants: 245,
-                totalSpecies: 180,
-                totalUsers: 1523,
-                totalSearches: 8947,
-                activePlants: 230,
-                newPlantsThisMonth: 15
-            },
-            plantsByCategory: [
+            categories: [
                 { name: 'Cây ăn quả', count: 85, percentage: 34.7 },
                 { name: 'Cây công nghiệp', count: 62, percentage: 25.3 },
                 { name: 'Cây dược liệu', count: 48, percentage: 19.6 },
@@ -294,10 +645,7 @@
                 { name: 'Lan hồ điệp', favorites: 298 },
                 { name: 'Sen đá', favorites: 256 },
                 { name: 'Phong lan', favorites: 234 },
-                { name: 'Xương rồng', favorites: 189 },
-                { name: 'Bonsai', favorites: 167 },
-                { name: 'Cây xanh văn phòng', favorites: 145 },
-                { name: 'Cây thuốc', favorites: 132 }
+                { name: 'Xương rồng', favorites: 189 }
             ],
             searchTrends: [
                 { month: 'T1', searches: 6 },
@@ -311,19 +659,7 @@
                 { month: 'T9', searches: 12 },
                 { month: 'T10', searches: 8 }
             ],
-            newPlantsMonthly: [
-                { month: 'T1', plants: 12 },
-                { month: 'T2', plants: 15 },
-                { month: 'T3', plants: 18 },
-                { month: 'T4', plants: 22 },
-                { month: 'T5', plants: 25 },
-                { month: 'T6', plants: 20 },
-                { month: 'T7', plants: 16 },
-                { month: 'T8', plants: 19 },
-                { month: 'T9', plants: 23 },
-                { month: 'T10', plants: 15 }
-            ],
-            topSearchKeywords: [
+            topKeywords: [
                 { keyword: 'cây cảnh', count: 523 },
                 { keyword: 'cây dược liệu', count: 487 },
                 { keyword: 'sen đá', count: 456 },
@@ -332,102 +668,67 @@
                 { keyword: 'bonsai', count: 367 },
                 { keyword: 'cây văn phòng', count: 334 },
                 { keyword: 'xương rồng', count: 298 }
-            ],
-            userActivity: [
-                { month: 'T1', newUsers: 142, activeUsers: 890 },
-                { month: 'T2', newUsers: 156, activeUsers: 920 },
-                { month: 'T3', newUsers: 178, activeUsers: 985 },
-                { month: 'T4', newUsers: 192, activeUsers: 1050 },
-                { month: 'T5', newUsers: 203, activeUsers: 1120 },
-                { month: 'T6', newUsers: 187, activeUsers: 1090 },
-                { month: 'T7', newUsers: 165, activeUsers: 1010 },
-                { month: 'T8', newUsers: 198, activeUsers: 1150 },
-                { month: 'T9', newUsers: 215, activeUsers: 1280 },
-                { month: 'T10', newUsers: 176, activeUsers: 1200 }
             ]
         };
-        const categories = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CategoryStats));
-
-        const topFavorites = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TopFavorites));
-
-        const topKeywords = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TopKeywords));
-        @* const newPlants = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.NewPlantsPerMonth)); *@
-            @* const userActivity = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.UserActivityStats)); *@
-
-        // Ví dụ cho tổng số, bạn có thể gán trực tiếp
-        const totalPlants = @Model.PlantSummary?.TotalPlants ?? 0;
-        const totalUsers = @Model.UserSummary?.TotalUsers ?? 0;
-
-        console.log('categories:', categories);
-        console.log('topFavorites:', topFavorites);
-        console.log('topKeywords:', topKeywords);
-        console.log('totalPlants:', totalPlants);
-        console.log('totalUsers:', totalUsers);
-
-
-
 
         // Initialize Pie Chart
         const pieCtx = document.getElementById('pieChart').getContext('2d');
         new Chart(pieCtx, {
-            type: 'pie',
+            type: 'doughnut',
             data: {
-                labels: categories.map(c => c.CategoryName),
+                labels: data.categories.map(c => c.name),
                 datasets: [{
-                    data: categories.map(c => c.PlantCount),
+                    data: data.categories.map(c => c.count),
                     backgroundColor: [
-                        '#10b981',
                         '#3b82f6',
+                        '#8b5cf6',
                         '#f59e0b',
                         '#ef4444',
-                        '#8b5cf6',
-                        '#6366f1',
-                        '#f43f5e',
-                        '#22d3ee',
-                        '#fbbf24',
-                        '#84cc16',
-                        '#eab308',
-                        '#0ea5e9',
-                        '#f87171',
-                        '#a3e635',
-                        '#f472b6',
-                        '#d946ef',
-                        '#818cf8',
-                        '#fb7185',
-                        '#fde68a',
-                        '#4ade80'
-                    ]
+                        '#10b981'
+                    ],
+                    borderColor: '#ffffff',
+                    borderWidth: 2
                 }]
             },
             options: {
                 responsive: true,
                 plugins: {
                     legend: {
-                        position: 'bottom'
+                        position: 'bottom',
+                        labels: {
+                            padding: 16,
+                            font: { size: 13, weight: '500' },
+                            color: '#627d6b'
+                        }
                     }
                 }
             }
         });
 
+        // Initialize Bar Chart
         const barCtx = document.getElementById('barChart').getContext('2d');
         new Chart(barCtx, {
             type: 'bar',
             data: {
-                labels: topFavorites.map(f => f.PlantName),
+                labels: data.topFavorites.map(f => f.name),
                 datasets: [{
                     label: 'Lượt yêu thích',
-                    data: topFavorites.map(f => Number(f.FavoriteCount)),
-                    backgroundColor: '#10b981'
+                    data: data.topFavorites.map(f => f.favorites),
+                    backgroundColor: '#3b82f6',
+                    borderRadius: 4
                 }]
             },
             options: {
                 responsive: true,
-                indexAxis: 'x',
-                plugins: { legend: { display: false } },
-                scales: { x: { beginAtZero: true } }
+                plugins: { 
+                    legend: { display: false }
+                },
+                scales: { 
+                    y: { beginAtZero: true, ticks: { color: '#627d6b' } },
+                    x: { ticks: { color: '#627d6b' } }
+                }
             }
         });
-
 
         // Initialize Line Chart
         const lineCtx = document.getElementById('lineChart').getContext('2d');
@@ -438,90 +739,31 @@
                 datasets: [{
                     label: 'Lượt tìm kiếm',
                     data: data.searchTrends.map(s => s.searches),
-                    borderColor: '#10b981',
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    borderColor: '#8b5cf6',
+                    backgroundColor: 'rgba(139, 92, 246, 0.08)',
                     tension: 0.4,
-                    fill: true
+                    fill: true,
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#8b5cf6'
                 }]
             },
             options: {
                 responsive: true,
                 plugins: {
-                    legend: {
-                        display: false
-                    }
+                    legend: { display: false }
                 },
                 scales: {
-                    y: {
-                        beginAtZero: true
+                    y: { 
+                        beginAtZero: true,
+                        ticks: { color: '#627d6b' }
+                    },
+                    x: { 
+                        ticks: { color: '#627d6b' }
                     }
                 }
             }
         });
-
-
-
-        @* // Initialize New Plants Chart
-        const newPlantsCtx = document.getElementById('newPlantsChart').getContext('2d');
-        new Chart(newPlantsCtx, {
-            type: 'bar',
-            data: {
-                labels: data.newPlants.map(p => p.month),
-                datasets: [{
-                    label: 'Số lượng cây mới',
-                    data: data.newPlants.map(p => p.plants),
-                    backgroundColor: '#10b981'
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        }); *@
-
-            @* // Initialize User Activity Chart
-        const userActivityCtx = document.getElementById('userActivityChart').getContext('2d');
-        new Chart(userActivityCtx, {
-            type: 'line',
-            data: {
-                labels: data.userActivity.months,
-                datasets: [{
-                    label: 'Người dùng mới',
-                    data: data.userActivity.newUsers,
-                    borderColor: '#3b82f6',
-                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                    tension: 0.4
-                }, {
-                    label: 'Người dùng hoạt động',
-                    data: data.userActivity.activeUsers,
-                    borderColor: '#10b981',
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                    tension: 0.4
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        }); *@
 
         // Render Keywords List
         const keywordsList = document.getElementById('keywordsList');
@@ -553,11 +795,62 @@
                     <td>${item.name}</td>
                     <td style="text-align: right;">${item.count}</td>
                     <td style="text-align: right;">${item.percentage}%</td>
-                    <td style="text-align: right;">
-                        <span class="trend-up">↗ +${trend}%</span>
-                    </td>
+                    <td style="text-align: right;"><span class="trend-up">↗ +${trend}%</span></td>
                 </tr>
             `;
+        });
+
+        // Render Category Modal
+        const categoryBody = document.getElementById('categoryTableBody');
+        const total = data.categories.reduce((sum, cat) => sum + cat.count, 0);
+        data.categories.forEach((cat, idx) => {
+            const percentage = ((cat.count / total) * 100).toFixed(2);
+            categoryBody.innerHTML += `
+                <tr>
+                    <td>${idx + 1}</td>
+                    <td>${cat.name}</td>
+                    <td>${cat.count}</td>
+                    <td>${percentage}%</td>
+                </tr>
+            `;
+        });
+
+        // Render Favorite Modal
+        const favoriteBody = document.getElementById('favoriteTableBody');
+        data.topFavorites.forEach((fav, idx) => {
+            favoriteBody.innerHTML += `
+                <tr>
+                    <td>${idx + 1}</td>
+                    <td>${fav.name}</td>
+                    <td>${fav.favorites}</td>
+                </tr>
+            `;
+        });
+
+        // Modal Functions
+        function openCategoryModal() {
+            document.getElementById('categoryTableModal').classList.add('active');
+        }
+
+        function closeCategoryModal() {
+            document.getElementById('categoryTableModal').classList.remove('active');
+        }
+
+        function openFavoriteModal() {
+            document.getElementById('favoriteTableModal').classList.add('active');
+        }
+
+        function closeFavoriteModal() {
+            document.getElementById('favoriteTableModal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('categoryTableModal').addEventListener('click', (e) => {
+            if (e.target.id === 'categoryTableModal') closeCategoryModal();
+        });
+
+        document.getElementById('favoriteTableModal').addEventListener('click', (e) => {
+            if (e.target.id === 'favoriteTableModal') closeFavoriteModal();
         });
 
         // Export Functions
@@ -568,19 +861,12 @@
             link.download = `${chartId}_${new Date().toISOString().split('T')[0]}.png`;
             link.href = url;
             link.click();
-            alert('Đã tải xuống biểu đồ!');
         }
 
         function exportKeywords() {
             const csv = 'STT,Từ khóa,Số lượt tìm\n' +
                 data.topKeywords.map((k, i) => `${i + 1},${k.keyword},${k.count}`).join('\n');
             downloadCSV(csv, 'tu-khoa-tim-kiem');
-        }
-
-        function exportReport() {
-            const csv = 'Danh mục,Số lượng,Tỷ lệ\n' +
-                data.categories.map(c => `${c.name},${c.count},${c.percentage}%`).join('\n');
-            downloadCSV(csv, 'bao-cao-tong-quan');
         }
 
         function exportTableToExcel() {
@@ -599,39 +885,7 @@
             link.href = URL.createObjectURL(blob);
             link.download = `${filename}_${new Date().toISOString().split('T')[0]}.csv`;
             link.click();
-            alert('Đã xuất báo cáo thành công!');
         }
-    </script>
-
-    <script>
-        document.getElementById("btnShowCategoryTable").onclick = function () {
-            document.getElementById("categoryTableModal").style.display = "flex";
-        };
-        document.getElementById("closeCategoryModal").onclick = function () {
-            document.getElementById("categoryTableModal").style.display = "none";
-        };
-        // Đóng khi click ra ngoài modal-content
-        document.getElementById("categoryTableModal").onclick = function (e) {
-            if (e.target === this) {
-                this.style.display = "none";
-            }
-        }
-    </script>
-
-    <script>
-        document.getElementById("btnShowFavoriteTable").onclick = function () {
-            document.getElementById("favoriteTableModal").style.display = "flex";
-        };
-        document.getElementById("closeFavoriteModal").onclick = function () {
-            document.getElementById("favoriteTableModal").style.display = "none";
-        };
-        // Đóng khi click ra ngoài modal-content
-        document.getElementById("favoriteTableModal").onclick = function (e) {
-            if (e.target === this) {
-                this.style.display = "none";
-            }
-        };
     </script>
 </body>
-
 </html>

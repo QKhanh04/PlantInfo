@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "U8me58jQb2Dj+eehgZVWvXaiNephZYWQ76aC92ZxTC4=",
+  "Hash": "cx4e0ZWb3S0SnQrwf0XGEB3VVefHhT0fUEc+LKuUHks=",
   "Source": "PlantManagement",
   "BasePath": "_content/PlantManagement",
   "Mode": "Default",
@@ -115,8 +115,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "jtsrtsvjvo",
-      "Integrity": "WViaOzJXot3+mxH4zoPB8Q0+V+6e4jHr1OXBRWvumRc=",
+      "Fingerprint": "g4ggs2s1dx",
+      "Integrity": "YGb85+k8ACedXgitMGrvpi6GsUIqhUM7av8VzYk/CDs=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\admin\\report.css"
@@ -1845,7 +1845,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 28 Sep 2025 15:52:37 GMT"
+          "Value": "Sun, 05 Oct 2025 18:22:04 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1882,7 +1882,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 28 Sep 2025 15:52:37 GMT"
+          "Value": "Sun, 05 Oct 2025 18:22:04 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1915,7 +1915,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "9052"
+          "Value": "9028"
         },
         {
           "Name": "Content-Type",
@@ -1923,11 +1923,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"WViaOzJXot3+mxH4zoPB8Q0+V+6e4jHr1OXBRWvumRc=\""
+          "Value": "\"YGb85+k8ACedXgitMGrvpi6GsUIqhUM7av8VzYk/CDs=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 05 Oct 2025 14:25:28 GMT"
+          "Value": "Sun, 05 Oct 2025 18:36:42 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1937,12 +1937,12 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-WViaOzJXot3+mxH4zoPB8Q0+V+6e4jHr1OXBRWvumRc="
+          "Value": "sha256-YGb85+k8ACedXgitMGrvpi6GsUIqhUM7av8VzYk/CDs="
         }
       ]
     },
     {
-      "Route": "css/admin/report.jtsrtsvjvo.css",
+      "Route": "css/admin/report.g4ggs2s1dx.css",
       "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\report.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -1952,7 +1952,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "9052"
+          "Value": "9028"
         },
         {
           "Name": "Content-Type",
@@ -1960,11 +1960,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"WViaOzJXot3+mxH4zoPB8Q0+V+6e4jHr1OXBRWvumRc=\""
+          "Value": "\"YGb85+k8ACedXgitMGrvpi6GsUIqhUM7av8VzYk/CDs=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 05 Oct 2025 14:25:28 GMT"
+          "Value": "Sun, 05 Oct 2025 18:36:42 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1974,7 +1974,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "jtsrtsvjvo"
+          "Value": "g4ggs2s1dx"
         },
         {
           "Name": "label",
@@ -1982,7 +1982,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-WViaOzJXot3+mxH4zoPB8Q0+V+6e4jHr1OXBRWvumRc="
+          "Value": "sha256-YGb85+k8ACedXgitMGrvpi6GsUIqhUM7av8VzYk/CDs="
         }
       ]
     },
