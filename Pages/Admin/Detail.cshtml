@@ -28,6 +28,33 @@
                 </div>
                 <h1 class="plant-title">@Model.Plants.CommonName</h1>
                 <div class="scientific-name">@Model.Plants.Species?.ScientificName</div>
+                
+                @* <!-- Rating Summary -->
+                @if (Model.Plants.RatingSummary != null)
+                {
+                    <div class="rating-summary-header">
+                        <div class="rating-stars">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                if (i <= Math.Floor(Model.Plants.RatingSummary.AverageRating))
+                                {
+                                    <i class="bi bi-star-fill"></i>
+                                }
+                                else if (i - Model.Plants.RatingSummary.AverageRating < 1)
+                                {
+                                    <i class="bi bi-star-half"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-star"></i>
+                                }
+                            }
+                        </div>
+                        <span class="rating-score">@Model.Plants.RatingSummary.AverageRating.ToString("0.0")</span>
+                        <span class="rating-count">(@Model.Plants.RatingSummary.TotalRatings đánh giá)</span>
+                    </div>
+                }
+                 *@
                 <p class="plant-description">@Model.Plants.Description</p>
                 <div class="plant-meta">
                     <div class="meta-item">
@@ -45,22 +72,24 @@
                 <div class="plant-image-gallery">
                     <!-- Ảnh chính -->
                     <div class="main-image">
-                        <img id="mainPlantImage" src="@mainImage" alt="@Model.Plants.CommonName"
-                            style="max-width: 100%; border-radius: 12px;" />
+                        <img id="mainPlantImage" src="@mainImage" alt="@Model.Plants.CommonName" />
                     </div>
 
                     <!-- Ảnh phụ (thumbnail carousel) -->
-                    <div class="d-flex align-items-center mt-2">
-                        <button type="button" class="thumbnail-nav-btn" id="thumbPrev" aria-label="Previous"
-                            onclick="showThumbnail(-1)">
-                            &lt;
-                        </button>
-                        <div id="thumbnailList" style="display: inline-flex;"></div>
-                        <button type="button" class="thumbnail-nav-btn" id="thumbNext" aria-label="Next"
-                            onclick="showThumbnail(1)">
-                            &gt;
-                        </button>
-                    </div>
+                    @if (imageList.Count > 1)
+                    {
+                        <div class="d-flex align-items-center justify-content-center mt-3">
+                            <button type="button" class="thumbnail-nav-btn" id="thumbPrev" aria-label="Previous"
+                                onclick="showThumbnail(-1)">
+                                <i class="bi bi-chevron-left"></i>
+                            </button>
+                            <div id="thumbnailList" class="thumbnail-container"></div>
+                            <button type="button" class="thumbnail-nav-btn" id="thumbNext" aria-label="Next"
+                                onclick="showThumbnail(1)">
+                                <i class="bi bi-chevron-right"></i>
+                            </button>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -98,38 +127,42 @@
         <div class="row g-4">
             <div class="col-md-6">
                 <div class="info-box">
-                    <div class="section-title">Thông tin cơ bản</div>
+                    <div class="section-title">
+                        <i class="bi bi-info-circle-fill me-2"></i>Thông tin cơ bản
+                    </div>
                     <div class="kv-row">
-                        <div class="kv-key">Họ thực vật</div>
+                        <div class="kv-key"><i class="bi bi-diagram-3"></i> Họ thực vật</div>
                         <div class="kv-value">@Model.Plants.Species?.Family</div>
                     </div>
                     <div class="divider"></div>
                     <div class="kv-row">
-                        <div class="kv-key">Chi</div>
+                        <div class="kv-key"><i class="bi bi-collection"></i> Chi</div>
                         <div class="kv-value">@Model.Plants.Species?.Genus</div>
                     </div>
                     <div class="divider"></div>
                     <div class="kv-row">
-                        <div class="kv-key">Bộ</div>
+                        <div class="kv-key"><i class="bi bi-layers"></i> Bộ</div>
                         <div class="kv-value">@Model.Plants.Species?.OrderName</div>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="info-box">
-                    <div class="section-title">Điều kiện sinh trưởng</div>
+                    <div class="section-title">
+                        <i class="bi bi-sun me-2"></i>Điều kiện sinh trưởng
+                    </div>
                     <div class="kv-row">
-                        <div class="kv-key">Loại đất</div>
+                        <div class="kv-key"><i class="bi bi-square"></i> Loại đất</div>
                         <div class="kv-value">@Model.Plants.GrowthCondition?.SoilType</div>
                     </div>
                     <div class="divider"></div>
                     <div class="kv-row">
-                        <div class="kv-key">Ánh sáng</div>
+                        <div class="kv-key"><i class="bi bi-brightness-high"></i> Ánh sáng</div>
                         <div class="kv-value">@Model.Plants.GrowthCondition?.Sunlight</div>
                     </div>
                     <div class="divider"></div>
                     <div class="kv-row">
-                        <div class="kv-key">Khí hậu</div>
+                        <div class="kv-key"><i class="bi bi-cloud"></i> Khí hậu</div>
                         <div class="kv-value">@Model.Plants.GrowthCondition?.Climate</div>
                     </div>
                 </div>
@@ -142,54 +175,215 @@
         <div class="row g-4">
             <div class="col-md-6">
                 <div class="info-box">
-                    <div class="section-title">Công dụng chính</div>
+                    <div class="section-title">
+                        <i class="bi bi-heart-pulse me-2"></i>Công dụng chính
+                    </div>
                     <div class="badge-list">
                         @foreach (var use in Model.Plants.Uses)
                         {
-                            <span class="badge-item">@use.UseName</span>
+                            <span class="badge-item" title="@use.Description">
+                                <i class="bi bi-check-circle me-1"></i>@use.UseName
+                            </span>
                         }
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="info-box">
-                    <div class="section-title">Bệnh thường gặp</div>
-                    <div class="badge-list">
+                    <div class="section-title">
+                        <i class="bi bi-bug me-2"></i>Bệnh thường gặp
+                    </div>
+                    <div class="disease-list">
                         @foreach (var disease in Model.Plants.Diseases)
                         {
-                            <span class="badge-item">@disease.DiseaseName</span>
+                            <div class="disease-item">
+                                <div class="disease-name">
+                                    <i class="bi bi-exclamation-triangle me-2"></i>@disease.DiseaseName
+                                </div>
+                                @if (!string.IsNullOrEmpty(disease.Symptoms))
+                                {
+                                    <div class="disease-details">
+                                        <strong>Triệu chứng:</strong> @disease.Symptoms
+                                    </div>
+                                }
+                                @if (!string.IsNullOrEmpty(disease.Treatment))
+                                {
+                                    <div class="disease-details">
+                                        <strong>Cách xử lý:</strong> @disease.Treatment
+                                    </div>
+                                }
+                            </div>
                         }
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- References -->
+
+    <!-- Rating Detail Section -->
+    @* @if (Model.Plants.RatingSummary != null && Model.Plants.RatingSummary.TotalRatings > 0)
+    {
+        <div class="info-section" data-aos="fade-up" data-aos-delay="350">
+            <div class="info-box">
+                <div class="section-title">
+                    <i class="bi bi-star-fill me-2"></i>Đánh giá chi tiết
+                </div>
+                <div class="rating-detail-content">
+                    <div class="rating-overview">
+                        <div class="rating-big-score">
+                            @Model.Plants.RatingSummary.AverageRating.ToString("0.0")
+                        </div>
+                        <div class="rating-big-stars">
+                            @for (int i = 1; i <= 5; i++)
+                            {
+                                <i class="bi bi-star-fill"></i>
+                            }
+                        </div>
+                        <div class="rating-total-count">
+                            @Model.Plants.RatingSummary.TotalRatings đánh giá
+                        </div>
+                    </div>
+                    <div class="rating-bars">
+                        @for (int star = 5; star >= 1; star--)
+                        {
+                            var count = Model.Plants.RatingSummary.StarDistribution.ContainsKey(star) 
+                                ? Model.Plants.RatingSummary.StarDistribution[star] : 0;
+                            var percentage = Model.Plants.RatingSummary.TotalRatings > 0 
+                                ? (count * 100.0 / Model.Plants.RatingSummary.TotalRatings) : 0;
+                            
+                            <div class="rating-bar-row">
+                                <span class="rating-bar-label">@star <i class="bi bi-star-fill"></i></span>
+                                <div class="rating-bar-container">
+                                    <div class="rating-bar-fill" style="width: @percentage%"></div>
+                                </div>
+                                <span class="rating-bar-count">@count</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    } *@
+
+    <!-- Add Rating Form -->
     <div class="info-section" data-aos="fade-up" data-aos-delay="400">
         <div class="info-box">
-            <div class="section-title">Tài liệu tham khảo</div>
+            <div class="section-title">
+                <i class="bi bi-star me-2"></i>Đánh giá của bạn
+            </div>
+            <div class="rating-form">
+                <div class="star-rating-input">
+                    <span class="rating-label">Chọn số sao:</span>
+                    <div class="stars-input" id="starsInput">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            <i class="bi bi-star" data-rating="@i"></i>
+                        }
+                    </div>
+                </div>
+                <button type="button" class="btn-submit-rating" onclick="submitRating()">
+                    <i class="bi bi-send me-2"></i>Gửi đánh giá
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Section -->
+    @* <div class="info-section" data-aos="fade-up" data-aos-delay="450">
+        <div class="info-box">
+            <div class="section-title">
+                <i class="bi bi-chat-dots me-2"></i>Bình luận 
+                <span class="comment-count">(@((Model.Plants.Comments?.Count ?? 0)))</span>
+            </div>
+            
+            <!-- Comment Form -->
+            <div class="comment-form">
+                <div class="comment-input-group">
+                    <input type="text" id="userName" class="form-input" placeholder="Tên của bạn" />
+                    <textarea id="commentContent" class="form-textarea" rows="3" 
+                        placeholder="Chia sẻ suy nghĩ của bạn về cây này..."></textarea>
+                </div>
+                <button type="button" class="btn-submit-comment" onclick="submitComment()">
+                    <i class="bi bi-send me-2"></i>Gửi bình luận
+                </button>
+            </div> *@
+
+            <!-- Comments List -->
+            @* <div class="comments-list" id="commentsList">
+                @if (Model.Plants.Comments != null && Model.Plants.Comments.Any())
+                {
+                    @foreach (var comment in Model.Plants.Comments.OrderByDescending(c => c.CreatedAt))
+                    {
+                        <div class="comment-item">
+                            <div class="comment-avatar">
+                                @if (!string.IsNullOrEmpty(comment.UserAvatar))
+                                {
+                                    <img src="@comment.UserAvatar" alt="@comment.UserName" />
+                                }
+                                else
+                                {
+                                    <div class="avatar-placeholder">
+                                        @comment.UserName.Substring(0, 1).ToUpper()
+                                    </div>
+                                }
+                            </div>
+                            <div class="comment-content">
+                                <div class="comment-header">
+                                    <span class="comment-author">@comment.UserName</span>
+                                    <span class="comment-time">@comment.CreatedAt.ToString("dd/MM/yyyy HH:mm")</span>
+                                </div>
+                                <p class="comment-text">@comment.Content</p>
+                                <div class="comment-actions">
+                                    <button class="btn-like" onclick="likeComment(@comment.CommentId)">
+                                        <i class="bi bi-heart"></i>
+                                        <span>@comment.LikeCount</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="no-comments">
+                        <i class="bi bi-chat-square-text"></i>
+                        <p>Chưa có bình luận nào. Hãy là người đầu tiên!</p>
+                    </div>
+                } *@
+            </div>
+        </div>
+    </div>
+
+    <!-- References -->
+    <div class="info-section" data-aos="fade-up" data-aos-delay="500">
+        <div class="info-box">
+            <div class="section-title">
+                <i class="bi bi-book me-2"></i>Tài liệu tham khảo
+            </div>
             @if (Model.Plants.References != null && Model.Plants.References.Any())
             {
-                <ul class="list-unstyled">
+                <ul class="reference-list">
                     @foreach (var reference in Model.Plants.References)
                     {
-                        <li class="mb-2">
-                            <i class="bi bi-book me-2" style="color: var(--accent-green);"></i>
-                            <strong>@reference.SourceName</strong>
-                            @if (!string.IsNullOrEmpty(reference.Author))
-                            {
-                                <span> - @reference.Author</span>
-                            }
-                            @if (reference.PublishedYear.HasValue)
-                            {
-                                <span> (@reference.PublishedYear)</span>
-                            }
-                            @if (!string.IsNullOrEmpty(reference.Url))
-                            {
-                                <a href="@reference.Url" target="_blank" class="ms-2 text-decoration-none text-primary">
-                                    <i class="bi bi-box-arrow-up-right"></i>
-                                </a>
-                            }
+                        <li class="reference-item">
+                            <i class="bi bi-bookmark-fill me-2"></i>
+                            <div class="reference-details">
+                                <strong>@reference.SourceName</strong>
+                                @if (!string.IsNullOrEmpty(reference.Author))
+                                {
+                                    <span class="reference-author"> - @reference.Author</span>
+                                }
+                                @if (reference.PublishedYear.HasValue)
+                                {
+                                    <span class="reference-year"> (@reference.PublishedYear)</span>
+                                }
+                                @if (!string.IsNullOrEmpty(reference.Url))
+                                {
+                                    <a href="@reference.Url" target="_blank" class="reference-link">
+                                        <i class="bi bi-box-arrow-up-right"></i> Xem nguồn
+                                    </a>
+                                }
+                            </div>
                         </li>
                     }
                 </ul>
@@ -212,7 +406,7 @@
             once: true
         });
 
-        // Smooth card/badge effects
+        // Smooth card effects
         document.addEventListener('DOMContentLoaded', function () {
             const cards = document.querySelectorAll('.stat-card, .info-box');
             cards.forEach(card => {
@@ -224,47 +418,39 @@
                 });
             });
 
-            const badges = document.querySelectorAll('.badge-item');
-            badges.forEach(badge => {
-                badge.addEventListener('click', function () {
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        this.style.transform = 'scale(1)';
-                    }, 150);
-                });
-            });
+            renderThumbnails();
+            initStarRating();
         });
 
         // Thumbnail carousel logic
         const imageList = [
-                    @foreach (var img in Model.Plants.Images ?? new List<PlantImageDTO>())
+            @foreach (var img in Model.Plants.Images ?? new List<PlantImageDTO>())
             {
                 <text>
-                    {
-                        url: "@img.ImageUrl",
+                {
+                    url: "@img.ImageUrl",
+                    caption: "@img.Caption",
                     isPrimary: @img.IsPrimary.ToString().ToLower()
-                                },
+                },
                 </text>
-                    }
-                ];
+            }
+        ];
+        
         let thumbStart = 0;
         const thumbPerPage = 5;
 
         function renderThumbnails() {
+            if (imageList.length <= 1) return;
+            
             const container = document.getElementById('thumbnailList');
             container.innerHTML = '';
-            // Hiển thị 5 ảnh từ thumbStart
+            
             for (let i = thumbStart; i < Math.min(imageList.length, thumbStart + thumbPerPage); i++) {
                 const img = imageList[i];
                 const el = document.createElement('img');
                 el.src = img.url;
                 el.className = 'thumbnail-img' + (img.isPrimary ? ' active' : '');
-                el.style.width = '70px';
-                el.style.height = '70px';
-                el.style.objectFit = 'cover';
-                el.style.margin = '5px';
-                el.style.borderRadius = '8px';
-                el.style.cursor = 'pointer';
+                el.alt = img.caption || 'Plant image';
                 el.onclick = function () {
                     document.getElementById('mainPlantImage').src = img.url;
                     document.querySelectorAll('.thumbnail-img').forEach(t => t.classList.remove('active'));
@@ -272,23 +458,217 @@
                 };
                 container.appendChild(el);
             }
-            // Disable nút nếu không dịch được nữa
+            
             document.getElementById('thumbPrev').disabled = (thumbStart === 0);
             document.getElementById('thumbNext').disabled = (thumbStart + thumbPerPage >= imageList.length);
         }
 
         function showThumbnail(direction) {
-            // direction: -1 (trái), +1 (phải)
             thumbStart += direction;
-            // Giới hạn thumbStart
             if (thumbStart < 0) thumbStart = 0;
             if (thumbStart > imageList.length - thumbPerPage) thumbStart = imageList.length - thumbPerPage;
             renderThumbnails();
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            renderThumbnails();
-        });
+        // Star Rating Input
+        let selectedRating = 0;
 
+        function initStarRating() {
+            const stars = document.querySelectorAll('#starsInput i');
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    selectedRating = parseInt(this.getAttribute('data-rating'));
+                    updateStarDisplay(selectedRating);
+                });
+                
+                star.addEventListener('mouseenter', function() {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    updateStarDisplay(rating);
+                });
+            });
+
+            document.getElementById('starsInput').addEventListener('mouseleave', function() {
+                updateStarDisplay(selectedRating);
+            });
+        }
+
+        function updateStarDisplay(rating) {
+            const stars = document.querySelectorAll('#starsInput i');
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.remove('bi-star');
+                    star.classList.add('bi-star-fill');
+                } else {
+                    star.classList.remove('bi-star-fill');
+                    star.classList.add('bi-star');
+                }
+            });
+        }
+
+        async function submitRating() {
+            if (selectedRating === 0) {
+                alert('Vui lòng chọn số sao đánh giá!');
+                return;
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('RatingScore', selectedRating);
+                
+                const response = await fetch('?handler=AddRating&id=@Model.Plants.PlantId', {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(result.message);
+                    selectedRating = 0;
+                    updateStarDisplay(0);
+                    // Reload trang để cập nhật rating summary
+                    location.reload();
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra khi gửi đánh giá!');
+            }
+        }
+
+        async function submitComment() {
+            const userName = document.getElementById('userName').value.trim();
+            const content = document.getElementById('commentContent').value.trim();
+
+            if (!userName || !content) {
+                alert('Vui lòng nhập đầy đủ tên và nội dung bình luận!');
+                return;
+            }
+
+            try {
+                const formData = new FormData();
+                formData.append('UserName', userName);
+                formData.append('CommentContent', content);
+                
+                const response = await fetch('?handler=AddComment&id=@Model.Plants.PlantId', {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(result.message);
+                    document.getElementById('userName').value = '';
+                    document.getElementById('commentContent').value = '';
+                    
+                    // Thêm comment mới vào danh sách
+                    addCommentToList(result.data);
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Có lỗi xảy ra khi gửi bình luận!');
+            }
+        }
+
+        async function likeComment(commentId) {
+            try {
+                const formData = new FormData();
+                
+                const response = await fetch(`?handler=LikeComment&commentId=${commentId}`, {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Cập nhật số like trên UI
+                    const likeButton = event.target.closest('.btn-like');
+                    const likeCountSpan = likeButton.querySelector('span');
+                    likeCountSpan.textContent = result.likeCount;
+                    
+                    // Thêm hiệu ứng
+                    likeButton.style.color = '#e74c3c';
+                    setTimeout(() => {
+                        likeButton.style.color = '';
+                    }, 300);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function addCommentToList(comment) {
+            const commentsList = document.getElementById('commentsList');
+            
+            // Xóa thông báo "chưa có bình luận" nếu có
+            const noComments = commentsList.querySelector('.no-comments');
+            if (noComments) {
+                noComments.remove();
+            }
+            
+            // Tạo HTML cho comment mới
+            const commentHTML = `
+                <div class="comment-item" style="animation: slideIn 0.3s ease;">
+                    <div class="comment-avatar">
+                        <div class="avatar-placeholder">
+                            ${comment.userName.substring(0, 1).toUpperCase()}
+                        </div>
+                    </div>
+                    <div class="comment-content">
+                        <div class="comment-header">
+                            <span class="comment-author">${comment.userName}</span>
+                            <span class="comment-time">Vừa xong</span>
+                        </div>
+                        <p class="comment-text">${comment.content}</p>
+                        <div class="comment-actions">
+                            <button class="btn-like" onclick="likeComment(${comment.commentId})">
+                                <i class="bi bi-heart"></i>
+                                <span>0</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Thêm vào đầu danh sách
+            commentsList.insertAdjacentHTML('afterbegin', commentHTML);
+            
+            // Cập nhật số lượng comments
+            const commentCount = document.querySelector('.comment-count');
+            if (commentCount) {
+                const currentCount = parseInt(commentCount.textContent.match(/\d+/)[0]);
+                commentCount.textContent = `(${currentCount + 1})`;
+            }
+        }
+
+        // Thêm CSS animation cho comment mới
+        const style = document.createElement('style');
+        style.textContent = `
+            @@keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 }

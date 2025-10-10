@@ -3,10 +3,10 @@
 @{
     ViewData["Title"] = "Tra cứu cây trồng";
 }
-
+ 
 <!DOCTYPE html>
 <html lang="vi">
-
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,21 +29,21 @@
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             --gradient-bg: linear-gradient(135deg, #f8fffe 0%, #e8f5e8 50%, #f0f7ed 100%);
         }
-
+ 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+ 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--gradient-bg);
         }
-
+ 
         /* Hero Section */
         .hero-section {
-            height: 75vh;
+            height: 90vh;
             width: 100%;
             background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
                 url('https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=1600') center/cover;
@@ -52,35 +52,34 @@
             justify-content: center;
             color: white;
             text-align: left;
-            margin-top: 50px;
         }
-
+ 
         .hero-content {
             width: 100%;
             max-width: 100%;
             padding: 0 15px;
         }
-
+ 
         .hero-subtitle {
             font-size: 18px;
             margin-bottom: 15px;
             font-weight: 300;
         }
-
+ 
         .hero-title {
             font-size: 56px;
             font-weight: 300;
             line-height: 1.3;
             margin-bottom: 25px;
         }
-
+ 
         .hero-description {
             font-size: 16px;
             line-height: 1.8;
             margin-bottom: 35px;
             max-width: 700px;
         }
-
+ 
         .hero-btn {
             background-color: var(--accent-green);
             color: white;
@@ -93,40 +92,40 @@
             transition: var(--transition);
             border-radius: var(--border-radius);
         }
-
+ 
         .hero-btn:hover {
             background-color: var(--light-green);
             color: white;
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(127, 176, 105, 0.4);
         }
-
+ 
         /* About Section */
         .about-section {
             background-color: var(--soft-green);
-            padding: 100px 0;
+            padding: 100px 100px;
             margin-bottom: 80px;
         }
-
+ 
         .about-title {
             font-size: 42px;
             font-weight: 300;
             margin-bottom: 30px;
             color: var(--text-dark);
         }
-
+ 
         .about-text {
             font-size: 16px;
             line-height: 1.8;
             color: var(--text-muted);
             margin-bottom: 20px;
         }
-
+ 
         .about-images {
             position: relative;
             height: 500px;
         }
-
+ 
         .about-image-main {
             position: absolute;
             width: 65%;
@@ -137,13 +136,13 @@
             overflow: hidden;
             box-shadow: 0 10px 40px var(--shadow-medium);
         }
-
+ 
         .about-image-main img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
+ 
         .about-image-secondary {
             position: absolute;
             width: 55%;
@@ -154,18 +153,18 @@
             overflow: hidden;
             box-shadow: 0 10px 40px var(--shadow-medium);
         }
-
+ 
         .about-image-secondary img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
+ 
         /* Filter & Plants Section */
         .plants-section {
             padding: 60px 0 80px;
         }
-
+ 
         .section-title {
             font-size: 42px;
             font-weight: 300;
@@ -173,7 +172,7 @@
             margin-bottom: 50px;
             color: var(--text-dark);
         }
-
+ 
         /* Sidebar Filter */
         .filter-sidebar {
             background-color: white;
@@ -184,18 +183,18 @@
             top: 80px;
             height: fit-content;
         }
-
+ 
         .filter-sidebar h3 {
             font-size: 24px;
             margin-bottom: 25px;
             font-weight: 400;
             color: var(--text-dark);
         }
-
+ 
         .filter-group {
             margin-bottom: 25px;
         }
-
+ 
         .filter-group label {
             display: block;
             font-size: 14px;
@@ -203,7 +202,7 @@
             color: var(--text-muted);
             margin-bottom: 8px;
         }
-
+ 
         .checkbox-group {
             max-height: 200px;
             overflow-y: auto;
@@ -212,47 +211,47 @@
             border-radius: 8px;
             border: 1px solid #e0e0e0;
         }
-
+ 
         .checkbox-group::-webkit-scrollbar {
             width: 6px;
         }
-
+ 
         .checkbox-group::-webkit-scrollbar-track {
             background: #f1f1f1;
             border-radius: 10px;
         }
-
+ 
         .checkbox-group::-webkit-scrollbar-thumb {
             background: var(--accent-green);
             border-radius: 10px;
         }
-
+ 
         .form-check {
             margin-bottom: 10px;
         }
-
+ 
         .form-check-input {
             border: 2px solid var(--accent-green);
             cursor: pointer;
         }
-
+ 
         .form-check-input:checked {
             background-color: var(--accent-green);
             border-color: var(--accent-green);
         }
-
+ 
         .form-check-input:focus {
             border-color: var(--accent-green);
             box-shadow: 0 0 0 3px rgba(127, 176, 105, 0.1);
         }
-
+ 
         .form-check-label {
             font-size: 14px;
             color: var(--text-dark);
             cursor: pointer;
             user-select: none;
         }
-
+ 
         .form-control,
         .form-select {
             border-radius: 8px;
@@ -262,13 +261,13 @@
             transition: var(--transition);
             width: 100%;
         }
-
+ 
         .form-control:focus,
         .form-select:focus {
             border-color: var(--accent-green);
             box-shadow: 0 0 0 3px rgba(127, 176, 105, 0.1);
         }
-
+ 
         .btn-filter {
             background-color: var(--accent-green);
             color: white;
@@ -280,13 +279,13 @@
             width: 100%;
             margin-bottom: 10px;
         }
-
+ 
         .btn-filter:hover {
             background-color: var(--light-green);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(127, 176, 105, 0.3);
         }
-
+ 
         .btn-reset {
             background-color: var(--text-muted);
             color: white;
@@ -297,13 +296,13 @@
             transition: var(--transition);
             width: 100%;
         }
-
+ 
         .btn-reset:hover {
             background-color: #5a6268;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
         }
-
+ 
         /* Mobile Filter Toggle */
         .filter-toggle-btn {
             display: none;
@@ -316,7 +315,7 @@
             margin-bottom: 20px;
             width: 100%;
         }
-
+ 
         /* Plant Cards */
         .plant-card {
             background: white;
@@ -327,19 +326,19 @@
             box-shadow: 0 4px 20px var(--shadow-light);
             height: 100%;
         }
-
+ 
         .plant-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 8px 35px rgba(127, 176, 105, 0.2);
         }
-
+ 
         .plant-image {
             height: 250px;
             overflow: hidden;
             background-color: #f0f0f0;
             position: relative;
         }
-
+ 
         .favorite-btn {
             position: absolute;
             top: 15px;
@@ -357,33 +356,33 @@
             transition: var(--transition);
             z-index: 10;
         }
-
+ 
         .favorite-btn:hover {
             transform: scale(1.1);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
         }
-
+ 
         .favorite-btn i {
             font-size: 20px;
             color: #ccc;
             transition: var(--transition);
         }
-
+ 
         .favorite-btn.active i {
             color: #ff4757;
         }
-
+ 
         .plant-image img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 0.6s ease;
         }
-
+ 
         .plant-card:hover .plant-image img {
             transform: scale(1.08);
         }
-
+ 
         .plant-image-placeholder {
             display: flex;
             align-items: center;
@@ -391,23 +390,23 @@
             height: 100%;
             background: transparent;
         }
-
+ 
         .plant-image-placeholder i {
             font-size: 60px;
             color: rgba(0, 0, 0, 0.2);
         }
-
+ 
         .card-body {
             padding: 25px;
         }
-
+ 
         .plant-title {
             font-size: 22px;
             font-weight: 400;
             margin-bottom: 10px;
             color: var(--text-dark);
         }
-
+ 
         .plant-species {
             font-size: 14px;
             color: var(--accent-green);
@@ -415,14 +414,14 @@
             margin-bottom: 15px;
             display: block;
         }
-
+ 
         .category-badges {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
             margin-bottom: 20px;
         }
-
+ 
         .category-badge {
             background-color: var(--soft-green);
             color: var(--primary-green);
@@ -431,7 +430,7 @@
             border-radius: 20px;
             border: 1px solid var(--accent-green);
         }
-
+ 
         .view-detail-btn {
             background-color: transparent;
             color: var(--accent-green);
@@ -445,21 +444,21 @@
             font-size: 14px;
             border-radius: 8px;
         }
-
+ 
         .view-detail-btn:hover {
             background-color: var(--accent-green);
             color: white;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(127, 176, 105, 0.3);
         }
-
+ 
         /* Pagination */
         .pagination-wrapper {
             display: flex;
             justify-content: center;
             margin-top: 50px;
         }
-
+ 
         .pagination .page-link {
             color: var(--text-dark);
             border: 1px solid #e0e0e0;
@@ -468,21 +467,21 @@
             margin: 0 5px;
             transition: var(--transition);
         }
-
+ 
         .pagination .page-item.active .page-link {
             background-color: var(--accent-green);
             border-color: var(--accent-green);
             color: white;
             box-shadow: 0 3px 10px rgba(127, 176, 105, 0.3);
         }
-
+ 
         .pagination .page-link:hover {
             background-color: var(--soft-green);
             color: var(--primary-green);
             border-color: var(--accent-green);
             transform: translateY(-2px);
         }
-
+ 
         /* Loading Overlay */
         .loading-overlay {
             position: fixed;
@@ -496,11 +495,11 @@
             justify-content: center;
             z-index: 9999;
         }
-
+ 
         .loading-overlay.show {
             display: flex;
         }
-
+ 
         .loading-spinner {
             width: 60px;
             height: 60px;
@@ -509,63 +508,63 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-
+ 
         @* @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
+ 
         /* Responsive */
         @media (max-width: 992px) {
             .about-images {
                 height: 400px;
                 margin-top: 50px;
             }
-
+ 
             .filter-sidebar {
                 position: static;
                 margin-bottom: 30px;
             }
         }
-
+ 
         @media (max-width: 768px) {
             .hero-title {
                 font-size: 36px;
             }
-
+ 
             .hero-content {
                 padding: 0 20px;
             }
-
+ 
             .filter-toggle-btn {
                 display: block;
             }
-
+ 
             .filter-sidebar {
                 display: none;
             }
-
+ 
             .filter-sidebar.show {
                 display: block;
             }
-
+ 
             .about-title {
                 font-size: 32px;
             }
-
+ 
             .section-title {
                 font-size: 32px;
             }
         } *@
     </style>
 </head>
-
+ 
 <body>
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
     </div>
-
+ 
     <!-- Hero Section -->
     <section class="hero-section">
         <div class="hero-content">
@@ -580,7 +579,7 @@
             </div>
         </div>
     </section>
-
+ 
     <!-- About Us Section -->
     <section class="about-section" id="about">
         <div class="container-fluid">
@@ -614,12 +613,12 @@
             </div>
         </div>
     </section>
-
+ 
     <!-- Plants Section with Sidebar Filter -->
     <section class="plants-section" id="explore">
         <div class="container-fluid">
             <h2 class="section-title">Bộ Sưu Tập Cây Trồng</h2>
-            
+           
             <div class="row">
                 <!-- Sidebar Filter -->
                 <div class="col-lg-3 col-md-4">
@@ -627,16 +626,16 @@
                     <button class="filter-toggle-btn" id="filterToggleBtn">
                         <i class="bi bi-funnel me-2"></i>Bộ Lọc Tìm Kiếm
                     </button>
-
+ 
                     <div class="filter-sidebar" id="filterSidebar">
                         <h3><i class="bi bi-funnel me-2"></i>Tìm Kiếm</h3>
                         <form id="filter-form">
                             <div class="filter-group">
                                 <label for="keyword">Tên cây trồng</label>
-                                <input type="text" class="form-control" id="keyword" 
+                                <input type="text" class="form-control" id="keyword"
                                        placeholder="Nhập tên cây...">
                             </div>
-                            
+                           
                             <div class="filter-group">
                                 <label>Danh mục</label>
                                 <div class="checkbox-group">
@@ -658,7 +657,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+                           
                             <div class="filter-group">
                                 <label>Công dụng</label>
                                 <div class="checkbox-group">
@@ -684,7 +683,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+                           
                             <div class="filter-group">
                                 <label for="order">Bộ</label>
                                 <select class="form-select" id="order">
@@ -694,7 +693,7 @@
                                     <option value="Fabales">Fabales</option>
                                 </select>
                             </div>
-                            
+                           
                             <div class="filter-group">
                                 <button type="button" class="btn btn-filter" id="applyBtn">
                                     <i class="bi bi-search me-2"></i>Tìm Kiếm
@@ -706,7 +705,7 @@
                         </form>
                     </div>
                 </div>
-
+ 
                 <!-- Plants Grid -->
                 <div class="col-lg-9 col-md-8">
                     <div class="row g-4" id="plantsGrid">
@@ -746,7 +745,7 @@
                             </div>
                         }
                     </div>
-
+ 
                     <!-- Pagination -->
                     @if (Model.TotalPages > 1)
                     {
@@ -755,7 +754,7 @@
                                 <ul class="pagination mb-0">
                                     <li class="page-item @(Model.CurrentPage <= 1 ? "disabled" : "")">
                                         <a class="page-link"
-                                           href="@(Model.CurrentPage > 1 
+                                           href="@(Model.CurrentPage > 1
                                                ? Url.Page("/Index", null, new {
                                                    page = Model.CurrentPage - 1,
                                                    keyword = Model.FilterVM?.Keyword,
@@ -845,33 +844,24 @@
             </div>
         </div>
     </section>
-
+ 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
             var favorites = {};
-
+ 
             // Mobile filter toggle
             $('#filterToggleBtn').on('click', function () {
                 $('#filterSidebar').toggleClass('show');
             });
-
-            // Smooth scrolling
-            $('a[href^="#"]').on('click', function (e) {
-                e.preventDefault();
-                var target = $(this.getAttribute('href'));
-                if (target.length) {
-                    $('html, body').stop().animate({
-                        scrollTop: target.offset().top - 100
-                    }, 800);
-                }
-            });
-
+ 
+         
+ 
             // Apply filter button
             $('#applyBtn').on('click', function () {
                 filterPlants();
             });
-
+ 
             // Reset button
             $('#resetBtn').on('click', function () {
                 $('#keyword').val('');
@@ -880,31 +870,31 @@
                 $('#order').val('');
                 filterPlants();
             });
-
+ 
             function filterPlants() {
                 $('#loadingOverlay').addClass('show');
-
+ 
                 // Collect selected categories
                 var selectedCategories = [];
                 $('input[name="categories"]:checked').each(function() {
                     selectedCategories.push($(this).val());
                 });
-
+ 
                 // Collect selected usages
                 var selectedUsages = [];
                 $('input[name="usages"]:checked').each(function() {
                     selectedUsages.push($(this).val());
                 });
-
+ 
                 var filterData = {
                     keyword: $('#keyword').val(),
                     categories: selectedCategories,
                     usages: selectedUsages,
                     order: $('#order').val()
                 };
-
+ 
                 console.log('Filter data:', filterData);
-
+ 
                 setTimeout(function () {
                     $('#loadingOverlay').removeClass('show');
                     $('html, body').animate({
@@ -912,13 +902,13 @@
                     }, 500);
                 }, 500);
             }
-
+ 
             // Favorite functionality
             $('.favorite-btn').on('click', function (e) {
                 e.preventDefault();
                 var btn = $(this);
                 var plantId = btn.data('id');
-
+ 
                 if (favorites[plantId]) {
                     delete favorites[plantId];
                     btn.removeClass('active');
@@ -926,10 +916,10 @@
                     favorites[plantId] = true;
                     btn.addClass('active');
                 }
-
+ 
                 console.log('Favorites:', favorites);
             });
-
+ 
             // Card hover effect
             $('.plant-card').hover(
                 function () {
@@ -942,5 +932,5 @@
         });
     </script>
 </body>
-
+ 
 </html>
