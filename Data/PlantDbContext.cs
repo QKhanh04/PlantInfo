@@ -38,6 +38,8 @@ public partial class PlantDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<ViewLog> ViewLogs { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseNpgsql("Host=localhost;Database=PlantDB;Username=postgres;Password=12345");
@@ -350,6 +352,31 @@ public partial class PlantDbContext : DbContext
             entity.Property(e => e.Username)
                 .HasMaxLength(50)
                 .HasColumnName("username");
+        });
+
+        modelBuilder.Entity<ViewLog>(entity =>
+        {
+            entity.HasKey(e => e.ViewId).HasName("view_logs_pkey");
+
+            entity.ToTable("view_logs");
+
+            entity.Property(e => e.ViewId).HasColumnName("view_id");
+            entity.Property(e => e.PlantId).HasColumnName("plant_id");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+            entity.Property(e => e.ViewDate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("view_date");
+
+            entity.HasOne(d => d.Plant).WithMany(p => p.ViewLogs)
+                .HasForeignKey(d => d.PlantId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("view_logs_plant_id_fkey");
+
+            entity.HasOne(d => d.User).WithMany(p => p.ViewLogs)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("view_logs_user_id_fkey");
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -8,25 +8,21 @@ body {
 
 /* Header */
 .navbar {
-  background-color: #ffffff;
-  /* trắng tinh */
+  background-color: transparent;
   border-bottom: 1px solid #e0e0e0;
 }
 
 .navbar-brand {
   color: #4CAF50 !important;
-  /* xanh lá nhấn */
   font-weight: 600;
 }
 
 .navbar-brand:hover {
   color: #388E3C !important;
-  /* xanh lá đậm hơn khi hover */
 }
 
 .navbar-nav .nav-link {
   color: #555 !important;
-  /* xám nhẹ */
   font-weight: 500;
 }
 
@@ -68,8 +64,4 @@ footer.footer a:hover {
   text-decoration: underline;
 }
 
-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
+

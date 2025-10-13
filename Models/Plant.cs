@@ -33,6 +33,8 @@ public partial class Plant
 
     public virtual Species? Species { get; set; }
 
+    public virtual ICollection<ViewLog> ViewLogs { get; set; } = new List<ViewLog>();
+
     public virtual ICollection<Category> Categories { get; set; } = new List<Category>();
 
     public virtual ICollection<Use> Uses { get; set; } = new List<Use>();

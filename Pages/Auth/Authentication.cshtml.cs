@@ -1,14 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using PlantManagement.Data;
 using PlantManagement.Services;
+using PlantManagement.Services.Implementations;
 using PlantManagement.Services.Interfaces;
 using PlantManagement.ViewModel;
 
@@ -39,7 +38,7 @@ namespace PlantManagement.Pages
             {
                 return Page();
             }
-            var user = await _userService.Login(LoginVM.UsernameOrEmail, LoginVM.Password);
+            var user = await _userService.Login(LoginVM.UserNameOrEmail, LoginVM.Password);
 
             if (!user.Success) // TODO: hash password
             {
@@ -54,7 +53,8 @@ namespace PlantManagement.Pages
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Data.Username),
-                new Claim(ClaimTypes.Role, user.Data.Role)
+                new Claim(ClaimTypes.Role, user.Data.Role),
+                new Claim("UserId", user.Data.UserId.ToString())
             };
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -84,15 +84,25 @@ namespace PlantManagement.Pages
             // RegisterVM = registerViewModel;
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, "Vui lòng kiểm tra lại thông tin.");
+                foreach (var key in ModelState.Keys)
+                {
+                    var errors = ModelState[key].Errors;
+                    foreach (var error in errors)
+                    {
+                        // Xử lý hoặc log
+                        Console.WriteLine($"Field: {key}, Error: {error.ErrorMessage}");
+                    }
+                }
                 return Page();
             }
 
-            var result = await _userService.Register(RegisterVM.Username, RegisterVM.Email, RegisterVM.Password, RegisterVM.ConfirmPassword);
+            var result = await _userService.Register(RegisterVM.Email, RegisterVM.Username, RegisterVM.Password, RegisterVM.ConfirmPassword);
 
 
             if (!result.Success)
             {
+                ModelState.AddModelError("", RegisterVM.ConfirmPassword);
+
                 if (result.Message.Contains("User"))
                     ModelState.AddModelError("RegisterVM.Username", result.Message);
                 else if (result.Message.Contains("Email"))
@@ -107,7 +117,7 @@ namespace PlantManagement.Pages
 
             TempData["ToastMessage"] = "Đăng ký thành công!";
             TempData["ToastType"] = "success";
-            return RedirectToPage("/Auth/Authentication");
+             return RedirectToPage("/Auth/Authentication");
         }
 
         public async Task<IActionResult> OnPostLogout()

@@ -7,7 +7,7 @@
 
         @foreach (DTOs.PlantListDTO plant in Model.Plants.Items)
         {
-            <div class="col-lg-4 col-md-6 mb-4">
+            <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
                 <div class="card plant-card h-100">
                     <div class="plant-image">
                         @if (plant.ImageUrls != null && plant.ImageUrls.Any())
@@ -35,10 +35,10 @@
                             {
                                 <span class="category-badge border border-danger text-danger bg-danger-light px-2 py-1">
                                     <i class="bi bi-x-circle"></i>InActive
-                                </span>
+                                </span>                                                                                                                                                                                                     
                             }
                         </div>
-                        <p class="plant-description">@plant.Description</p>
+                        @* <p class="plant-description">@plant.Description</p> *@
                         <div class="category-badges mt-auto">
                             @foreach (var categoryName in plant.CategoryNames)
                             {
@@ -55,7 +55,7 @@
                                 <i class="bi bi-trash"></i> @(plant.IsActive == true ? "Ẩn" : "Hiện")
                             </button>
 
-                            <a asp-page="/Admin/Detail" asp-route-id="@plant.PlantId" class="action-btn btn-view">
+                            <a asp-page="/Detail" asp-route-id="@plant.PlantId" class="action-btn btn-view">
                                 <i class="bi bi-eye"></i> Chi tiết
                             </a>
                         </div>

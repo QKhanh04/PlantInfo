@@ -16,7 +16,7 @@ using PlantManagement.Services.Interfaces;
 namespace PlantManagement.Pages.Admin
 {
 
-     [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class CreateModel : PageModel
     {
         private readonly ILogger<CreateModel> _logger;
@@ -57,27 +57,27 @@ namespace PlantManagement.Pages.Admin
 
         public async Task OnGetAsync()
         {
-            var categories = await _categoryService.GetAllAsync();
-            CategoryList = categories.Select(c => new SelectListItem
+            var categories = await _categoryService.GetAllCategoryAsync();
+            CategoryList = categories.Data.Select(c => new SelectListItem
             {
                 Value = c.CategoryId.ToString(),
                 Text = c.CategoryName
             }).ToList();
-            var uses = await _useService.GetAllAsync();
-            UseList = uses.Select(u => new SelectListItem
+            var uses = await _useService.GetAllUsesAsync();
+            UseList = uses.Data.Select(u => new SelectListItem
             {
                 Value = u.UseId.ToString(),
                 Text = u.UseName
             }).ToList();
-            var species = await _speciesService.GetAllAsync();
-            SpeciesList = species.Select(s => new SelectListItem
+            var species = await _speciesService.GetAllSpeciesAsync();
+            SpeciesList = species.Data.Select(s => new SelectListItem
             {
                 Value = s.SpeciesId.ToString(),
                 Text = s.ScientificName
             }).ToList();
 
-            var disease = await _diseaseService.GetAllAsync();
-            DiseaseList = disease.Select(s => new SelectListItem
+            var disease = await _diseaseService.GetAllDiseaseAsync();
+            DiseaseList = disease.Data.Select(s => new SelectListItem
             {
                 Value = s.DiseaseId.ToString(),
                 Text = s.DiseaseName
@@ -93,7 +93,7 @@ namespace PlantManagement.Pages.Admin
                 {
                     await OnGetAsync(); // reload select list
                     TempData["ToastMessage"] = "Dữ liệu nhập không hợp lệ. Vui lòng kiểm tra lại!";
-                    TempData["ToastType"] = "error";
+                    TempData["ToastType"] = "danger";
                     foreach (var key in ModelState.Keys)
                     {
                         var errors = ModelState[key].Errors;
@@ -101,7 +101,7 @@ namespace PlantManagement.Pages.Admin
                         {
                             _logger.LogWarning($"ModelState error for {key}: {error.ErrorMessage}");
                             TempData["ToastMessage"] = $"D{key}: {error.ErrorMessage}";
-                            TempData["ToastType"] = "error";
+                            TempData["ToastType"] = "danger";
                         }
                     }
                     return Page();
@@ -143,7 +143,7 @@ namespace PlantManagement.Pages.Admin
                 }
 
                 TempData["ToastMessage"] = result.Message ?? "Thêm cây thất bại!";
-                TempData["ToastType"] = "error";
+                TempData["ToastType"] = "danger";
                 await OnGetAsync();
                 return Page();
             }
@@ -154,7 +154,7 @@ namespace PlantManagement.Pages.Admin
                 _logger?.LogError(ex, "Lỗi khi thêm cây trồng: {Message}. Inner: {Inner}", ex.Message, inner?.Message);
 
                 TempData["ToastMessage"] = "Đã xảy ra lỗi khi lưu dữ liệu: " + (inner?.Message ?? ex.Message);
-                TempData["ToastType"] = "error";
+                TempData["ToastType"] = "danger";
                 await OnGetAsync();
                 return Page();
             }

@@ -18,16 +18,6 @@ namespace PlantManagement.Services.Implementations
         {
             _speciesRepository = speciesRepository;
         }
-        public async Task<List<string>> GetDistinctOrderNameAsync()
-        {
-            var allSpecies = await _speciesRepository.GetAllAsync();
-            return allSpecies
-                .Select(s => s.OrderName)
-                .Where(o => !string.IsNullOrEmpty(o))
-                .Distinct()
-                .OrderBy(o => o)
-                .ToList();
-        }
 
         public async Task<ServiceResult<Species>> CreateAsync(Species species)
         {
@@ -42,9 +32,23 @@ namespace PlantManagement.Services.Implementations
                 return ServiceResult<Species>.Fail($"Error creating species: {ex.Message}");
             }
         }
-        public async Task<IEnumerable<Species>> GetAllAsync()
+
+        public async Task<List<string>> GetDistinctOrderNameAsync()
         {
-            return await _speciesRepository.GetAllAsync();
+            var allSpecies = await _speciesRepository.GetAllAsync();
+            return allSpecies
+                .Select(s => s.OrderName)
+                .Where(o => !string.IsNullOrEmpty(o))
+                .Distinct()
+                .OrderBy(o => o)
+                .ToList();
         }
+
+
+        public async Task<ServiceResult<IEnumerable<Species>>> GetAllSpeciesAsync() {
+            var species = await _speciesRepository.GetAllAsync();
+            return species == null ? ServiceResult<IEnumerable<Species>>.Fail("Have No Species") : ServiceResult<IEnumerable<Species>>.Ok(species);
+        }
+
     }
 }

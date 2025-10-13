@@ -9,8 +9,8 @@ namespace PlantManagement.Services.Interfaces
 {
     public interface IPlantImageService
     {
-        Task<ServiceResult<PlantImage>> CreateAsync(PlantImage image);
-        // Task<List<PlantImage>> GetByPlantIdAsync(int plantId);
+        Task<ServiceResult<PlantImage>> CreateAsync(PlantImage plantImage);
+
 
     }
 }

@@ -11,17 +11,17 @@ namespace PlantManagement.Services.Implementations
 {
     public class DiseaseService : IDiseaseService
     {
-        private readonly IDiseaseRepository _repo;
-        public DiseaseService(IDiseaseRepository repo)
+        private readonly IDiseaseRepository _diseaseRepository;
+        public DiseaseService(IDiseaseRepository diseaseRepository)
         {
-            _repo = repo;
+            _diseaseRepository = diseaseRepository;
         }
-        public async Task<ServiceResult<Disease>> CreateAsync(Disease disease)
+        public async Task<ServiceResult<Disease>> CreateDiseaseAsync(Disease disease)
         {
             try
             {
-                await _repo.AddAsync(disease);
-                await _repo.SaveChangesAsync();
+                await _diseaseRepository.AddAsync(disease);
+                await _diseaseRepository.SaveChangesAsync();
                 return ServiceResult<Disease>.Ok(disease, "Disease created successfully");
             }
             catch (Exception ex)
@@ -29,9 +29,12 @@ namespace PlantManagement.Services.Implementations
                 return ServiceResult<Disease>.Fail($"Error creating disease: {ex.Message}");
             }
         }
-        public async Task<IEnumerable<Disease>> GetAllAsync()
+
+        public async Task<ServiceResult<IEnumerable<Disease>>> GetAllDiseaseAsync()
         {
-            return await _repo.GetAllAsync();
+            var disease = await _diseaseRepository.GetAllAsync();
+            return disease == null ? ServiceResult<IEnumerable<Disease>>.Fail("Have No Disease") : ServiceResult<IEnumerable<Disease>>.Ok(disease);
         }
+
     }
 }

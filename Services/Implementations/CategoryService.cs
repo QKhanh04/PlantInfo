@@ -17,12 +17,8 @@ namespace PlantManagement.Services.Implementations
         {
             _categoryRepository = categoryRepository;
         }
-        public async Task<ServiceResult<IEnumerable<Category>>> GetAllCategories()
-        {
-            return ServiceResult<IEnumerable<Category>>.Ok(await _categoryRepository.GetAllAsync(), "Categories retrieved successfully");
-        }
 
-        public async Task<ServiceResult<Category>> CreateAsync(Category category)
+        public async Task<ServiceResult<Category>> CreateCategoryAsync(Category category)
         {
             try
             {
@@ -32,13 +28,16 @@ namespace PlantManagement.Services.Implementations
             }
             catch (Exception ex)
             {
-                return ServiceResult<Category>.Fail($"Error creating category: {ex.Message}");
+                return ServiceResult<Category>.Fail($"Error creating Category: {ex.Message}");
             }
         }
-        public async Task<IEnumerable<Category>> GetAllAsync()
+
+        public async Task<ServiceResult<IEnumerable<Category>>> GetAllCategoryAsync()
         {
-            return await _categoryRepository.GetAllAsync();
+            var categories = await _categoryRepository.GetAllAsync();
+            return categories == null ? ServiceResult<IEnumerable<Category>>.Fail("Have No Category") : ServiceResult<IEnumerable<Category>>.Ok(categories);
         }
+
 
     }
 }

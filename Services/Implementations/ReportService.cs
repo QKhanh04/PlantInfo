@@ -41,5 +41,19 @@ namespace PlantManagement.Services.Implementations
         {
             return await _reportRepository.GetTopSearchKeywordsAsync(topN, startDate, endDate);
         }
+        public async Task<List<PlantMonthlyStatDto>> GetMonthlyNewPlantStatsAsync(int year)
+        {
+            return await _reportRepository.GetMonthlyNewPlantStatsAsync(year);
+        }
+
+        public async Task<List<UserMonthlyStatDto>> GetMonthlyNewUserStatsAsync(int year)
+        {
+            return await _reportRepository.GetMonthlyNewUserStatsAsync(year);
+        }
+
+        public async Task<List<PlantViewStatDto>> GetTopViewedPlantsAsync(int top, DateTime? startDate, DateTime? endDate)
+        {
+            return await _reportRepository.GetTopViewedPlantsAsync(top, startDate, endDate);
+        }
     }
 }

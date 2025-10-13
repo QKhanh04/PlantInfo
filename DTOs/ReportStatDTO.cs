@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace PlantManagement.DTOs
 {
-    public class PlantSummaryDto
+     public class PlantSummaryDto
     {
         public int TotalPlants { get; set; }
         public int TotalActivePlants { get; set; }
@@ -16,7 +16,7 @@ namespace PlantManagement.DTOs
     public class UserSummaryDto
     {
         public int TotalUsers { get; set; }
-        public int NewUsers { get; set; } // Số user mới trong khoảng thời gian lọc
+        public int NewUsers { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
     }
@@ -41,5 +41,26 @@ namespace PlantManagement.DTOs
         public string? Keyword { get; set; }
         public int Count { get; set; }
         public double Percentage { get; set; }
+    }
+
+    public class PlantMonthlyStatDto
+    {
+        public int Year { get; set; }
+        public int Month { get; set; }
+        public int PlantCount { get; set; }
+    }
+
+    public class UserMonthlyStatDto
+    {
+        public int Year { get; set; }
+        public int Month { get; set; }
+        public int UserCount { get; set; }
+    }
+
+    public class PlantViewStatDto
+    {
+        public int PlantId { get; set; }
+        public string PlantName { get; set; } = string.Empty;
+        public int ViewCount { get; set; }
     }
 }

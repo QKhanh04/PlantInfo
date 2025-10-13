@@ -8,8 +8,6 @@ using PlantManagement.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorPages();
 builder.Services.AddDbContext<PlantDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Generic Repository (nếu bạn dùng)
@@ -27,10 +25,13 @@ builder.Services.AddScoped<IPlantImageRepository, PlantImageRepository>();
 builder.Services.AddScoped<IPlantReferenceRepository, PlantReferenceRepository>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
+builder.Services.AddScoped<IViewLogRepository, ViewLogRepository>();
+
+
 // // Nếu có bảng liên kết:
 // builder.Services.AddScoped<IPlantCategoryRepository, PlantCategoryRepository>();
 // builder.Services.AddScoped<IPlantUseRepository, PlantUseRepository>();
- 
+
 // Service
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPlantService, PlantService>();
@@ -43,6 +44,10 @@ builder.Services.AddScoped<IPlantImageService, PlantImageService>();
 builder.Services.AddScoped<IPlantReferenceService, PlantReferenceService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IFavoriteService, FavoriteService>();
+builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
+builder.Services.AddScoped<IViewLogService, ViewLogService>();
+
+
 // Nếu có bảng liên kết:
 // builder.Services.AddScoped<IPlantCategoryService, PlantCategoryService>();
 // builder.Services.AddScoped<IPlantUseService, PlantUseService>();
@@ -57,7 +62,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 // Add AutoMapper for all profiles in the assembly
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-
+builder.Services.AddSession();
+builder.Services.AddRazorPages();
 builder.Services.AddAuthorization();
 var app = builder.Build();
 
@@ -70,12 +76,13 @@ if (!app.Environment.IsDevelopment())
 }
 
 // app.UseHttpsRedirection();
-app.UseStaticFiles();  
-
+app.UseStaticFiles();
 app.UseRouting();
+app.UseSession();
 
-app.UseAuthentication(); 
-app.UseAuthorization(); 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapRazorPages();
 
 app.Run();

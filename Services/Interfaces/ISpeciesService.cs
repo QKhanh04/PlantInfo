@@ -10,8 +10,8 @@ namespace PlantManagement.Services.Interfaces
 {
     public interface ISpeciesService
     {
-        Task<List<string>> GetDistinctOrderNameAsync();
+         Task<List<string>> GetDistinctOrderNameAsync();
         Task<ServiceResult<Species>> CreateAsync(Species species);
-        Task<IEnumerable<Species>> GetAllAsync();
+        Task<ServiceResult<IEnumerable<Species>>> GetAllSpeciesAsync();
     }
 }

@@ -29,9 +29,11 @@ namespace PlantManagement.Services.Implementations
                 return ServiceResult<Use>.Fail($"Error creating use: {ex.Message}");
             }
         }
-        public async Task<IEnumerable<Use>> GetAllAsync()
+
+        public async Task<ServiceResult<IEnumerable<Use>>> GetAllUsesAsync()
         {
-            return await _useRepository.GetAllAsync();
+            var uses = await _useRepository.GetAllAsync();
+            return uses == null ? ServiceResult<IEnumerable<Use>>.Fail("Have No Use") : ServiceResult<IEnumerable<Use>>.Ok(uses);
         }
     }
 }

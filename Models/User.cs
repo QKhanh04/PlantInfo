@@ -20,4 +20,6 @@ public partial class User
     public virtual ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
 
     public virtual ICollection<SearchLog> SearchLogs { get; set; } = new List<SearchLog>();
+
+    public virtual ICollection<ViewLog> ViewLogs { get; set; } = new List<ViewLog>();
 }

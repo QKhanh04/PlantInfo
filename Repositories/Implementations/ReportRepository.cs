@@ -25,7 +25,6 @@ namespace PlantManagement.Repositories.Implementations
                 query = query.Where(p => p.CreateAt <= endDate.Value);
 
             int totalPlants = await query.CountAsync();
-            // int totalActivePlants = await query.CountAsync(p => p.IsActive);
 
             return new PlantSummaryDto
             {
@@ -90,6 +89,42 @@ namespace PlantManagement.Repositories.Implementations
             return stats;
         }
 
+        public async Task<List<PlantMonthlyStatDto>> GetMonthlyNewPlantStatsAsync(int selectedYear)
+        {
+            var query = _context.Plants.Where(p => p.CreateAt.HasValue && p.CreateAt.Value.Year == selectedYear);
+
+            var monthlyStats = await query
+                .GroupBy(p => p.CreateAt!.Value.Month)
+                .Select(g => new PlantMonthlyStatDto
+                {
+                    Year = selectedYear,
+                    Month = g.Key,
+                    PlantCount = g.Count()
+                })
+                .OrderBy(x => x.Month)
+                .ToListAsync();
+
+            return monthlyStats;
+        }
+
+        public async Task<List<UserMonthlyStatDto>> GetMonthlyNewUserStatsAsync(int selectedYear)
+        {
+            var query = _context.Users.Where(p => p.CreateAt.HasValue && p.CreateAt.Value.Year == selectedYear);
+
+            var monthlyStats = await query
+                .GroupBy(p => p.CreateAt!.Value.Month)
+                .Select(g => new UserMonthlyStatDto
+                {
+                    Year = selectedYear,
+                    Month = g.Key,
+                    UserCount = g.Count()
+                })
+                .OrderBy(x => x.Month)
+                .ToListAsync();
+
+            return monthlyStats;
+        }
+
         public async Task<List<FavoriteStatDto>> GetTopFavoritePlantsAsync(int topN, DateTime? startDate, DateTime? endDate)
         {
             var favQuery = _context.Favorites.AsQueryable();
@@ -148,6 +183,34 @@ namespace PlantManagement.Repositories.Implementations
                 .ToListAsync();
 
             return topKeywords;
+        }
+        public async Task<List<PlantViewStatDto>> GetTopViewedPlantsAsync(int top, DateTime? startDate, DateTime? endDate)
+        {
+            var query = _context.ViewLogs.AsQueryable();
+
+            // Lọc theo khoảng thời gian
+            if (startDate.HasValue)
+                query = query.Where(l => l.ViewDate >= startDate.Value);
+            if (endDate.HasValue)
+                query = query.Where(l => l.ViewDate <= endDate.Value);
+
+            // Join trước rồi mới group
+            var joinedQuery = from log in query
+                              where log.PlantId.HasValue
+                              join plant in _context.Plants on log.PlantId.Value equals plant.PlantId
+                              select new { log, plant };
+
+            var groupedQuery = from item in joinedQuery
+                               group item by item.plant.PlantId into grp
+                               orderby grp.Count() descending
+                               select new PlantViewStatDto
+                               {
+                                   PlantId = grp.Key,
+                                   PlantName = grp.First().plant.CommonName ?? "",
+                                   ViewCount = grp.Count()
+                               };
+
+            return await groupedQuery.Take(top).ToListAsync();
         }
     }
 }

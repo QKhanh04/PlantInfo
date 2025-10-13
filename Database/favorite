@@ -1,0 +1,1176 @@
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Logging;
+using PlantManagement.Services.Interfaces;
+
+namespace PlantManagement.Pages
+{
+    public class IndexModel : PageModel
+    {
+        private readonly ILogger<IndexModel> _logger;
+        private readonly IPlantService _plantService;
+        private readonly ICategoryService _categoryService;
+        private readonly ISpeciesService _speciesService;
+
+        public IndexModel(
+            ILogger<IndexModel> logger,
+            IPlantService plantService,
+            ICategoryService categoryService,
+            ISpeciesService speciesService)
+        {
+            _logger = logger;
+            _plantService = plantService;
+            _categoryService = categoryService;
+            _speciesService = speciesService;
+        }
+
+        // Statistics for the home page
+        public int TotalPlants { get; set; }
+        public int TotalCategories { get; set; }
+        public int TotalImages { get; set; }
+        public int TotalUsers { get; set; } = 10000; // Hardcoded for now, or get from UserService
+
+        public async Task<IActionResult> OnGetAsync()
+        {
+            try
+            {
+                // Load statistics
+                await LoadStatisticsAsync();
+
+                _logger.LogInformation("Trang chủ được tải với {TotalPlants} cây trồng", TotalPlants);
+
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Lỗi khi tải trang chủ");
+                // Set default values on error
+                TotalPlants = 0;
+                TotalCategories = 0;
+                TotalImages = 0;
+                return Page();
+            }
+        }
+
+        /// <summary>
+        /// Load statistics for the home page
+        /// </summary>
+        private async Task LoadStatisticsAsync()
+        {
+            // Get total plants count
+            var plantsResult = await _plantService.GetPagedAsync(null, 1, 1, null, null, null);
+            if (plantsResult.Success && plantsResult.Data != null)
+            {
+                TotalPlants = plantsResult.Data.TotalItems;
+
+                // Calculate total images (assuming average 2-3 images per plant)
+                // Or you can implement a proper count method in your service
+                TotalImages = TotalPlants > 0 ? TotalPlants * 2 : 0;
+            }
+
+            // Get total categories count
+            var categoriesResult = await _categoryService.GetAllCategoryAsync();
+            if (categoriesResult.Success && categoriesResult.Data != null)
+            {
+                TotalCategories = categoriesResult.Data.Count();
+            }
+
+            // You can add more statistics here if needed
+            // For example: Total species, total orders, etc.
+        }
+
+        /// <summary>
+        /// Get quick stats for AJAX calls (optional)
+        /// </summary>
+        public async Task<JsonResult> OnGetStatsAsync()
+        {
+            try
+            {
+                await LoadStatisticsAsync();
+
+                return new JsonResult(new
+                {
+                    success = true,
+                    data = new
+                    {
+                        totalPlants = TotalPlants,
+                        totalCategories = TotalCategories,
+                        totalImages = TotalImages,
+                        totalUsers = TotalUsers
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Lỗi khi lấy thống kê");
+                return new JsonResult(new
+                {
+                    success = false,
+                    message = "Không thể lấy thống kê"
+                });
+            }
+        }
+    }
+}
+
+
+namespace PlantManagement.Pages
+{
+    public class LookUpPlantModel : PageModel
+    {
+        private readonly ILogger<LookUpPlantModel> _logger;
+        private readonly IPlantService _plantService;
+        private readonly ICategoryService _categoryService;
+        private readonly IUseService _useService;
+        private readonly ISpeciesService _speciesService;
+        private readonly IFavoriteService _favoriteService;
+
+        public LookUpPlantModel(
+            ILogger<LookUpPlantModel> logger,
+            IPlantService plantService,
+            ICategoryService categoryService,
+            ISpeciesService speciesService,
+            IFavoriteService favoriteService,
+            IUseService useService)
+        {
+            _logger = logger;
+            _plantService = plantService;
+            _categoryService = categoryService;
+            _speciesService = speciesService;
+            _favoriteService = favoriteService;
+            _useService = useService;
+        }
+
+        // Properties for Plant List
+        public PagedResult<PlantListDTO>? Plants { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public int CurrentPage { get; set; } = 1;
+
+        [BindProperty(SupportsGet = true)]
+        public int TotalPages { get; set; }
+
+        public const int PageSize = 9;
+
+        // Filter Properties
+        [BindProperty(SupportsGet = true)]
+        public FilterViewModel FilterVM { get; set; } = new();
+
+        public IEnumerable<Category> Categories { get; set; } = new List<Category>();
+        public IEnumerable<Use> Uses { get; set; } = new List<Use>();
+        public List<string> OrderList { get; set; } = new();
+
+        // Favorite tracking (for logged-in users)
+        public HashSet<int> FavoritePlantIds { get; set; } = new HashSet<int>();
+
+        public async Task<IActionResult> OnGetAsync()
+        {
+            try
+            {
+                // Load filter options
+                var categoriesTask = _categoryService.GetAllCategoryAsync();
+                var usesTask = _useService.GetAllUsesAsync();
+                var ordersTask = _speciesService.GetDistinctOrderNameAsync();
+
+                // Load plants with filters
+                var plantsTask = _plantService.GetPagedAsync(
+                    FilterVM?.Keyword,
+                    CurrentPage,
+                    PageSize,
+                    FilterVM?.OrderName,
+                    FilterVM?.CategoryIds,
+                    FilterVM?.UseIds
+                );
+
+                await Task.WhenAll(categoriesTask, usesTask, ordersTask, plantsTask);
+
+                // Set filter options
+                var categoriesResult = await categoriesTask;
+                var usesResult = await usesTask;
+                OrderList = await ordersTask;
+
+                Categories = categoriesResult.Data ?? new List<Category>();
+                Uses = usesResult.Data ?? new List<Use>();
+
+                // Set plants result
+                var plantsResult = await plantsTask;
+                if (!plantsResult.Success || plantsResult.Data == null)
+                {
+                    _logger.LogWarning("Lỗi khi lấy danh sách cây: {Message}", plantsResult.Message);
+                    TempData["ToastMessage"] = plantsResult.Message ?? "Không thể tải danh sách cây trồng";
+                    TempData["ToastType"] = "danger";
+
+                    Plants = new PagedResult<PlantListDTO>
+                    {
+                        Items = new List<PlantListDTO>(),
+                        PageIndex = CurrentPage,
+                        PageSize = PageSize,
+                        TotalItems = 0,
+                        TotalPages = 0
+                    };
+                    TotalPages = 0;
+                    return Page();
+                }
+
+                Plants = plantsResult.Data;
+                TotalPages = plantsResult.Data.TotalPages;
+
+                // Load favorites if user is logged in
+                var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+                if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
+                {
+                    var favoritesResult = await _favoriteService.GetUserFavoritesAsync(userId);
+                    if (favoritesResult.Success && favoritesResult.Data != null)
+                    {
+                        FavoritePlantIds = favoritesResult.Data.Select(f => f.PlantId).ToHashSet();
+                    }
+                }
+
+                _logger.LogInformation(
+                    "Tra cứu cây trồng - Tìm thấy {Count} cây, Trang {Page}/{TotalPages}",
+                    plantsResult.Data.TotalItems,
+                    CurrentPage,
+                    TotalPages
+                );
+
+                return Page();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Lỗi không mong muốn khi tải trang tra cứu");
+                TempData["ToastMessage"] = "Đã xảy ra lỗi. Vui lòng thử lại sau.";
+                TempData["ToastType"] = "danger";
+
+                Plants = new PagedResult<PlantListDTO>
+                {
+                    Items = new List<PlantListDTO>(),
+                    PageIndex = CurrentPage,
+                    PageSize = PageSize,
+                    TotalItems = 0,
+                    TotalPages = 0
+                };
+                Categories = new List<Category>();
+                Uses = new List<Use>();
+                TotalPages = 0;
+
+                return Page();
+            }
+        }
+
+        /// <summary>
+        /// Handler for AJAX filtering (optional - if you want to implement AJAX filtering)
+        /// </summary>
+        public async Task<IActionResult> OnGetFilterAsync(
+            string? keyword,
+            List<int>? categoryIds,
+            List<int>? useIds,
+            string? orderName,
+            int page = 1)
+        {
+            FilterVM = new FilterViewModel
+            {
+                Keyword = keyword,
+                CategoryIds = categoryIds,
+                UseIds = useIds,
+                OrderName = orderName
+            };
+            CurrentPage = page;
+
+            await OnGetAsync();
+
+            // Return partial view or JSON for AJAX
+            return Partial("_PlantListPartial", this);
+        }
+
+        /// <summary>
+        /// Toggle favorite status for a plant
+        /// </summary>
+        public async Task<JsonResult> OnPostToggleFavoriteAsync(int plantId)
+        {
+            try
+            {
+                // Get user ID from claims
+                var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+                if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+                {
+                    return new JsonResult(new
+                    {
+                        success = false,
+                        message = "Bạn cần đăng nhập để sử dụng tính năng này!"
+                    });
+                }
+
+                // Check if plant exists
+                var plantResult = await _plantService.GetPlantByIdAsync(plantId);
+                if (!plantResult.Success || plantResult.Data == null)
+                {
+                    return new JsonResult(new
+                    {
+                        success = false,
+                        message = "Không tìm thấy cây trồng!"
+                    });
+                }
+
+                // Check current favorite status
+                var isFavorite = await _favoriteService.IsFavoriteAsync(userId, plantId);
+
+                bool success;
+                string message;
+
+                if (isFavorite)
+                {
+                    // Remove from favorites
+                    success = await _favoriteService.RemoveFavoriteAsync(userId, plantId);
+                    message = success ? "Đã bỏ yêu thích" : "Không thể bỏ yêu thích";
+
+                    _logger.LogInformation(
+                        "User {UserId} removed plant {PlantId} from favorites",
+                        userId,
+                        plantId
+                    );
+                }
+                else
+                {
+                    // Add to favorites
+                    success = await _favoriteService.AddFavoriteAsync(userId, plantId);
+                    message = success ? "Đã thêm vào yêu thích" : "Không thể thêm vào yêu thích";
+
+                    _logger.LogInformation(
+                        "User {UserId} added plant {PlantId} to favorites",
+                        userId,
+                        plantId
+                    );
+                }
+
+                return new JsonResult(new
+                {
+                    success = success,
+                    favorite = !isFavorite,
+                    message = message
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Lỗi khi toggle favorite cho plant {PlantId}", plantId);
+                return new JsonResult(new
+                {
+                    success = false,
+                    message = "Đã xảy ra lỗi. Vui lòng thử lại sau."
+                });
+            }
+        }
+
+        /// <summary>
+        /// Get user's favorite plants (optional - for a separate favorites page)
+        /// </summary>
+        public async Task<IActionResult> OnGetFavoritesAsync()
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            if (userIdClaim == null || !int.TryParse(userIdClaim.Value, out int userId))
+            {
+                TempData["ToastMessage"] = "Bạn cần đăng nhập để xem danh sách yêu thích!";
+                TempData["ToastType"] = "warning";
+                return RedirectToPage("/Auth/Authentication");
+            }
+
+            var result = await _favoriteService.GetUserFavoritesAsync(userId);
+            if (result.Success && result.Data != null)
+            {
+                return new JsonResult(new
+                {
+                    success = true,
+                    favorites = result.Data
+                });
+            }
+
+            return new JsonResult(new
+            {
+                success = false,
+                message = "Không thể tải danh sách yêu thích"
+            });
+        }
+    }
+}
+$(document).ready(function () {
+    // Initialize favorites from server-side data
+    var favorites = @Html.Raw(Json.Serialize(Model.FavoritePlantIds));
+    
+    // Mark already favorited plants
+    favorites.forEach(function(plantId) {
+        $('.favorite-btn[data-id="' + plantId + '"]').addClass('active');
+    });
+
+    // Mobile filter toggle
+    $('#filterToggleBtn').on('click', function () {
+        $('#filterSidebar').toggleClass('show');
+    });
+
+    // Apply filter button
+    $('#applyBtn').on('click', function () {
+        filterPlants();
+    });
+
+    // Reset button
+    $('#resetBtn').on('click', function () {
+        $('#keyword').val('');
+        $('input[name="categories"]').prop('checked', false);
+        $('input[name="usages"]').prop('checked', false);
+        $('#order').val('');
+        
+        // Redirect to clean page
+        window.location.href = '/LookUpPlant';
+    });
+
+    // Enter key on keyword input
+    $('#keyword').on('keypress', function(e) {
+        if (e.which === 13) { // Enter key
+            e.preventDefault();
+            filterPlants();
+        }
+    });
+
+    // Filter function
+    function filterPlants() {
+        $('#loadingOverlay').addClass('show');
+
+        // Collect selected categories
+        var selectedCategories = [];
+        $('input[name="categories"]:checked').each(function () {
+            selectedCategories.push($(this).val());
+        });
+
+        // Collect selected usages
+        var selectedUsages = [];
+        $('input[name="usages"]:checked').each(function () {
+            selectedUsages.push($(this).val());
+        });
+
+        // Build query string
+        var queryParams = new URLSearchParams();
+        
+        var keyword = $('#keyword').val().trim();
+        if (keyword) {
+            queryParams.append('keyword', keyword);
+        }
+
+        if (selectedCategories.length > 0) {
+            selectedCategories.forEach(function(catId) {
+                queryParams.append('FilterVM.CategoryIds', catId);
+            });
+        }
+
+        if (selectedUsages.length > 0) {
+            selectedUsages.forEach(function(useId) {
+                queryParams.append('FilterVM.UseIds', useId);
+            });
+        }
+
+        var orderName = $('#order').val();
+        if (orderName) {
+            queryParams.append('FilterVM.OrderName', orderName);
+        }
+
+        // Redirect to filtered page
+        window.location.href = '/LookUpPlant?' + queryParams.toString();
+    }
+
+    // Favorite functionality with AJAX
+    $('.favorite-btn').on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        var btn = $(this);
+        var plantId = btn.data('id');
+
+        // Check if user is logged in (you can set this from server-side)
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <text>
+            showToast('Bạn cần đăng nhập để sử dụng tính năng này!', 'warning');
+            setTimeout(function() {
+                window.location.href = '/Auth/Authentication?returnUrl=' + encodeURIComponent(window.location.pathname + window.location.search);
+            }, 1500);
+            return;
+            </text>
+        }
+
+        // Disable button during request
+        btn.prop('disabled', true);
+
+        // Send AJAX request
+        $.ajax({
+            url: '/LookUpPlant?handler=ToggleFavorite',
+            type: 'POST',
+            data: { plantId: plantId },
+            headers: {
+                'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+            },
+            success: function (response) {
+                if (response.success) {
+                    if (response.favorite) {
+                        // Added to favorites
+                        btn.addClass('active');
+                        favorites.push(plantId);
+                        showToast(response.message || 'Đã thêm vào yêu thích', 'success');
+                    } else {
+                        // Removed from favorites
+                        btn.removeClass('active');
+                        favorites = favorites.filter(id => id !== plantId);
+                        showToast(response.message || 'Đã bỏ yêu thích', 'info');
+                    }
+                } else {
+                    showToast(response.message || 'Có lỗi xảy ra', 'danger');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error toggling favorite:', error);
+                showToast('Không thể thực hiện. Vui lòng thử lại!', 'danger');
+            },
+            complete: function() {
+                btn.prop('disabled', false);
+            }
+        });
+    });
+
+    // Sort select change
+    $('.sort-select').on('change', function() {
+        var sortValue = $(this).val();
+        if (sortValue) {
+            // Add sort parameter to current URL
+            var url = new URL(window.location.href);
+            url.searchParams.set('sort', sortValue);
+            url.searchParams.set('page', '1'); // Reset to first page
+            window.location.href = url.toString();
+        }
+    });
+
+    // Card click navigation (except favorite button)
+    $('.plant-card').on('click', function(e) {
+        if (!$(e.target).closest('.favorite-btn').length) {
+            var detailUrl = $(this).find('.view-detail-btn').attr('href');
+            if (detailUrl) {
+                window.location.href = detailUrl;
+            }
+        }
+    });
+
+    // Card hover effect
+    $('.plant-card').hover(
+        function () {
+            $(this).addClass('shadow-lg');
+        },
+        function () {
+            $(this).removeClass('shadow-lg');
+        }
+    );
+
+    // Smooth scroll to results after filter
+    if (window.location.search) {
+        setTimeout(function() {
+            var plantsGrid = $('#plantsGrid');
+            if (plantsGrid.length) {
+                $('html, body').animate({
+                    scrollTop: plantsGrid.offset().top - 150
+                }, 500);
+            }
+        }, 100);
+    }
+
+    // Toast notification function
+    function showToast(message, type = 'info') {
+        if (typeof window.showToast === 'function') {
+            window.showToast(message, type);
+        } else {
+            // Fallback if global showToast not available
+            console.log('[Toast]', type, ':', message);
+            alert(message);
+        }
+    }
+});
+
+<!-- Thêm vào đầu form trong filter sidebar -->
+<form id="filter-form" method="get">
+    @Html.AntiForgeryToken()
+    
+    <div class="filter-group">
+        <label for="keyword">Tên cây trồng</label>
+        <input type="text" class="form-control" id="keyword" name="FilterVM.Keyword" 
+               placeholder="Nhập tên cây..." value="@Model.FilterVM?.Keyword">
+    </div>
+
+    <div class="filter-group">
+        <label>Danh mục</label>
+        <div class="checkbox-group">
+            @if (Model.Categories != null && Model.Categories.Any())
+            {
+                @foreach (var category in Model.Categories)
+                {
+                    var isChecked = Model.FilterVM?.CategoryIds?.Contains(category.CategoryId) == true;
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" 
+                               value="@category.CategoryId" 
+                               id="cat@(category.CategoryId)" 
+                               name="FilterVM.CategoryIds"
+                               @(isChecked ? "checked" : "")>
+                        <label class="form-check-label" for="cat@(category.CategoryId)">
+                            @category.CategoryName
+                        </label>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted small">Không có danh mục</p>
+            }
+        </div>
+    </div>
+
+    <div class="filter-group">
+        <label>Công dụng</label>
+        <div class="checkbox-group">
+            @if (Model.Uses != null && Model.Uses.Any())
+            {
+                @foreach (var use in Model.Uses)
+                {
+                    var isChecked = Model.FilterVM?.UseIds?.Contains(use.UseId) == true;
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" 
+                               value="@use.UseId" 
+                               id="use@(use.UseId)" 
+                               name="FilterVM.UseIds"
+                               @(isChecked ? "checked" : "")>
+                        <label class="form-check-label" for="use@(use.UseId)">
+                            @use.UseName
+                        </label>
+                    </div>
+                }
+            }
+            else
+            {
+                <p class="text-muted small">Không có công dụng</p>
+            }
+        </div>
+    </div>
+
+    <div class="filter-group">
+        <label for="order">Bộ</label>
+        <select class="form-select" id="order" name="FilterVM.OrderName">
+            <option value="">Tất cả bộ</option>
+            @if (Model.OrderList != null && Model.OrderList.Any())
+            {
+                @foreach (var orderName in Model.OrderList)
+                {
+                    var isSelected = Model.FilterVM?.OrderName == orderName;
+                    <option value="@orderName" @(isSelected ? "selected" : "")>
+                        @orderName
+                    </option>
+                }
+            }
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <button type="button" class="btn btn-filter" id="applyBtn">
+            <i class="bi bi-search me-2"></i>Tìm Kiếm
+        </button>
+        <button type="button" class="btn btn-reset" id="resetBtn">
+            <i class="bi bi-arrow-counterclockwise me-2"></i>Xóa Bộ Lọc
+        </button>
+    </div>
+</form>
+
+using System.Collections.Generic;
+
+namespace PlantManagement.ViewModel
+{
+    public class FilterViewModel
+    {
+        /// <summary>
+        /// Keyword for searching plant name or species
+        /// </summary>
+        public string? Keyword { get; set; }
+
+        /// <summary>
+        /// List of category IDs to filter by
+        /// </summary>
+        public List<int>? CategoryIds { get; set; }
+
+        /// <summary>
+        /// List of use/purpose IDs to filter by
+        /// </summary>
+        public List<int>? UseIds { get; set; }
+
+        /// <summary>
+        /// Order name (taxonomic order) to filter by
+        /// </summary>
+        public string? OrderName { get; set; }
+
+        /// <summary>
+        /// Sort option (e.g., "name-asc", "name-desc", "newest", "popular")
+        /// </summary>
+        public string? SortBy { get; set; }
+
+        /// <summary>
+        /// Check if any filter is applied
+        /// </summary>
+        public bool HasFilters()
+        {
+            return !string.IsNullOrWhiteSpace(Keyword) ||
+                   (CategoryIds != null && CategoryIds.Count > 0) ||
+                   (UseIds != null && UseIds.Count > 0) ||
+                   !string.IsNullOrWhiteSpace(OrderName);
+        }
+
+        /// <summary>
+        /// Get a display summary of active filters
+        /// </summary>
+        public string GetFilterSummary()
+        {
+            var filters = new List<string>();
+
+            if (!string.IsNullOrWhiteSpace(Keyword))
+                filters.Add($"Từ khóa: '{Keyword}'");
+
+            if (CategoryIds != null && CategoryIds.Count > 0)
+                filters.Add($"{CategoryIds.Count} danh mục");
+
+            if (UseIds != null && UseIds.Count > 0)
+                filters.Add($"{UseIds.Count} công dụng");
+
+            if (!string.IsNullOrWhiteSpace(OrderName))
+                filters.Add($"Bộ: {OrderName}");
+
+            return filters.Count > 0 ? string.Join(", ", filters) : "Không có bộ lọc";
+        }
+    }
+}
+
+@model PlantManagement.Pages.LookUpPlantModel
+
+<!-- Results Header -->
+<div class="results-header">
+    <div class="results-count">
+        Tìm thấy <strong>@Model.Plants.TotalCount</strong> kết quả
+    </div>
+    <select class="form-select sort-select">
+        <option value="">Sắp xếp theo</option>
+        <option value="name-asc">Tên A-Z</option>
+        <option value="name-desc">Tên Z-A</option>
+        <option value="newest">Mới nhất</option>
+        <option value="popular">Phổ biến nhất</option>
+    </select>
+</div>
+
+<!-- Filter Summary -->
+@if (Model.FilterVM != null && Model.FilterVM.HasFilters())
+{
+    <div class="alert alert-info d-flex align-items-center justify-content-between mb-4">
+        <div>
+            <i class="bi bi-info-circle me-2"></i>
+            <strong>Bộ lọc đang áp dụng:</strong> @Model.FilterVM.GetFilterSummary()
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-info" onclick="clearAllFilters()">
+            Xóa bộ lọc
+        </button>
+    </div>
+}
+
+@if (Model.Plants.Items.Any())
+{
+    <!-- Plants Grid -->
+    <div class="row g-4" id="plantsGrid">
+        @foreach (DTOs.PlantListDTO plant in Model.Plants.Items)
+        {
+            <div class="col-lg-4 col-md-6 col-sm-6">
+                <div class="plant-card">
+                    <div class="plant-image">
+                        @if (plant.ImageUrls != null && plant.ImageUrls.Any())
+                        {
+                            <img src="@plant.ImageUrls.First()" alt="@plant.CommonName" loading="lazy">
+                        }
+                        else
+                        {
+                            <div class="plant-image-placeholder">
+                                <i class="bi bi-image"></i>
+                            </div>
+                        }
+                        <button class="favorite-btn @(Model.FavoritePlantIds.Contains(plant.PlantId) ? "active" : "")" 
+                                data-id="@plant.PlantId"
+                                aria-label="Yêu thích">
+                            <i class="bi bi-heart-fill"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="plant-title">@plant.CommonName</h5>
+                        <span class="plant-species">@plant.SpeciesName</span>
+                        <div class="category-badges">
+                            @foreach (var categoryName in plant.CategoryNames)
+                            {
+                                <span class="category-badge">@categoryName</span>
+                            }
+                        </div>
+                        <a asp-page="/Detail" asp-route-id="@plant.PlantId" class="view-detail-btn">
+                            <i class="bi bi-eye me-2"></i> Xem Chi Tiết
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Pagination -->
+    @if (Model.TotalPages > 1)
+    {
+        <div class="pagination-wrapper">
+            <nav aria-label="Phân trang">
+                <ul class="pagination mb-0">
+                    <!-- Previous Button -->
+                    <li class="page-item @(Model.CurrentPage <= 1 ? "disabled" : "")">
+                        <a class="page-link" 
+                           href="@(Model.CurrentPage > 1 
+                               ? Url.Page("/LookUpPlant", new { 
+                                   page = Model.CurrentPage - 1,
+                                   FilterVM.Keyword = Model.FilterVM?.Keyword,
+                                   FilterVM.CategoryIds = Model.FilterVM?.CategoryIds,
+                                   FilterVM.UseIds = Model.FilterVM?.UseIds,
+                                   FilterVM.OrderName = Model.FilterVM?.OrderName
+                               })
+                               : "#")"
+                           aria-label="Trang trước">
+                            <i class="bi bi-chevron-left"></i> Trước
+                        </a>
+                    </li>
+
+                    @{
+                        int start = Math.Max(1, Model.CurrentPage - 2);
+                        int end = Math.Min(Model.TotalPages, Model.CurrentPage + 2);
+                        
+                        if (Model.CurrentPage <= 3)
+                        {
+                            start = 1;
+                            end = Math.Min(5, Model.TotalPages);
+                        }
+                        else if (Model.CurrentPage >= Model.TotalPages - 2)
+                        {
+                            end = Model.TotalPages;
+                            start = Math.Max(1, Model.TotalPages - 4);
+                        }
+                    }
+
+                    <!-- First page + ellipsis -->
+                    @if (start > 1)
+                    {
+                        <li class="page-item">
+                            <a class="page-link" 
+                               href="@Url.Page("/LookUpPlant", new { 
+                                   page = 1,
+                                   FilterVM.Keyword = Model.FilterVM?.Keyword,
+                                   FilterVM.CategoryIds = Model.FilterVM?.CategoryIds,
+                                   FilterVM.UseIds = Model.FilterVM?.UseIds,
+                                   FilterVM.OrderName = Model.FilterVM?.OrderName
+                               })">
+                                1
+                            </a>
+                        </li>
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                    }
+
+                    <!-- Page numbers -->
+                    @for (int i = start; i <= end; i++)
+                    {
+                        <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                            <a class="page-link" 
+                               href="@Url.Page("/LookUpPlant", new { 
+                                   page = i,
+                                   FilterVM.Keyword = Model.FilterVM?.Keyword,
+                                   FilterVM.CategoryIds = Model.FilterVM?.CategoryIds,
+                                   FilterVM.UseIds = Model.FilterVM?.UseIds,
+                                   FilterVM.OrderName = Model.FilterVM?.OrderName
+                               })"
+                               aria-label="Trang @i"
+                               @(i == Model.CurrentPage ? "aria-current='page'" : "")>
+                                @i
+                            </a>
+                        </li>
+                    }
+
+                    <!-- Ellipsis + last page -->
+                    @if (end < Model.TotalPages)
+                    {
+                        <li class="page-item disabled">
+                            <span class="page-link">...</span>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" 
+                               href="@Url.Page("/LookUpPlant", new { 
+                                   page = Model.TotalPages,
+                                   FilterVM.Keyword = Model.FilterVM?.Keyword,
+                                   FilterVM.CategoryIds = Model.FilterVM?.CategoryIds,
+                                   FilterVM.UseIds = Model.FilterVM?.UseIds,
+                                   FilterVM.OrderName = Model.FilterVM?.OrderName
+                               })">
+                                @Model.TotalPages
+                            </a>
+                        </li>
+                    }
+
+                    <!-- Next Button -->
+                    <li class="page-item @(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
+                        <a class="page-link" 
+                           href="@(Model.CurrentPage < Model.TotalPages 
+                               ? Url.Page("/LookUpPlant", new { 
+                                   page = Model.CurrentPage + 1,
+                                   FilterVM.Keyword = Model.FilterVM?.Keyword,
+                                   FilterVM.CategoryIds = Model.FilterVM?.CategoryIds,
+                                   FilterVM.UseIds = Model.FilterVM?.UseIds,
+                                   FilterVM.OrderName = Model.FilterVM?.OrderName
+                               })
+                               : "#")"
+                           aria-label="Trang sau">
+                            Sau <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    }
+}
+else
+{
+    <!-- No Results -->
+    <div class="no-results">
+        <i class="bi bi-search"></i>
+        <h3>Không tìm thấy kết quả</h3>
+        <p>Vui lòng thử lại với từ khóa hoặc bộ lọc khác</p>
+        @if (Model.FilterVM != null && Model.FilterVM.HasFilters())
+        {
+            <button type="button" class="btn btn-primary mt-3" onclick="clearAllFilters()">
+                <i class="bi bi-arrow-counterclockwise me-2"></i>Xóa bộ lọc và thử lại
+            </button>
+        }
+    </div>
+}
+
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using PlantManagement.Common.Results;
+using PlantManagement.Models;
+
+namespace PlantManagement.Services.Interfaces
+{
+    public interface IFavoriteService
+    {
+        /// <summary>
+        /// Check if a plant is favorited by a user
+        /// </summary>
+        Task<bool> IsFavoriteAsync(int userId, int plantId);
+
+        /// <summary>
+        /// Add a plant to user's favorites
+        /// </summary>
+        Task<bool> AddFavoriteAsync(int userId, int plantId);
+
+        /// <summary>
+        /// Remove a plant from user's favorites
+        /// </summary>
+        Task<bool> RemoveFavoriteAsync(int userId, int plantId);
+
+        /// <summary>
+        /// Get all favorite plants for a user
+        /// </summary>
+        Task<Result<List<Favorite>>> GetUserFavoritesAsync(int userId);
+
+        /// <summary>
+        /// Get count of favorites for a specific plant
+        /// </summary>
+        Task<int> GetPlantFavoriteCountAsync(int plantId);
+
+        /// <summary>
+        /// Toggle favorite status (add if not exists, remove if exists)
+        /// </summary>
+        Task<Result<bool>> ToggleFavoriteAsync(int userId, int plantId);
+    }
+}
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using PlantManagement.Common.Results;
+using PlantManagement.Data;
+using PlantManagement.Models;
+using PlantManagement.Services.Interfaces;
+
+namespace PlantManagement.Services
+{
+    public class FavoriteService : IFavoriteService
+    {
+        private readonly ApplicationDbContext _context;
+        private readonly ILogger<FavoriteService> _logger;
+
+        public FavoriteService(ApplicationDbContext context, ILogger<FavoriteService> logger)
+        {
+            _context = context;
+            _logger = logger;
+        }
+
+        public async Task<bool> IsFavoriteAsync(int userId, int plantId)
+        {
+            try
+            {
+                return await _context.Favorites
+                    .AnyAsync(f => f.UserId == userId && f.PlantId == plantId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error checking if plant {PlantId} is favorited by user {UserId}", plantId, userId);
+                return false;
+            }
+        }
+
+        public async Task<bool> AddFavoriteAsync(int userId, int plantId)
+        {
+            try
+            {
+                // Check if already exists
+                var exists = await IsFavoriteAsync(userId, plantId);
+                if (exists)
+                {
+                    _logger.LogWarning("Plant {PlantId} is already favorited by user {UserId}", plantId, userId);
+                    return true; // Already favorited, return success
+                }
+
+                // Check if plant exists
+                var plantExists = await _context.Plants.AnyAsync(p => p.PlantId == plantId);
+                if (!plantExists)
+                {
+                    _logger.LogWarning("Cannot add favorite - Plant {PlantId} does not exist", plantId);
+                    return false;
+                }
+
+                var favorite = new Favorite
+                {
+                    UserId = userId,
+                    PlantId = plantId,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                _context.Favorites.Add(favorite);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("User {UserId} added plant {PlantId} to favorites", userId, plantId);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding plant {PlantId} to favorites for user {UserId}", plantId, userId);
+                return false;
+            }
+        }
+
+        public async Task<bool> RemoveFavoriteAsync(int userId, int plantId)
+        {
+            try
+            {
+                var favorite = await _context.Favorites
+                    .FirstOrDefaultAsync(f => f.UserId == userId && f.PlantId == plantId);
+
+                if (favorite == null)
+                {
+                    _logger.LogWarning("Cannot remove favorite - not found for user {UserId} and plant {PlantId}", userId, plantId);
+                    return false;
+                }
+
+                _context.Favorites.Remove(favorite);
+                await _context.SaveChangesAsync();
+
+                _logger.LogInformation("User {UserId} removed plant {PlantId} from favorites", userId, plantId);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error removing plant {PlantId} from favorites for user {UserId}", plantId, userId);
+                return false;
+            }
+        }
+
+        public async Task<Result<List<Favorite>>> GetUserFavoritesAsync(int userId)
+        {
+            try
+            {
+                var favorites = await _context.Favorites
+                    .Where(f => f.UserId == userId)
+                    .Include(f => f.Plant)
+                        .ThenInclude(p => p.Species)
+                    .Include(f => f.Plant)
+                        .ThenInclude(p => p.PlantCategories)
+                            .ThenInclude(pc => pc.Category)
+                    .Include(f => f.Plant)
+                        .ThenInclude(p => p.PlantImages)
+                    .OrderByDescending(f => f.CreatedAt)
+                    .ToListAsync();
+
+                return Result<List<Favorite>>.SuccessResult(favorites, $"Lấy danh sách {favorites.Count} cây yêu thích thành công");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting favorites for user {UserId}", userId);
+                return Result<List<Favorite>>.FailureResult("Không thể lấy danh sách yêu thích");
+            }
+        }
+
+        public async Task<int> GetPlantFavoriteCountAsync(int plantId)
+        {
+            try
+            {
+                return await _context.Favorites
+                    .CountAsync(f => f.PlantId == plantId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting favorite count for plant {PlantId}", plantId);
+                return 0;
+            }
+        }
+
+        public async Task<Result<bool>> ToggleFavoriteAsync(int userId, int plantId)
+        {
+            try
+            {
+                var isFavorite = await IsFavoriteAsync(userId, plantId);
+
+                bool success;
+                string message;
+
+                if (isFavorite)
+                {
+                    success = await RemoveFavoriteAsync(userId, plantId);
+                    message = success ? "Đã bỏ yêu thích" : "Không thể bỏ yêu thích";
+                }
+                else
+                {
+                    success = await AddFavoriteAsync(userId, plantId);
+                    message = success ? "Đã thêm vào yêu thích" : "Không thể thêm vào yêu thích";
+                }
+
+                return success
+                    ? Result<bool>.SuccessResult(!isFavorite, message)
+                    : Result<bool>.FailureResult(message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error toggling favorite for user {UserId} and plant {PlantId}", userId, plantId);
+                return Result<bool>.FailureResult("Đã xảy ra lỗi khi xử lý yêu thích");
+            }
+        }
+    }
+}

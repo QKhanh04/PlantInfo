@@ -9,9 +9,7 @@ namespace PlantManagement.Services.Interfaces
 {
     public interface ICategoryService
     {
-        public Task<ServiceResult<IEnumerable<Category>>> GetAllCategories();
-        Task<ServiceResult<Category>> CreateAsync(Category category);
-        // Task<ServiceResult<Category>> GetByIdAsync(int id);
-        Task<IEnumerable<Category>> GetAllAsync();
+        Task<ServiceResult<IEnumerable<Category>>> GetAllCategoryAsync();
+        Task<ServiceResult<Category>> CreateCategoryAsync(Category category);
     }
 }

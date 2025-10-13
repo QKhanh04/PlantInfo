@@ -1,0 +1,353 @@
+@page "{id:int}"
+@using PlantManagement.DTOs
+
+@model DetailModel
+@{
+    ViewData["Title"] = "Chi tiết cây trồng";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/detail.css" />
+}
+
+<div class="detail-container">
+    <!-- Back Button -->
+    <a class="back-button" href="javascript:history.back()" data-aos="fade-down">
+        <i class="bi bi-arrow-left me-2"></i> Quay lại
+    </a>
+    <!-- Nút admin -->
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="action-buttons">
+            <a asp-page="/Admin/Update" asp-route-id="@Model.Plants.PlantId" class="action-btn btn-edit">
+                <i class="bi bi-pencil-square"></i> Sửa
+            </a>
+            @* <button type="button" class="action-btn btn-delete toggle-active-btn" data-id="@Model.Plants.PlantId">
+                <i class="bi bi-trash"></i> @(Model.Plants.IsActive == true ? "Ẩn" : "Hiện")
+            </button> *@
+
+        </div>
+    }
+
+    <!-- Header Section -->
+    <div class="plant-header" data-aos="fade-up">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <div class="category-badges">
+                    @foreach (var category in Model.Plants.Categories)
+                    {
+                        <span class="badge-custom"
+                            data-tooltip-content="@category.Description">@category.CategoryName</span>
+                    }
+                </div>
+                <h1 class="plant-title">@Model.Plants.CommonName</h1>
+                <div class="scientific-name">@Model.Plants.Species?.ScientificName</div>
+                <p class="plant-description">@Model.Plants.Description</p>
+                <div class="plant-meta">
+                    <div class="meta-item">
+                        <i class="bi bi-geo-alt"></i>
+                        <span>@Model.Plants.Origin</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mt-4 mt-lg-0">
+                @{
+                    var imageList = Model.Plants.Images ?? new List<PlantImageDTO>();
+                    var mainImage = imageList.FirstOrDefault(img => img.IsPrimary)?.ImageUrl ??
+                    imageList.FirstOrDefault()?.ImageUrl;
+                }
+                <div class="plant-image-gallery">
+                    <!-- Ảnh chính -->
+                    <div class="main-image">
+                        <img id="mainPlantImage" src="@mainImage" alt="@Model.Plants.CommonName"
+                            style="max-width: 100%; border-radius: 12px;" />
+                    </div>
+
+                    <!-- Ảnh phụ (thumbnail carousel) -->
+                    <div class="d-flex align-items-center mt-2">
+                        <button type="button" class="thumbnail-nav-btn" id="thumbPrev" aria-label="Previous"
+                            onclick="showThumbnail(-1)">
+                            &lt;
+                        </button>
+                        <div id="thumbnailList" style="display: inline-flex;"></div>
+                        <button type="button" class="thumbnail-nav-btn" id="thumbNext" aria-label="Next"
+                            onclick="showThumbnail(1)">
+                            &gt;
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section" data-aos="fade-up" data-aos-delay="100">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <i class="bi bi-brightness-high stat-icon" style="color: #f39c12;"></i>
+                    <div class="stat-title">Ánh sáng</div>
+                    <div class="stat-value">@Model.Plants.GrowthCondition?.Sunlight</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <i class="bi bi-droplet stat-icon" style="color: #3498db;"></i>
+                    <div class="stat-title">Tưới nước</div>
+                    <div class="stat-value">@Model.Plants.GrowthCondition?.WaterRequirement</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <i class="bi bi-thermometer-half stat-icon" style="color: #e74c3c;"></i>
+                    <div class="stat-title">Nhiệt độ</div>
+                    <div class="stat-value">@Model.Plants.GrowthCondition?.TemperatureRange</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Info Sections -->
+    <div class="info-section" data-aos="fade-up" data-aos-delay="200">
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="info-box">
+                    <div class="section-title">Thông tin cơ bản</div>
+                    <div class="kv-row">
+                        <div class="kv-key">Họ thực vật</div>
+                        <div class="kv-value">@Model.Plants.Species?.Family</div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="kv-row">
+                        <div class="kv-key">Chi</div>
+                        <div class="kv-value">@Model.Plants.Species?.Genus</div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="kv-row">
+                        <div class="kv-key">Bộ</div>
+                        <div class="kv-value">@Model.Plants.Species?.OrderName</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="info-box">
+                    <div class="section-title">Điều kiện sinh trưởng</div>
+                    <div class="kv-row">
+                        <div class="kv-key">Loại đất</div>
+                        <div class="kv-value">@Model.Plants.GrowthCondition?.SoilType</div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="kv-row">
+                        <div class="kv-key">Ánh sáng</div>
+                        <div class="kv-value">@Model.Plants.GrowthCondition?.Sunlight</div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="kv-row">
+                        <div class="kv-key">Khí hậu</div>
+                        <div class="kv-value">@Model.Plants.GrowthCondition?.Climate</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Uses and Diseases -->
+    <div class="info-section" data-aos="fade-up" data-aos-delay="300">
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="info-box">
+                    <div class="section-title">Công dụng chính</div>
+                    <div class="badge-list">
+                        @foreach (var use in Model.Plants.Uses)
+                        {
+                            <span class="badge-item" data-tooltip-content="@use.Description">
+                                @use.UseName
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="info-box">
+                    <div class="section-title">Bệnh thường gặp</div>
+                    <div class="badge-list">
+                        @foreach (var disease in Model.Plants.Diseases)
+                        {
+                            <span class="badge-item"
+                                data-tooltip-content="<b>Triệu chứng:</b> @disease.Symptoms<br/><b>Cách chữa:</b> @disease.Treatment">
+                                @disease.DiseaseName
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- References -->
+    <div class="info-section" data-aos="fade-up" data-aos-delay="400">
+        <div class="info-box">
+            <div class="section-title">Tài liệu tham khảo</div>
+            @if (Model.Plants.References != null && Model.Plants.References.Any())
+            {
+                <ul class="list-unstyled">
+                    @foreach (var reference in Model.Plants.References)
+                    {
+                        <li class="mb-2">
+                            <i class="bi bi-book me-2" style="color: var(--accent-green);"></i>
+                            <strong>@reference.SourceName</strong>
+                            @if (!string.IsNullOrEmpty(reference.Author))
+                            {
+                                <span> - @reference.Author</span>
+                            }
+                            @if (reference.PublishedYear.HasValue)
+                            {
+                                <span> (@reference.PublishedYear)</span>
+                            }
+                            @if (!string.IsNullOrEmpty(reference.Url))
+                            {
+                                <a href="@reference.Url" target="_blank" class="ms-2 text-decoration-none text-primary">
+                                    <i class="bi bi-box-arrow-up-right"></i>
+                                </a>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">Chưa có tài liệu tham khảo.</p>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script src="https://unpkg.com/@@popperjs/core@2"></script>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true
+        });
+
+        // Smooth card/badge effects
+        document.addEventListener('DOMContentLoaded', function () {
+            const cards = document.querySelectorAll('.stat-card, .info-box');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function () {
+                    this.style.transform = 'translateY(-8px)';
+                });
+                card.addEventListener('mouseleave', function () {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            const badges = document.querySelectorAll('.badge-item');
+            badges.forEach(badge => {
+                badge.addEventListener('click', function () {
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'scale(1)';
+                    }, 150);
+                });
+            });
+        });
+
+        // Thumbnail carousel logic
+        const imageList = [
+                            @foreach (var img in Model.Plants.Images ?? new List<PlantImageDTO>())
+            {
+                <text>
+                    {
+                        url: "@img.ImageUrl",
+                    isPrimary: @img.IsPrimary.ToString().ToLower()
+                                                },
+                </text>
+                                    }
+                                                ];
+        let thumbStart = 0;
+        const thumbPerPage = 5;
+
+        function renderThumbnails() {
+            const container = document.getElementById('thumbnailList');
+            container.innerHTML = '';
+            // Hiển thị 5 ảnh từ thumbStart
+            for (let i = thumbStart; i < Math.min(imageList.length, thumbStart + thumbPerPage); i++) {
+                const img = imageList[i];
+                const el = document.createElement('img');
+                el.src = img.url;
+                el.className = 'thumbnail-img' + (img.isPrimary ? ' active' : '');
+                el.style.width = '70px';
+                el.style.height = '70px';
+                el.style.objectFit = 'cover';
+                el.style.margin = '5px';
+                el.style.borderRadius = '8px';
+                el.style.cursor = 'pointer';
+                el.onclick = function () {
+                    document.getElementById('mainPlantImage').src = img.url;
+                    document.querySelectorAll('.thumbnail-img').forEach(t => t.classList.remove('active'));
+                    el.classList.add('active');
+                };
+                container.appendChild(el);
+            }
+            // Disable nút nếu không dịch được nữa
+            document.getElementById('thumbPrev').disabled = (thumbStart === 0);
+            document.getElementById('thumbNext').disabled = (thumbStart + thumbPerPage >= imageList.length);
+        }
+
+        function showThumbnail(direction) {
+            // direction: -1 (trái), +1 (phải)
+            thumbStart += direction;
+            // Giới hạn thumbStart
+            if (thumbStart < 0) thumbStart = 0;
+            if (thumbStart > imageList.length - thumbPerPage) thumbStart = imageList.length - thumbPerPage;
+            renderThumbnails();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            renderThumbnails();
+        });
+
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const badgeItems = document.querySelectorAll('.badge-item, .badge-custom');
+            let tooltipEl = null;
+            let popperInstance = null;
+
+            badgeItems.forEach(badge => {
+                badge.addEventListener('mouseenter', function () {
+                    // Tạo tooltip element
+                    tooltipEl = document.createElement('div');
+                    tooltipEl.className = 'custom-tooltip';
+                    tooltipEl.innerHTML = badge.getAttribute('data-tooltip-content');
+                    document.body.appendChild(tooltipEl);
+
+                    // Tạo Popper instance
+                    popperInstance = Popper.createPopper(badge, tooltipEl, {
+                        placement: 'top',
+                        modifiers: [{
+                            name: 'offset',
+                            options: { offset: [0, 8] }
+                        }]
+                    });
+                });
+
+                badge.addEventListener('mouseleave', function () {
+                    // Ẩn tooltip và destroy Popper
+                    if (tooltipEl) {
+                        document.body.removeChild(tooltipEl);
+                        tooltipEl = null;
+                    }
+                    if (popperInstance) {
+                        popperInstance.destroy();
+                        popperInstance = null;
+                    }
+                });
+            });
+        });
+
+    </script>
+}

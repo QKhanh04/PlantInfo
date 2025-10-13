@@ -8,25 +8,21 @@ body[b-z4vcll1ubv] {
 
 /* Header */
 .navbar[b-z4vcll1ubv] {
-  background-color: #ffffff;
-  /* trắng tinh */
+  background-color: transparent;
   border-bottom: 1px solid #e0e0e0;
 }
 
 .navbar-brand[b-z4vcll1ubv] {
   color: #4CAF50 !important;
-  /* xanh lá nhấn */
   font-weight: 600;
 }
 
 .navbar-brand:hover[b-z4vcll1ubv] {
   color: #388E3C !important;
-  /* xanh lá đậm hơn khi hover */
 }
 
 .navbar-nav .nav-link[b-z4vcll1ubv] {
   color: #555 !important;
-  /* xám nhẹ */
   font-weight: 500;
 }
 
@@ -68,8 +64,4 @@ footer.footer a:hover[b-z4vcll1ubv] {
   text-decoration: underline;
 }
 
-header[b-z4vcll1ubv] {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
+

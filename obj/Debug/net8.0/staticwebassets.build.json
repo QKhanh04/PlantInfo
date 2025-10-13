@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "ziriABxzdRjA+8B6tmds7gr0QEnM4wWyA0cWMvrCEtY=",
+  "Hash": "x+plHAb/q6SuBmG3kwkiBEReO55yfF6iyQK2VMgq5I0=",
   "Source": "PlantManagement",
   "BasePath": "_content/PlantManagement",
   "Mode": "Default",
@@ -31,8 +31,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ApplicationBundle",
-      "Fingerprint": "gsnjqsttnh",
-      "Integrity": "MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I=",
+      "Fingerprint": "zk67hu4z5c",
+      "Integrity": "EwY8SEg0mZIxm18lhOJrtFxXlwN+eR6xOiSRm+b4twg=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\Admin\\Desktop\\PlantManagement\\obj\\Debug\\net8.0\\scopedcss\\bundle\\PlantManagement.styles.css"
@@ -52,8 +52,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "ScopedCss",
       "AssetTraitValue": "ProjectBundle",
-      "Fingerprint": "gsnjqsttnh",
-      "Integrity": "MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I=",
+      "Fingerprint": "zk67hu4z5c",
+      "Integrity": "EwY8SEg0mZIxm18lhOJrtFxXlwN+eR6xOiSRm+b4twg=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\Admin\\Desktop\\PlantManagement\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\PlantManagement.bundle.scp.css"
@@ -73,8 +73,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "4r5dl0ewnu",
-      "Integrity": "YHOd4X+ot/g79xDcDbZ8M4ISFjXEhlB7qQvokNfRNHI=",
+      "Fingerprint": "n29bg5feji",
+      "Integrity": "r7bbgfnP/GYCd5y4IFQMu4V7XBzduETxYQ71qIyNb8g=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\admin\\create.css"
@@ -94,8 +94,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "rvvti9fhy4",
-      "Integrity": "WXO38n/BaynOOMH0hwNlTnJKx381P3E0L8iC7mv4nn8=",
+      "Fingerprint": "931m6f8eua",
+      "Integrity": "BRE/W5rVAecyI4YI27goQLWS+e0cbooME0p5jppdi64=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\admin\\index.css"
@@ -115,8 +115,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "g4ggs2s1dx",
-      "Integrity": "YGb85+k8ACedXgitMGrvpi6GsUIqhUM7av8VzYk/CDs=",
+      "Fingerprint": "89jtmdm519",
+      "Integrity": "RC+ld7Ia8MWE0E7a5wi21ZRRIxLcoTEARXEsYH9h2NE=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\admin\\report.css"
@@ -136,8 +136,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "2bgg2efpbm",
-      "Integrity": "jiA9uLzOQcIxqsvUIk+re9H8t4ePA33LCGOfyT6CmHk=",
+      "Fingerprint": "vfrkjbu63f",
+      "Integrity": "6yaDyS+LNPtoeg7hE7RaxpxBJnMhsXbjfFtXHQlNKLc=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\auth.css"
@@ -157,11 +157,32 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "3ph1xzrj1k",
-      "Integrity": "KVOmMGbZmevkTfAXFAHE5/SKvTKbLZtnjkuZPfK4ZbM=",
+      "Fingerprint": "posy41focn",
+      "Integrity": "RyJ230xw5GWfJUxt70nJFZBdvJt2ZFVOEbg7klufZmU=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\detail.css"
+    },
+    {
+      "Identity": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\index.css",
+      "SourceId": "PlantManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\",
+      "BasePath": "_content/PlantManagement",
+      "RelativePath": "css/index#[.{fingerprint}]?.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "hw5zf0tf65",
+      "Integrity": "X/gR+9f9rvKUwonAAOaSbeYu+PLDMWTY/nmjHgYEJso=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\css\\index.css"
     },
     {
       "Identity": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\site.css",
@@ -178,8 +199,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "khundd5xyy",
-      "Integrity": "6PRbGc/8KD64YTSC6D3ysDqz1nUM7Vns5afSnRRb+7w=",
+      "Fingerprint": "kwzkpte9pe",
+      "Integrity": "PKC3XcXESVKer8h6ZJga9MATE41ON5sLvZyq/y9D3dI=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
@@ -1741,51 +1762,6 @@
   ],
   "Endpoints": [
     {
-      "Route": "css/admin/create.4r5dl0ewnu.css",
-      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\create.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "11977"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"YHOd4X+ot/g79xDcDbZ8M4ISFjXEhlB7qQvokNfRNHI=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Wed, 01 Oct 2025 14:42:51 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "4r5dl0ewnu"
-        },
-        {
-          "Name": "label",
-          "Value": "css/admin/create.css"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-YHOd4X+ot/g79xDcDbZ8M4ISFjXEhlB7qQvokNfRNHI="
-        }
-      ]
-    },
-    {
       "Route": "css/admin/create.css",
       "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\create.css",
       "Selectors": [],
@@ -1796,7 +1772,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "11977"
+          "Value": "11144"
         },
         {
           "Name": "Content-Type",
@@ -1804,11 +1780,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"YHOd4X+ot/g79xDcDbZ8M4ISFjXEhlB7qQvokNfRNHI=\""
+          "Value": "\"r7bbgfnP/GYCd5y4IFQMu4V7XBzduETxYQ71qIyNb8g=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 01 Oct 2025 14:42:51 GMT"
+          "Value": "Fri, 10 Oct 2025 11:50:27 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1818,7 +1794,97 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-YHOd4X+ot/g79xDcDbZ8M4ISFjXEhlB7qQvokNfRNHI="
+          "Value": "sha256-r7bbgfnP/GYCd5y4IFQMu4V7XBzduETxYQ71qIyNb8g="
+        }
+      ]
+    },
+    {
+      "Route": "css/admin/create.n29bg5feji.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\create.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "11144"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"r7bbgfnP/GYCd5y4IFQMu4V7XBzduETxYQ71qIyNb8g=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 10 Oct 2025 11:50:27 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "n29bg5feji"
+        },
+        {
+          "Name": "label",
+          "Value": "css/admin/create.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-r7bbgfnP/GYCd5y4IFQMu4V7XBzduETxYQ71qIyNb8g="
+        }
+      ]
+    },
+    {
+      "Route": "css/admin/index.931m6f8eua.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\index.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "7252"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"BRE/W5rVAecyI4YI27goQLWS+e0cbooME0p5jppdi64=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 10 Oct 2025 11:50:46 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "931m6f8eua"
+        },
+        {
+          "Name": "label",
+          "Value": "css/admin/index.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-BRE/W5rVAecyI4YI27goQLWS+e0cbooME0p5jppdi64="
         }
       ]
     },
@@ -1833,7 +1899,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "9576"
+          "Value": "7252"
         },
         {
           "Name": "Content-Type",
@@ -1841,11 +1907,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"WXO38n/BaynOOMH0hwNlTnJKx381P3E0L8iC7mv4nn8=\""
+          "Value": "\"BRE/W5rVAecyI4YI27goQLWS+e0cbooME0p5jppdi64=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 05 Oct 2025 18:22:04 GMT"
+          "Value": "Fri, 10 Oct 2025 11:50:46 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1855,13 +1921,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-WXO38n/BaynOOMH0hwNlTnJKx381P3E0L8iC7mv4nn8="
+          "Value": "sha256-BRE/W5rVAecyI4YI27goQLWS+e0cbooME0p5jppdi64="
         }
       ]
     },
     {
-      "Route": "css/admin/index.rvvti9fhy4.css",
-      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\index.css",
+      "Route": "css/admin/report.89jtmdm519.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\report.css",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1870,7 +1936,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "9576"
+          "Value": "7806"
         },
         {
           "Name": "Content-Type",
@@ -1878,11 +1944,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"WXO38n/BaynOOMH0hwNlTnJKx381P3E0L8iC7mv4nn8=\""
+          "Value": "\"RC+ld7Ia8MWE0E7a5wi21ZRRIxLcoTEARXEsYH9h2NE=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 05 Oct 2025 18:22:04 GMT"
+          "Value": "Fri, 10 Oct 2025 11:51:00 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1892,15 +1958,15 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "rvvti9fhy4"
+          "Value": "89jtmdm519"
         },
         {
           "Name": "label",
-          "Value": "css/admin/index.css"
+          "Value": "css/admin/report.css"
         },
         {
           "Name": "integrity",
-          "Value": "sha256-WXO38n/BaynOOMH0hwNlTnJKx381P3E0L8iC7mv4nn8="
+          "Value": "sha256-RC+ld7Ia8MWE0E7a5wi21ZRRIxLcoTEARXEsYH9h2NE="
         }
       ]
     },
@@ -1915,7 +1981,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "9028"
+          "Value": "7806"
         },
         {
           "Name": "Content-Type",
@@ -1923,11 +1989,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"YGb85+k8ACedXgitMGrvpi6GsUIqhUM7av8VzYk/CDs=\""
+          "Value": "\"RC+ld7Ia8MWE0E7a5wi21ZRRIxLcoTEARXEsYH9h2NE=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 05 Oct 2025 18:36:42 GMT"
+          "Value": "Fri, 10 Oct 2025 11:51:00 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1937,97 +2003,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-YGb85+k8ACedXgitMGrvpi6GsUIqhUM7av8VzYk/CDs="
-        }
-      ]
-    },
-    {
-      "Route": "css/admin/report.g4ggs2s1dx.css",
-      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\report.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "9028"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"YGb85+k8ACedXgitMGrvpi6GsUIqhUM7av8VzYk/CDs=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Sun, 05 Oct 2025 18:36:42 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "g4ggs2s1dx"
-        },
-        {
-          "Name": "label",
-          "Value": "css/admin/report.css"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-YGb85+k8ACedXgitMGrvpi6GsUIqhUM7av8VzYk/CDs="
-        }
-      ]
-    },
-    {
-      "Route": "css/auth.2bgg2efpbm.css",
-      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\auth.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "4951"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"jiA9uLzOQcIxqsvUIk+re9H8t4ePA33LCGOfyT6CmHk=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Sun, 28 Sep 2025 16:08:15 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "2bgg2efpbm"
-        },
-        {
-          "Name": "label",
-          "Value": "css/auth.css"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-jiA9uLzOQcIxqsvUIk+re9H8t4ePA33LCGOfyT6CmHk="
+          "Value": "sha256-RC+ld7Ia8MWE0E7a5wi21ZRRIxLcoTEARXEsYH9h2NE="
         }
       ]
     },
@@ -2042,7 +2018,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "4951"
+          "Value": "5699"
         },
         {
           "Name": "Content-Type",
@@ -2050,11 +2026,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"jiA9uLzOQcIxqsvUIk+re9H8t4ePA33LCGOfyT6CmHk=\""
+          "Value": "\"6yaDyS+LNPtoeg7hE7RaxpxBJnMhsXbjfFtXHQlNKLc=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 28 Sep 2025 16:08:15 GMT"
+          "Value": "Fri, 10 Oct 2025 11:51:19 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2064,13 +2040,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-jiA9uLzOQcIxqsvUIk+re9H8t4ePA33LCGOfyT6CmHk="
+          "Value": "sha256-6yaDyS+LNPtoeg7hE7RaxpxBJnMhsXbjfFtXHQlNKLc="
         }
       ]
     },
     {
-      "Route": "css/detail.3ph1xzrj1k.css",
-      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\detail.css",
+      "Route": "css/auth.vfrkjbu63f.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\auth.css",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -2079,7 +2055,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "7052"
+          "Value": "5699"
         },
         {
           "Name": "Content-Type",
@@ -2087,11 +2063,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"KVOmMGbZmevkTfAXFAHE5/SKvTKbLZtnjkuZPfK4ZbM=\""
+          "Value": "\"6yaDyS+LNPtoeg7hE7RaxpxBJnMhsXbjfFtXHQlNKLc=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 01 Oct 2025 14:59:40 GMT"
+          "Value": "Fri, 10 Oct 2025 11:51:19 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2101,15 +2077,15 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "3ph1xzrj1k"
+          "Value": "vfrkjbu63f"
         },
         {
           "Name": "label",
-          "Value": "css/detail.css"
+          "Value": "css/auth.css"
         },
         {
           "Name": "integrity",
-          "Value": "sha256-KVOmMGbZmevkTfAXFAHE5/SKvTKbLZtnjkuZPfK4ZbM="
+          "Value": "sha256-6yaDyS+LNPtoeg7hE7RaxpxBJnMhsXbjfFtXHQlNKLc="
         }
       ]
     },
@@ -2124,7 +2100,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "7052"
+          "Value": "8443"
         },
         {
           "Name": "Content-Type",
@@ -2132,11 +2108,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"KVOmMGbZmevkTfAXFAHE5/SKvTKbLZtnjkuZPfK4ZbM=\""
+          "Value": "\"RyJ230xw5GWfJUxt70nJFZBdvJt2ZFVOEbg7klufZmU=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 01 Oct 2025 14:59:40 GMT"
+          "Value": "Fri, 10 Oct 2025 11:51:34 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2146,7 +2122,134 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-KVOmMGbZmevkTfAXFAHE5/SKvTKbLZtnjkuZPfK4ZbM="
+          "Value": "sha256-RyJ230xw5GWfJUxt70nJFZBdvJt2ZFVOEbg7klufZmU="
+        }
+      ]
+    },
+    {
+      "Route": "css/detail.posy41focn.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\detail.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "8443"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"RyJ230xw5GWfJUxt70nJFZBdvJt2ZFVOEbg7klufZmU=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Fri, 10 Oct 2025 11:51:34 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "posy41focn"
+        },
+        {
+          "Name": "label",
+          "Value": "css/detail.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-RyJ230xw5GWfJUxt70nJFZBdvJt2ZFVOEbg7klufZmU="
+        }
+      ]
+    },
+    {
+      "Route": "css/index.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\index.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "10849"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"X/gR+9f9rvKUwonAAOaSbeYu+PLDMWTY/nmjHgYEJso=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 12 Oct 2025 09:15:03 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-X/gR+9f9rvKUwonAAOaSbeYu+PLDMWTY/nmjHgYEJso="
+        }
+      ]
+    },
+    {
+      "Route": "css/index.hw5zf0tf65.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\index.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "10849"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"X/gR+9f9rvKUwonAAOaSbeYu+PLDMWTY/nmjHgYEJso=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 12 Oct 2025 09:15:03 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "hw5zf0tf65"
+        },
+        {
+          "Name": "label",
+          "Value": "css/index.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-X/gR+9f9rvKUwonAAOaSbeYu+PLDMWTY/nmjHgYEJso="
         }
       ]
     },
@@ -2161,7 +2264,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1065"
+          "Value": "4847"
         },
         {
           "Name": "Content-Type",
@@ -2169,11 +2272,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"6PRbGc/8KD64YTSC6D3ysDqz1nUM7Vns5afSnRRb+7w=\""
+          "Value": "\"PKC3XcXESVKer8h6ZJga9MATE41ON5sLvZyq/y9D3dI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 01 Oct 2025 14:23:19 GMT"
+          "Value": "Sat, 11 Oct 2025 10:42:06 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2183,12 +2286,12 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-6PRbGc/8KD64YTSC6D3ysDqz1nUM7Vns5afSnRRb+7w="
+          "Value": "sha256-PKC3XcXESVKer8h6ZJga9MATE41ON5sLvZyq/y9D3dI="
         }
       ]
     },
     {
-      "Route": "css/site.khundd5xyy.css",
+      "Route": "css/site.kwzkpte9pe.css",
       "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\site.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -2198,7 +2301,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1065"
+          "Value": "4847"
         },
         {
           "Name": "Content-Type",
@@ -2206,11 +2309,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"6PRbGc/8KD64YTSC6D3ysDqz1nUM7Vns5afSnRRb+7w=\""
+          "Value": "\"PKC3XcXESVKer8h6ZJga9MATE41ON5sLvZyq/y9D3dI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 01 Oct 2025 14:23:19 GMT"
+          "Value": "Sat, 11 Oct 2025 10:42:06 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2220,7 +2323,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "khundd5xyy"
+          "Value": "kwzkpte9pe"
         },
         {
           "Name": "label",
@@ -2228,7 +2331,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-6PRbGc/8KD64YTSC6D3ysDqz1nUM7Vns5afSnRRb+7w="
+          "Value": "sha256-PKC3XcXESVKer8h6ZJga9MATE41ON5sLvZyq/y9D3dI="
         }
       ]
     },
@@ -7655,7 +7758,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1596"
+          "Value": "1419"
         },
         {
           "Name": "Content-Type",
@@ -7663,11 +7766,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I=\""
+          "Value": "\"EwY8SEg0mZIxm18lhOJrtFxXlwN+eR6xOiSRm+b4twg=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 10 Oct 2025 00:18:08 GMT"
+          "Value": "Sun, 12 Oct 2025 23:57:17 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -7677,97 +7780,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I="
-        }
-      ]
-    },
-    {
-      "Route": "PlantManagement.gsnjqsttnh.bundle.scp.css",
-      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\PlantManagement.bundle.scp.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "1596"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Fri, 10 Oct 2025 00:18:08 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "gsnjqsttnh"
-        },
-        {
-          "Name": "label",
-          "Value": "PlantManagement.bundle.scp.css"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I="
-        }
-      ]
-    },
-    {
-      "Route": "PlantManagement.gsnjqsttnh.styles.css",
-      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\obj\\Debug\\net8.0\\scopedcss\\bundle\\PlantManagement.styles.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "1596"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Fri, 10 Oct 2025 00:18:08 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "gsnjqsttnh"
-        },
-        {
-          "Name": "label",
-          "Value": "PlantManagement.styles.css"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I="
+          "Value": "sha256-EwY8SEg0mZIxm18lhOJrtFxXlwN+eR6xOiSRm+b4twg="
         }
       ]
     },
@@ -7782,7 +7795,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1596"
+          "Value": "1419"
         },
         {
           "Name": "Content-Type",
@@ -7790,11 +7803,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I=\""
+          "Value": "\"EwY8SEg0mZIxm18lhOJrtFxXlwN+eR6xOiSRm+b4twg=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 10 Oct 2025 00:18:08 GMT"
+          "Value": "Sun, 12 Oct 2025 23:57:17 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -7804,7 +7817,97 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-MFkfriivOS9mv0ldDO+2PXmd/ulwFOYtOp7w1ilvk+I="
+          "Value": "sha256-EwY8SEg0mZIxm18lhOJrtFxXlwN+eR6xOiSRm+b4twg="
+        }
+      ]
+    },
+    {
+      "Route": "PlantManagement.zk67hu4z5c.bundle.scp.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\PlantManagement.bundle.scp.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1419"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"EwY8SEg0mZIxm18lhOJrtFxXlwN+eR6xOiSRm+b4twg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 12 Oct 2025 23:57:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "zk67hu4z5c"
+        },
+        {
+          "Name": "label",
+          "Value": "PlantManagement.bundle.scp.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-EwY8SEg0mZIxm18lhOJrtFxXlwN+eR6xOiSRm+b4twg="
+        }
+      ]
+    },
+    {
+      "Route": "PlantManagement.zk67hu4z5c.styles.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\obj\\Debug\\net8.0\\scopedcss\\bundle\\PlantManagement.styles.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1419"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"EwY8SEg0mZIxm18lhOJrtFxXlwN+eR6xOiSRm+b4twg=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sun, 12 Oct 2025 23:57:17 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "zk67hu4z5c"
+        },
+        {
+          "Name": "label",
+          "Value": "PlantManagement.styles.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-EwY8SEg0mZIxm18lhOJrtFxXlwN+eR6xOiSRm+b4twg="
         }
       ]
     },

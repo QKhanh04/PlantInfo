@@ -6,12 +6,14 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/auth.css" />
 </head>
+
 <body>
     <div class="background">
         <div class="auth-container">
@@ -23,12 +25,10 @@
             <!-- Tab Buttons -->
             <div class="tab-buttons">
                 <div class="tab-indicator @(Model.ActiveTab == "register" ? "register" : "")"></div>
-                <button type="button"
-                        class="tab-button @(Model.ActiveTab == "login" ? "active" : "")"
-                        onclick="switchToLogin()">Đăng nhập</button>
-                <button type="button"
-                        class="tab-button @(Model.ActiveTab == "register" ? "active" : "")"
-                        onclick="switchToRegister()">Đăng ký</button>
+                <button type="button" class="tab-button @(Model.ActiveTab == "login" ? "active" : "")"
+                    onclick="switchToLogin()">Đăng nhập</button>
+                <button type="button" class="tab-button @(Model.ActiveTab == "register" ? "active" : "")"
+                    onclick="switchToRegister()">Đăng ký</button>
             </div>
 
             <!-- Forms Container -->
@@ -37,18 +37,16 @@
                 <!-- Login Form -->
                 <div class="form-wrapper login @(Model.ActiveTab != "login" ? "inactive" : "active")" id="loginForm">
                     <form method="post" asp-page-handler="Login">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                         <!-- Username/Email -->
                         <div class="form-group">
                             <label class="form-label">Email hoặc Username</label>
                             <div class="input-icon">
                                 <i class="bi bi-envelope"></i>
-                                <input asp-for="LoginVM.UsernameOrEmail"
-                                       class="form-input"
-                                       placeholder="Nhập email hoặc username" />
+                                <input asp-for="LoginVM.UserNameOrEmail" class="form-input"
+                                    placeholder="Nhập email hoặc username" />
                             </div>
-                            <span asp-validation-for="LoginVM.UsernameOrEmail" class="text-danger error-message"></span>
+                            <span asp-validation-for="LoginVM.UserNameOrEmail" class="text-danger error-message"></span>
                         </div>
 
                         <!-- Password -->
@@ -56,37 +54,32 @@
                             <label class="form-label">Mật khẩu</label>
                             <div class="input-icon">
                                 <i class="bi bi-lock"></i>
-                                <input asp-for="LoginVM.Password"
-                                       class="form-input"
-                                       type="password"
-                                       id="loginPassword"
-                                       placeholder="........" />
-                                <button type="button"
-                                        class="password-toggle"
-                                        onclick="togglePassword('loginPassword', this)">
+                                <input asp-for="LoginVM.Password" class="form-input" type="password" id="loginPassword"
+                                    placeholder="........" />
+                                <button type="button" class="password-toggle" tabindex="-1"
+                                    onclick="togglePassword('loginPassword', this)">
                                     <i class="bi bi-eye"></i>
                                 </button>
                             </div>
                             <span asp-validation-for="LoginVM.Password" class="text-danger error-message"></span>
                         </div>
-
+                        <div class="forgot-password-wrapper text-end">
+                            <a class="forgot-password-btn" asp-page="/Auth/ForgotPassword" tabindex="-1">Quên mật khẩu</a>
+                        </div>
                         <button type="submit" class="submit-button">Đăng nhập</button>
                     </form>
                 </div>
 
                 <!-- Register Form -->
-                <div class="form-wrapper register @(Model.ActiveTab == "register" ? "active" : "inactive")" id="registerForm">
+                <div class="form-wrapper register @(Model.ActiveTab == "register" ? "active" : "inactive")"
+                    id="registerForm">
                     <form method="post" asp-page-handler="Register">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
                         <!-- Username -->
                         <div class="form-group">
                             <label class="form-label">Username</label>
                             <div class="input-icon">
                                 <i class="bi bi-person"></i>
-                                <input asp-for="RegisterVM.Username"
-                                       class="form-input"
-                                       placeholder="Tên đăng nhập" />
+                                <input asp-for="RegisterVM.Username" class="form-input" placeholder="Tên đăng nhập" />
                             </div>
                             <span asp-validation-for="RegisterVM.Username" class="text-danger error-message"></span>
                         </div>
@@ -96,9 +89,7 @@
                             <label class="form-label">Email</label>
                             <div class="input-icon">
                                 <i class="bi bi-envelope"></i>
-                                <input asp-for="RegisterVM.Email"
-                                       class="form-input"
-                                       placeholder="your@email.com" />
+                                <input asp-for="RegisterVM.Email" class="form-input" placeholder="your@email.com" />
                             </div>
                             <span asp-validation-for="RegisterVM.Email" class="text-danger error-message"></span>
                         </div>
@@ -108,14 +99,10 @@
                             <label class="form-label">Mật khẩu</label>
                             <div class="input-icon">
                                 <i class="bi bi-lock"></i>
-                                <input asp-for="RegisterVM.Password"
-                                       class="form-input"
-                                       type="password"
-                                       id="registerPassword"
-                                       placeholder="........" />
-                                <button type="button"
-                                        class="password-toggle"
-                                        onclick="togglePassword('registerPassword', this)">
+                                <input asp-for="RegisterVM.Password" class="form-input" type="password"
+                                    id="registerPassword" placeholder="........" />
+                                <button type="button" class="password-toggle" tabindex="-1"
+                                    onclick="togglePassword('registerPassword', this)">
                                     <i class="bi bi-eye"></i>
                                 </button>
                             </div>
@@ -127,20 +114,17 @@
                             <label class="form-label">Xác nhận mật khẩu</label>
                             <div class="input-icon">
                                 <i class="bi bi-lock"></i>
-                                <input asp-for="RegisterVM.ConfirmPassword"
-                                       class="form-input"
-                                       type="password"
-                                       id="confirmPassword"
-                                       placeholder="........" />
-                                <button type="button"
-                                        class="password-toggle"
-                                        onclick="togglePassword('confirmPassword', this)">
+                                <input asp-for="RegisterVM.ConfirmPassword" class="form-input" type="password"
+                                    id="confirmPassword" placeholder="........" />
+                                <button type="button" class="password-toggle" tabindex="-1"
+                                    onclick="togglePassword('confirmPassword', this)">
                                     <i class="bi bi-eye-slash"></i>
                                 </button>
                             </div>
-                            <span asp-validation-for="RegisterVM.ConfirmPassword" class="text-danger error-message"></span>
+                            <span asp-validation-for="RegisterVM.ConfirmPassword"
+                                class="text-danger error-message"></span>
                         </div>
-                        <div> @TempData["SuccessMessage"]</div>
+                        @* <div> @TempData["SuccessMessage"]</div> *@
 
                         <button type="submit" class="submit-button">Đăng ký</button>
                     </form>
@@ -154,4 +138,5 @@
         <partial name="_ValidationScriptsPartial" />
     }
 </body>
+
 </html>

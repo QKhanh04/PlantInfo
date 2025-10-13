@@ -16,7 +16,7 @@ namespace PlantManagement.Services.Implementations
         {
             _repo = repo;
         }
-        public async Task<ServiceResult<GrowthCondition>> CreateAsync(GrowthCondition gc)
+        public async Task<ServiceResult<GrowthCondition>> CreateGrowthConditionAsync(GrowthCondition gc)
         {
             try
             {
@@ -29,9 +29,11 @@ namespace PlantManagement.Services.Implementations
                 return ServiceResult<GrowthCondition>.Fail($"Error creating growth condition: {ex.Message}");
             }
         }
-        public async Task<IEnumerable<GrowthCondition>> GetAllAsync()
+
+        public async Task<ServiceResult<IEnumerable<GrowthCondition>>> GetAllGrowthConditionAsync()
         {
-            return await _repo.GetAllAsync();
+            var growthConditions = await _repo.GetAllAsync();
+            return growthConditions == null ? ServiceResult<IEnumerable<GrowthCondition>>.Fail("Have No Growth Condition") : ServiceResult<IEnumerable<GrowthCondition>>.Ok(growthConditions);
         }
     }
 }

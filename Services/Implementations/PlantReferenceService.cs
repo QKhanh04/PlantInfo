@@ -29,6 +29,6 @@ namespace PlantManagement.Services.Implementations
                 return ServiceResult<PlantReference>.Fail($"Error creating reference: {ex.Message}");
             }
         }
-        
+
     }
 }

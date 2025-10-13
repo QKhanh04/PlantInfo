@@ -9,7 +9,14 @@ namespace PlantManagement.Services.Interfaces
 {
     public interface IAuthService
     {
-        public Task<ServiceResult<User>> Register(string username, string email, string password, string confirmPassword);
-        public Task<ServiceResult<User?>> Login(string usernameOrEmail, string password);
+        public Task<ServiceResult<User>> Login(String userNameOrEmail, string password);
+
+        public Task<ServiceResult<User>> Register(string email, string userName, string password, string ConfirmedPassword);
+
+        // public Task<ServiceResult<User>> ForgotPassword(string email, string userName, string otp, string password, string ConfirmedPassword);
+        public Task<ServiceResult<bool>> SendOtpAsync(HttpContext httpContext, string email);
+        public Task<ServiceResult<bool>> ChangePassword(string email, string newPassword, string confirmedNewPassword);
+        public Task<bool> VerifyOtp(HttpContext httpContext, string otp);
+        public void ClearOtpSession(HttpContext httpContext);
     }
 }

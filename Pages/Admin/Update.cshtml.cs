@@ -70,29 +70,29 @@ namespace PlantManagement.Pages.Admin
 
             // Map từ PlantDetailDTO sang PlantUpdateDTO (bạn có thể dùng AutoMapper hoặc tự map)
             Plant = _mapper.Map<PlantUpdateDTO>(result.Data);
-            var species = await _speciesService.GetAllAsync();
-            SpeciesList = species.Select(c => new SelectListItem
+            var species = await _speciesService.GetAllSpeciesAsync();
+            SpeciesList = species.Data.Select(c => new SelectListItem
             {
                 Value = c.SpeciesId.ToString(),
                 Text = c.ScientificName
 
             }).ToList();
-            var categories = await _categoryService.GetAllAsync();
-            CategoryList = categories.Select(c => new SelectListItem
+            var categories = await _categoryService.GetAllCategoryAsync();
+            CategoryList = categories.Data.Select(c => new SelectListItem
             {
                 Value = c.CategoryId.ToString(),
                 Text = c.CategoryName
             }).ToList();
-            var uses = await _useService.GetAllAsync();
+            var uses = await _useService.GetAllUsesAsync();
 
-            UseList = uses.Select(c => new SelectListItem
+            UseList = uses.Data.Select(c => new SelectListItem
             {
                 Value = c.UseId.ToString(),
                 Text = c.UseName
             }).ToList();
 
-            var disease = await _diseaseService.GetAllAsync();
-            DiseaseList = disease.Select(s => new SelectListItem
+            var disease = await _diseaseService.GetAllDiseaseAsync();
+            DiseaseList = disease.Data.Select(s => new SelectListItem
             {
                 Value = s.DiseaseId.ToString(),
                 Text = s.DiseaseName
@@ -101,6 +101,7 @@ namespace PlantManagement.Pages.Admin
             Plant.UseIds = result.Data.Uses?.Select(u => u.UseId).ToList();
             Plant.DiseaseIds = result.Data.Diseases?.Select(d => d.DiseaseId).ToList();
             return Page();
+
 
         }
 
@@ -158,7 +159,7 @@ namespace PlantManagement.Pages.Admin
                 TempData["ToastMessage"] = "Cập nhật thành công!";
                 Console.WriteLine("So luong anh trong Plant.Images: " + Plant.Images?.Count);
 
-                return RedirectToPage("/Admin/Detail", new { id = Plant.PlantId });
+                return RedirectToPage("/Detail", new { id = Plant.PlantId });
             }
             else
             {

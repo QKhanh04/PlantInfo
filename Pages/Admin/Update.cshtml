@@ -1,6 +1,7 @@
 @page "{id:int}"
 @model UpdateModel
 @{
+    Layout = "_AdminLayout";
     ViewData["Title"]= "Cập nhật cây trồng";
 } 
 
@@ -64,9 +65,11 @@
     <div class="mb-3 border p-2">
         <label class="form-label">Thêm phân loại mới</label>
         <div id="newCategories">
-            <div class="mb-2">
+            <div class="mb-2" id="catRow_0">
                 <input name="Plant.NewCategories[0].CategoryName" class="form-control" placeholder="Tên phân loại" />
                 <input name="Plant.NewCategories[0].Description" class="form-control mt-2" placeholder="Mô tả" />
+                <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('catRow_0')">Xóa</button>
+
             </div>
         </div>
         <button type="button" class="btn btn-outline-primary mt-2" onclick="addCategory()">+ Thêm phân loại</button>
@@ -90,9 +93,10 @@
     <div class="mb-3 border p-2">
         <label class="form-label">Thêm công dụng mới</label>
         <div id="newUses">
-            <div class="mb-2">
+            <div class="mb-2" id="useRow_0">
                 <input name="Plant.NewUses[0].UseName" class="form-control" placeholder="Tên công dụng" />
                 <input name="Plant.NewUses[0].Description" class="form-control mt-2" placeholder="Mô tả" />
+                <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('useRow_0')">Xóa</button>
             </div>
         </div>
         <button type="button" class="btn btn-outline-primary mt-2" onclick="addUse()">+ Thêm công dụng</button>
@@ -112,16 +116,17 @@
             }
         </div>
     </div>
-    <div class="mb-3 border p-2">
-        <label class="form-label">Thêm bệnh mới</label>
-        <div id="NewDiseases">
-            <div class="mb-2">
-                <input name="Plant.NewDiseases[0].UseName" class="form-control" placeholder="Tên bệnh" />
-                <input name="Plant.NewDiseases[0].Description" class="form-control mt-2" placeholder="Mô tả" />
-            </div>
+   <div class="mb-3 border p-2">
+    <label class="form-label">Thêm bệnh mới</label>
+    <div id="NewDiseases">
+        <div class="mb-2" id="diseaseRow_0">
+            <input name="Plant.NewDiseases[0].DiseaseName" class="form-control" placeholder="Tên bệnh" />
+            <input name="Plant.NewDiseases[0].Description" class="form-control mt-2" placeholder="Mô tả" />
+            <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('diseaseRow_0')">Xóa</button>
         </div>
-        <button type="button" class="btn btn-outline-primary mt-2" onclick="addDisease()">+ Thêm công dụng</button>
     </div>
+    <button type="button" class="btn btn-outline-primary mt-2" onclick="addDisease()">+ Thêm bệnh</button>
+</div>
 
     <!-- Điều kiện sinh trưởng -->
     <h4>Điều kiện sinh trưởng</h4>
@@ -141,7 +146,6 @@
         for (int i = 0; i < Model.Plant.Images.Count; i++)
         {
             <div class="mb-2" id="imgRow_@i">
-            
                 <input type="hidden" name="Plant.Images[@i].ImageId" value="@Model.Plant.Images[i].ImageId" />
                 <input name="Plant.Images[@i].ImageUrl" class="form-control mb-2"
                     value="@Model.Plant.Images[i].ImageUrl" placeholder="Đường dẫn ảnh (URL)"
@@ -218,7 +222,7 @@
     }
 </div>
 <button type="button" class="btn btn-outline-primary mt-2" onclick="addReference()">+ Thêm nguồn tham khảo</button>
-<div>@TempData["ToastMessage"]</div>
+@* <div>@TempData["ToastMessage"]</div> *@
 <button type="submit" class="btn btn-success mt-4">Cập nhật cây</button>
 </form>
 
@@ -228,74 +232,153 @@
        // THÊM PHÂN LOẠI MỚI
 function addCategory() {
     const container = document.getElementById('newCategories');
-    // Đếm số lượng input hiện tại theo CategoryName
-    const index = container.querySelectorAll('[name^="Plant.NewCategories["][name$="].CategoryName"]').length;
+    const index = container.querySelectorAll('[id^="catRow_"]').length;
     container.insertAdjacentHTML('beforeend',
-        `<div class="mb-2">
+        `<div class="mb-2" id="catRow_${index}">
             <input name="Plant.NewCategories[${index}].CategoryName" class="form-control" placeholder="Tên phân loại" />
             <input name="Plant.NewCategories[${index}].Description" class="form-control mt-2" placeholder="Mô tả" />
+            <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('catRow_${index}')">Xóa</button>
         </div>`);
+    reindexCategories();
+}
+function reindexCategories() {
+    const rows = document.querySelectorAll('#newCategories > div[id^="catRow_"]');
+    rows.forEach((row, i) => {
+        row.id = "catRow_" + i;
+        row.querySelectorAll('input').forEach(input => {
+            input.name = input.name.replace(/Plant\.NewCategories\[\d+\]/, `Plant.NewCategories[${i}]`);
+        });
+        const btnRemove = row.querySelector('button.btn-danger');
+        if (btnRemove) btnRemove.setAttribute('onclick', `removeRow('catRow_${i}')`);
+    });
 }
 
 // THÊM CÔNG DỤNG MỚI
 function addUse() {
     const container = document.getElementById('newUses');
-    const index = container.querySelectorAll('[name^="Plant.NewUses["][name$="].UseName"]').length;
+    const index = container.querySelectorAll('[id^="useRow_"]').length;
     container.insertAdjacentHTML('beforeend',
-        `<div class="mb-2">
+        `<div class="mb-2" id="useRow_${index}">
             <input name="Plant.NewUses[${index}].UseName" class="form-control" placeholder="Tên công dụng" />
             <input name="Plant.NewUses[${index}].Description" class="form-control mt-2" placeholder="Mô tả" />
+            <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('useRow_${index}')">Xóa</button>
         </div>`);
+    reindexUses();
+}
+function reindexUses() {
+    const rows = document.querySelectorAll('#newUses > div[id^="useRow_"]');
+    rows.forEach((row, i) => {
+        row.id = "useRow_" + i;
+        row.querySelectorAll('input').forEach(input => {
+            input.name = input.name.replace(/Plant\.NewUses\[\d+\]/, `Plant.NewUses[${i}]`);
+        });
+        const btnRemove = row.querySelector('button.btn-danger');
+        if (btnRemove) btnRemove.setAttribute('onclick', `removeRow('useRow_${i}')`);
+    });
 }
 
 // THÊM BỆNH MỚI
 function addDisease() {
     const container = document.getElementById('NewDiseases');
-    const index = container.querySelectorAll('[name^="Plant.NewDiseases["][name$="].DiseaseName"]').length;
+    const index = container.querySelectorAll('[id^="diseaseRow_"]').length;
     container.insertAdjacentHTML('beforeend',
-        `<div class="mb-2">
+        `<div class="mb-2" id="diseaseRow_${index}">
             <input name="Plant.NewDiseases[${index}].DiseaseName" class="form-control" placeholder="Tên bệnh" />
             <input name="Plant.NewDiseases[${index}].Description" class="form-control mt-2" placeholder="Mô tả" />
+            <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('diseaseRow_${index}')">Xóa</button>
         </div>`);
+    reindexDiseases();
+}
+function reindexDiseases() {
+    const rows = document.querySelectorAll('#NewDiseases > div[id^="diseaseRow_"]');
+    rows.forEach((row, i) => {
+        row.id = "diseaseRow_" + i;
+        row.querySelectorAll('input').forEach(input => {
+            input.name = input.name.replace(/Plant\.NewDiseases\[\d+\]/, `Plant.NewDiseases[${i}]`);
+        });
+        const btnRemove = row.querySelector('button.btn-danger');
+        if (btnRemove) btnRemove.setAttribute('onclick', `removeRow('diseaseRow_${i}')`);
+    });
 }
 
 // THÊM ẢNH MỚI
-function addImage() {
-            const container = document.getElementById('images');
-            const index = container.querySelectorAll('[id^="imgRow_"]').length;
-            container.insertAdjacentHTML('beforeend',
-                `<div class="mb-2" id="imgRow_${index}">
-                    <input name="Plant.Images[${index}].ImageUrl" class="form-control mb-2" placeholder="Đường dẫn ảnh (URL)"
-                        oninput="previewUrlImage(this, 'urlImagePreview_${index}')" />
-                    <div id="urlImagePreview_${index}" class="mt-2"></div>
-                    <input name="Plant.Images[${index}].Caption" class="form-control mt-2" placeholder="Chú thích" />
-                    <div class="form-check mt-2">
-                        <input type="checkbox" name="Plant.Images[${index}].IsPrimary" value="true" class="form-check-input" />
-                        <label class="form-check-label">Ảnh chính</label>
-                    </div>
-                    <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('imgRow_${index}')">Xóa ảnh</button>
-                </div>`);
-        }
+    function addImage() {
+                const container = document.getElementById('images');
+                const index = container.querySelectorAll('[id^="imgRow_"]').length;
+                container.insertAdjacentHTML('beforeend',
+                    `<div class="mb-2" id="imgRow_${index}">
+                        <input name="Plant.Images[${index}].ImageUrl" class="form-control mb-2" placeholder="Đường dẫn ảnh (URL)"
+                            oninput="previewUrlImage(this, 'urlImagePreview_${index}')" />
+                        <div id="urlImagePreview_${index}" class="mt-2"></div>
+                        <input name="Plant.Images[${index}].Caption" class="form-control mt-2" placeholder="Chú thích" />
+                        <div class="form-check mt-2">
+                            <input type="checkbox" name="Plant.Images[${index}].IsPrimary" value="true" class="form-check-input" />
+                            <label class="form-check-label">Ảnh chính</label>
+                        </div>
+                        <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('imgRow_${index}')">Xóa ảnh</button>
+                    </div>`);
+                    reindexImages();
+            }
 
-        // XÓA DÒNG
-        function removeRow(rowId) {
-            const row = document.getElementById(rowId);
-            if (row) row.remove();
-        }
+            function reindexImages() {
+        const rows = document.querySelectorAll('#images > div[id^="imgRow_"]');
+        rows.forEach((row, i) => {
+            row.id = "imgRow_" + i;
+            // Đổi name cho các input
+            row.querySelectorAll('input, textarea').forEach(input => {
+                input.name = input.name.replace(/Plant\.Images\[\d+\]/, `Plant.Images[${i}]`);
+                console.log(input.name); // Xem lại kết quả trên console
+            });
+            // Đổi id preview
+            const previewDiv = row.querySelector('div[id^="urlImagePreview_"]');
+            if (previewDiv) previewDiv.id = "urlImagePreview_" + i;
+            // Đổi oninput preview
+            const urlInput = row.querySelector('input[oninput]');
+            if (urlInput) urlInput.setAttribute('oninput', `previewUrlImage(this, 'urlImagePreview_${i}')`);
+            // Đổi onclick nút xóa
+            const btnRemove = row.querySelector('button.btn-danger');
+            if (btnRemove) btnRemove.setAttribute('onclick', `removeRow('imgRow_${i}')`);
+        });
+    }
 
         // THÊM NGUỒN THAM KHẢO MỚI
         function addReference() {
-            const container = document.getElementById('references');
-            const index = container.querySelectorAll('[id^="refRow_"]').length;;
-            container.insertAdjacentHTML('beforeend',
-                `<div class="mb-2" id="refRow_${index}">
-                    <input name="Plant.References[${index}].SourceName" class="form-control" placeholder="Tên nguồn" />
-                    <input name="Plant.References[${index}].Url" class="form-control mt-2" placeholder="Link" />
-                    <input name="Plant.References[${index}].Author" class="form-control mt-2" placeholder="Tác giả" />
-                    <input name="Plant.References[${index}].PublishedYear" class="form-control mt-2" placeholder="Năm xuất bản" />
-                    <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('refRow_${index}')">Xóa nguồn</button>
-                </div>`);
-        }
+    const container = document.getElementById('references');
+    const index = container.querySelectorAll('[id^="refRow_"]').length;
+    container.insertAdjacentHTML('beforeend',
+        `<div class="mb-2" id="refRow_${index}">
+            <input name="Plant.References[${index}].SourceName" class="form-control" placeholder="Tên nguồn" />
+            <input name="Plant.References[${index}].Url" class="form-control mt-2" placeholder="Link" />
+            <input name="Plant.References[${index}].Author" class="form-control mt-2" placeholder="Tác giả" />
+            <input name="Plant.References[${index}].PublishedYear" class="form-control mt-2" placeholder="Năm xuất bản" />
+            <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('refRow_${index}')">Xóa nguồn</button>
+        </div>`);
+    reindexReferences(); 
+}
+    function reindexReferences() {
+    const rows = document.querySelectorAll('#references > div[id^="refRow_"]');
+    rows.forEach((row, i) => {
+        row.id = "refRow_" + i;
+        row.querySelectorAll('input').forEach(input => {
+            input.name = input.name.replace(/Plant\.References\[\d+\]/, `Plant.References[${i}]`);
+        console.log("reindexReferences: ", input.name)
+
+        });
+        const btnRemove = row.querySelector('button.btn-danger');
+        if (btnRemove) btnRemove.setAttribute('onclick', `removeRow('refRow_${i}')`);
+    });
+}
+
+function removeRow(rowId) {
+    const row = document.getElementById(rowId);
+    if (row) row.remove();
+    if (rowId.startsWith("catRow_")) reindexCategories();
+    else if (rowId.startsWith("useRow_")) reindexUses();
+    else if (rowId.startsWith("diseaseRow_")) reindexDiseases();
+    else if (rowId.startsWith("imgRow_")) reindexImages();
+    else if (rowId.startsWith("refRow_")) reindexReferences();
+}
+
         function previewFileImages(input) {
             const container = document.getElementById('fileImagePreview');
             container.innerHTML = '';

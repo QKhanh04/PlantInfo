@@ -13,61 +13,104 @@ namespace PlantManagement.Services.Implementations
 {
     public class AuthService : IAuthService
     {
-        private readonly IAuthRepository _authRepository;
-        public AuthService(IAuthRepository authRepository)
+        private readonly IAuthRepository _userRepo;
+        private readonly IEmailSender _emailSender;
+        private const string OtpSessionKey = "OTP";
+        private const string EmailSessionKey = "OTP_EMAIL";
+        public AuthService(IAuthRepository userRepo, IEmailSender emailSender)
         {
-            _authRepository = authRepository;
+            _userRepo = userRepo;
+            _emailSender = emailSender;
         }
-        public async Task<ServiceResult<User?>> Login(string usernameOrEmail, string password)
+
+
+
+        public async Task<ServiceResult<bool>> SendOtpAsync(HttpContext httpContext, string email)
         {
-            if (string.IsNullOrEmpty(usernameOrEmail) || string.IsNullOrEmpty(password))
-            {
-                return ServiceResult<User?>.Fail("Invalid input");
-            }
-            var user = _authRepository.GetUserByUsernameOrEmail(usernameOrEmail);
+            if (await _userRepo.GetUserByUsernameOrEmail(email) == null)
+                return ServiceResult<bool>.Fail("Email is not existed");
+
+            var otp = new Random().Next(100000, 999999).ToString();
+            httpContext.Session.SetString("OTP", otp);
+            httpContext.Session.SetString("OTP_EMAIL", email);
+
+            var subject = "Your OTP Code";
+            var body = $"Your OTP code is: {otp}";
+            return ServiceResult<bool>.Ok(_emailSender.SendEmail(email, subject, body), "OTP has been sent to your email.");
+        }
+
+        public async Task<bool> VerifyOtp(HttpContext httpContext, string otp)
+        {
+            var storedOtp = httpContext.Session.GetString(OtpSessionKey);
+            return storedOtp == otp;
+        }
+
+        public async Task<ServiceResult<bool>> ChangePassword(string email, string newPassword, string confirmedNewPassword)
+        {
+            var user = await _userRepo.GetUserByUsernameOrEmail(email);
+
             if (user == null)
             {
-                return ServiceResult<User?>.Fail("User not found");
+                return ServiceResult<bool>.Fail("Email is not existed");
             }
-            if (!PasswordHelper.VerifyPassword(password, user.Result.Password))
+            else if (newPassword != confirmedNewPassword)
             {
-                return ServiceResult<User?>.Fail("Incorrect password");
+                return ServiceResult<bool>.Fail("Passwords do not match.");
             }
 
-            return ServiceResult<User?>.Ok(user.Result, "Login successful");
+            user.Password = PasswordHelper.HashPassword(newPassword);
+            await _userRepo.SaveChangesAsync();
+
+            return ServiceResult<bool>.Ok(true, "Password changed successfully!");
         }
 
-        public async Task<ServiceResult<User>> Register(string username, string email, string password, string confirmPassword)
+        public void ClearOtpSession(HttpContext httpContext)
         {
-            // if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
-            // {
-            //     return new ServiceResult<User> { Success = false, Message = "Invalid input." };
-            // }
-            var existingUserName = await _authRepository.GetUserByUsernameOrEmail(username);
-            var existingEmail = await _authRepository.GetUserByUsernameOrEmail(email);
+            httpContext.Session.Remove(OtpSessionKey);
+            httpContext.Session.Remove(EmailSessionKey);
+        }
+
+        public async Task<ServiceResult<User>> Login(String userNameOrEmail, string password)
+        {
+            var user = await _userRepo.GetUserByUsernameOrEmail(userNameOrEmail);
+            if (user == null)
+            {
+                return ServiceResult<User>.Fail("UserName or Email is not existed");
+            }
+            bool verify = PasswordHelper.VerifyPassword(password, user.Password);
+            if (verify) return ServiceResult<User>.Ok(user);
+            return ServiceResult<User>.Fail("Password is not correct");
+        }
+
+        public async Task<ServiceResult<User>> Register(string email, string userName, string password, string ConfirmedPassword)
+        {
+            var existingUserName = await _userRepo.GetUserByUsernameOrEmail(userName);
+            var existingEmail = await _userRepo.GetUserByUsernameOrEmail(email);
 
             if (existingUserName != null)
             {
-                return new ServiceResult<User> { Success = false, Message = "Username already exists." };
+                return ServiceResult<User>.Fail("User name is existed");
             }
-            if (existingEmail != null)
+            else if (existingEmail != null)
             {
-                return new ServiceResult<User> { Success = false, Message = "Email already exists." };
+                return ServiceResult<User>.Fail("Email is existed");
             }
-            if (password != confirmPassword)
+            else if (password != ConfirmedPassword)
             {
-                return new ServiceResult<User> { Success = false, Message = "Passwords do not match." };
+                return ServiceResult<User>.Fail("Confirm password is not correct");
             }
-
-            var newUser = new User
+            var user = new User
             {
-                Username = username,
+                Username = userName,
                 Email = email,
-                Password = PasswordHelper.HashPassword(password)
+                Password = PasswordHelper.HashPassword(password),
+                Role = "User"
             };
-            await _authRepository.AddAsync(newUser);
-            await _authRepository.SaveChangesAsync();
-            return new ServiceResult<User> { Success = true, Message = "User registered successfully.", Data = newUser };
+            await _userRepo.AddAsync(user);
+            await _userRepo.SaveChangesAsync();
+            return ServiceResult<User>.Ok(user);
         }
+
+
     }
 }

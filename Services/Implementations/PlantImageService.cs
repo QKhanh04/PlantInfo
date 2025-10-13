@@ -9,13 +9,14 @@ using PlantManagement.Services.Interfaces;
 
 namespace PlantManagement.Services.Implementations
 {
-    public class PlantImageService : IPlantImageService
+     public class PlantImageService : IPlantImageService
     {
         private readonly IPlantImageRepository _repo;
         public PlantImageService(IPlantImageRepository repo)
         {
             _repo = repo;
         }
+
         public async Task<ServiceResult<PlantImage>> CreateAsync(PlantImage image)
         {
             try
@@ -29,6 +30,10 @@ namespace PlantManagement.Services.Implementations
                 return ServiceResult<PlantImage>.Fail($"Error creating image: {ex.Message}");
             }
         }
-        
+        public async Task<ServiceResult<IEnumerable<PlantImage>>> GetAllPlantImageAsync()
+        {
+            var plantImages= await _repo.GetAllAsync();
+            return plantImages == null ? ServiceResult<IEnumerable<PlantImage>>.Fail("Have No Plant Image") : ServiceResult<IEnumerable<PlantImage>>.Ok(plantImages);
+        }
     }
 }

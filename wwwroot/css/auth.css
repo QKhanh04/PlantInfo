@@ -10,24 +10,35 @@
 /* Layout */
 .background {
     background: #fff;
-    min-height: 100vh;
+    height: 90vh;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
-    padding-top: 40px;
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+        url('https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=1600') center/cover;
+
 }
 
 .auth-container {
     max-width: 400px;
     width: 100%;
     padding: 30px;
-    background: white;
+    background: rgba(255,255,255,0.7);
     border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     position: relative;
     overflow: hidden;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.45);
 }
-
+.auth-title,
+.auth-subtitle,
+.form-label,
+.form-input {
+    color: #222 !important;
+    text-shadow: 0 1px 4px rgba(255,255,255,0.2);
+}
 /* Title & Subtitle */
 .auth-title {
     text-align: center;
@@ -260,4 +271,20 @@
     to {
         transform: rotate(360deg);
     }
+}
+
+.forgot-password-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.forgot-password-btn {
+    background: none;
+    border: none;
+    color: #287016;
+    cursor: pointer;
+    padding: 0;
+    font: inherit;
+    text-decoration: none;
+    /* Nếu muốn bỏ gạch chân khi dùng button */
 }

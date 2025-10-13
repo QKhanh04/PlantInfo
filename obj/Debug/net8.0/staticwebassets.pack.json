@@ -2,7 +2,7 @@
   "Files": [
     {
       "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\PlantManagement.bundle.scp.css",
-      "PackagePath": "staticwebassets\\PlantManagement.gsnjqsttnh.bundle.scp.css"
+      "PackagePath": "staticwebassets\\PlantManagement.zk67hu4z5c.bundle.scp.css"
     },
     {
       "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\create.css",
@@ -23,6 +23,10 @@
     {
       "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\detail.css",
       "PackagePath": "staticwebassets\\css\\detail.css"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\index.css",
+      "PackagePath": "staticwebassets\\css\\index.css"
     },
     {
       "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\site.css",

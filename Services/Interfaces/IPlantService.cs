@@ -10,6 +10,7 @@ namespace PlantManagement.Services.Interfaces
 {
     public interface IPlantService
     {
+
         Task<ServiceResult<PagedResult<PlantListDTO>>> GetPagedAsync(string? keyword,
    int page,
    int pageSize,
@@ -17,11 +18,22 @@ namespace PlantManagement.Services.Interfaces
    string? orderName
 
 );
+
+        Task<ServiceResult<PagedResult<PlantListDTO>>> GetPagedAsync(
+            string? keyword,
+            int page,
+            int pageSize,
+            List<int>? categoryIds,
+            List<int>? useIds,
+            List<int>? diseaseIds,
+            string? orderName
+        );
         Task<ServiceResult<PlantDetailDTO>> GetDetailPlantAsync(int id);
         Task<ServiceResult<Plant>> GetPlantByIdAsync(int id);
         Task<ServiceResult<PlantDTO>> CreatePlantAsync(PlantCreateDTO plant);
         Task<ServiceResult<PlantDTO>> UpdatePlantAsync(PlantUpdateDTO plant);
         Task<ServiceResult<bool>> DeletePlantAsync(int id);
-        Task<ServiceResult<IEnumerable<Plant>>> GetAllPlantAsync();
+        Task<ServiceResult<IEnumerable<PlantDetailDTO>>> GetAllPlantAsync();
     }
+
 }

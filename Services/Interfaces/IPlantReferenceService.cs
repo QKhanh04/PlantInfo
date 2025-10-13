@@ -9,8 +9,8 @@ namespace PlantManagement.Services.Interfaces
 {
     public interface IPlantReferenceService
     {
-        Task<ServiceResult<PlantReference>> CreateAsync(PlantReference reference);
-        // Task<List<PlantReference>> GetByPlantIdAsync(int plantId);
-        
+        Task<ServiceResult<PlantReference>> CreateAsync(PlantReference plantReference);
+
+
     }
 }

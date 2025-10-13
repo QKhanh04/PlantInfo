@@ -9,7 +9,7 @@ namespace PlantManagement.Services.Interfaces
 {
     public interface IDiseaseService
     {
-        Task<ServiceResult<Disease>> CreateAsync(Disease disease);
-        Task<IEnumerable<Disease>> GetAllAsync();
+        Task<ServiceResult<Disease>> CreateDiseaseAsync(Disease disease);
+        Task<ServiceResult<IEnumerable<Disease>>> GetAllDiseaseAsync();
     }
 }
