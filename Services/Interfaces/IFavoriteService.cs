@@ -14,6 +14,6 @@ namespace PlantManagement.Services.Interfaces
         Task<bool> RemoveFavoriteAsync(int userId, int plantId);
 
         Task<bool> IsFavoriteAsync(int userId, int plantId);
-        Task<ServiceResult<List<PlantListDTO>>> GetFavoritePlantsAsync(int userId);
+        Task<List<PlantListDTO>> GetFavoritePlantsAsync(int userId);
     }
 }

@@ -14,6 +14,6 @@ namespace PlantManagement.DTOs
         public List<string>? CategoryNames { get; set; }
         public List<string>? ImageUrls { get; set; }
         public bool? IsActive { get; set; }
- 
+        public bool IsFavorited { get; set; }
     }
 }

@@ -26,7 +26,9 @@ namespace PlantManagement.Services.Interfaces
             List<int>? categoryIds,
             List<int>? useIds,
             List<int>? diseaseIds,
-            string? orderName
+            string? orderName,
+            bool? isFavorited,
+            int? userId
         );
         Task<ServiceResult<PlantDetailDTO>> GetDetailPlantAsync(int id);
         Task<ServiceResult<Plant>> GetPlantByIdAsync(int id);

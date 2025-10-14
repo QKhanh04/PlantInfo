@@ -577,6 +577,88 @@
       ]
     },
     {
+      "Route": "css/look-up-plant.bvfobirrur.css",
+      "AssetFile": "css/look-up-plant.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "9939"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"qbYjVpQaDxLiP9vP1fx/qt3SyjyccHRmfJuKaJ7jEuc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Oct 2025 23:33:02 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "bvfobirrur"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-qbYjVpQaDxLiP9vP1fx/qt3SyjyccHRmfJuKaJ7jEuc="
+        },
+        {
+          "Name": "label",
+          "Value": "css/look-up-plant.css"
+        }
+      ]
+    },
+    {
+      "Route": "css/look-up-plant.css",
+      "AssetFile": "css/look-up-plant.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "9939"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"qbYjVpQaDxLiP9vP1fx/qt3SyjyccHRmfJuKaJ7jEuc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 13 Oct 2025 23:33:02 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-qbYjVpQaDxLiP9vP1fx/qt3SyjyccHRmfJuKaJ7jEuc="
+        }
+      ]
+    },
+    {
       "Route": "css/site.css",
       "AssetFile": "css/site.css",
       "Selectors": [],

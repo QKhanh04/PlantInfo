@@ -29,6 +29,10 @@
       "PackagePath": "staticwebassets\\css\\index.css"
     },
     {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\look-up-plant.css",
+      "PackagePath": "staticwebassets\\css\\look-up-plant.css"
+    },
+    {
       "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },

@@ -15,17 +15,14 @@
     <a class="back-button" href="javascript:history.back()" data-aos="fade-down">
         <i class="bi bi-arrow-left me-2"></i> Quay lại
     </a>
-    <!-- Nút admin -->
+    
+    <!-- Admin Action Buttons -->
     @if (User.IsInRole("Admin"))
     {
-        <div class="action-buttons">
+        <div class="action-buttons" data-aos="fade-down">
             <a asp-page="/Admin/Update" asp-route-id="@Model.Plants.PlantId" class="action-btn btn-edit">
                 <i class="bi bi-pencil-square"></i> Sửa
             </a>
-            @* <button type="button" class="action-btn btn-delete toggle-active-btn" data-id="@Model.Plants.PlantId">
-                <i class="bi bi-trash"></i> @(Model.Plants.IsActive == true ? "Ẩn" : "Hiện")
-            </button> *@
-
         </div>
     }
 
@@ -33,23 +30,44 @@
     <div class="plant-header" data-aos="fade-up">
         <div class="row align-items-center">
             <div class="col-lg-6">
+                <!-- Rating Display -->
+                <div class="rating-display mb-3">
+                    <div class="stars-large">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-half"></i>
+                    </div>
+                    <span class="rating-score">4.5</span>
+                    <span class="rating-count">(128 đánh giá)</span>
+                </div>
+
                 <div class="category-badges">
                     @foreach (var category in Model.Plants.Categories)
                     {
-                        <span class="badge-custom"
-                            data-tooltip-content="@category.Description">@category.CategoryName</span>
+                        <span class="badge-custom" data-tooltip-content="@category.Description">
+                            @category.CategoryName
+                        </span>
                     }
                 </div>
+                
                 <h1 class="plant-title">@Model.Plants.CommonName</h1>
                 <div class="scientific-name">@Model.Plants.Species?.ScientificName</div>
                 <p class="plant-description">@Model.Plants.Description</p>
+                
                 <div class="plant-meta">
                     <div class="meta-item">
                         <i class="bi bi-geo-alt"></i>
                         <span>@Model.Plants.Origin</span>
                     </div>
+                    <div class="meta-item">
+                        <i class="bi bi-eye"></i>
+                        <span>1,234 lượt xem</span>
+                    </div>
                 </div>
             </div>
+            
             <div class="col-lg-6 mt-4 mt-lg-0">
                 @{
                     var imageList = Model.Plants.Images ?? new List<PlantImageDTO>();
@@ -57,22 +75,22 @@
                     imageList.FirstOrDefault()?.ImageUrl;
                 }
                 <div class="plant-image-gallery">
-                    <!-- Ảnh chính -->
                     <div class="main-image">
-                        <img id="mainPlantImage" src="@mainImage" alt="@Model.Plants.CommonName"
-                            style="max-width: 100%; border-radius: 12px;" />
+                        <img id="mainPlantImage" src="@mainImage" alt="@Model.Plants.CommonName" />
+                        <div class="image-overlay">
+                            <button class="zoom-btn" onclick="openImageModal()">
+                                <i class="bi bi-zoom-in"></i>
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Ảnh phụ (thumbnail carousel) -->
-                    <div class="d-flex align-items-center mt-2">
-                        <button type="button" class="thumbnail-nav-btn" id="thumbPrev" aria-label="Previous"
-                            onclick="showThumbnail(-1)">
-                            &lt;
+                    <div class="d-flex align-items-center justify-content-center mt-3">
+                        <button type="button" class="thumbnail-nav-btn" id="thumbPrev" onclick="showThumbnail(-1)">
+                            <i class="bi bi-chevron-left"></i>
                         </button>
-                        <div id="thumbnailList" style="display: inline-flex;"></div>
-                        <button type="button" class="thumbnail-nav-btn" id="thumbNext" aria-label="Next"
-                            onclick="showThumbnail(1)">
-                            &gt;
+                        <div id="thumbnailList" class="thumbnail-container"></div>
+                        <button type="button" class="thumbnail-nav-btn" id="thumbNext" onclick="showThumbnail(1)">
+                            <i class="bi bi-chevron-right"></i>
                         </button>
                     </div>
                 </div>
@@ -80,28 +98,83 @@
         </div>
     </div>
 
-    <!-- Stats Section -->
+    <!-- Quick Stats Pills -->
+    <div class="quick-stats" data-aos="fade-up" data-aos-delay="50">
+        <div class="stat-pill">
+            <i class="bi bi-heart"></i>
+            <span>256 yêu thích</span>
+        </div>
+        <div class="stat-pill">
+            <i class="bi bi-bookmark"></i>
+            <span>89 đã lưu</span>
+        </div>
+        <div class="stat-pill">
+            <i class="bi bi-share"></i>
+            <span>43 chia sẻ</span>
+        </div>
+    </div>
+
+    <!-- Stats Section - Growth Conditions -->
     <div class="stats-section" data-aos="fade-up" data-aos-delay="100">
         <div class="row g-4">
-            <div class="col-md-4">
+            <div class="col-lg col-md-6">
                 <div class="stat-card">
-                    <i class="bi bi-brightness-high stat-icon" style="color: #f39c12;"></i>
+                    <div class="stat-icon-wrapper sunlight">
+                        <i class="bi bi-brightness-high stat-icon"></i>
+                    </div>
                     <div class="stat-title">Ánh sáng</div>
                     <div class="stat-value">@Model.Plants.GrowthCondition?.Sunlight</div>
+                    <div class="stat-progress">
+                        <div class="progress-bar" style="width: 80%"></div>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-lg col-md-6">
                 <div class="stat-card">
-                    <i class="bi bi-droplet stat-icon" style="color: #3498db;"></i>
+                    <div class="stat-icon-wrapper water">
+                        <i class="bi bi-droplet stat-icon"></i>
+                    </div>
                     <div class="stat-title">Tưới nước</div>
                     <div class="stat-value">@Model.Plants.GrowthCondition?.WaterRequirement</div>
+                    <div class="stat-progress">
+                        <div class="progress-bar" style="width: 60%"></div>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-lg col-md-6">
                 <div class="stat-card">
-                    <i class="bi bi-thermometer-half stat-icon" style="color: #e74c3c;"></i>
+                    <div class="stat-icon-wrapper temp">
+                        <i class="bi bi-thermometer-half stat-icon"></i>
+                    </div>
                     <div class="stat-title">Nhiệt độ</div>
                     <div class="stat-value">@Model.Plants.GrowthCondition?.TemperatureRange</div>
+                    <div class="stat-progress">
+                        <div class="progress-bar" style="width: 70%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg col-md-6">
+                <div class="stat-card">
+                    <div class="stat-icon-wrapper soil">
+                        <i class="bi bi-layers stat-icon"></i>
+                    </div>
+                    <div class="stat-title">Loại đất</div>
+                    <div class="stat-value">@Model.Plants.GrowthCondition?.SoilType</div>
+                    <div class="stat-progress">
+                        <div class="progress-bar" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg col-md-6">
+                <div class="stat-card">
+                    <div class="stat-icon-wrapper climate">
+                        <i class="bi bi-cloud-sun stat-icon"></i>
+                    </div>
+                    <div class="stat-title">Khí hậu</div>
+                    <div class="stat-value">@Model.Plants.GrowthCondition?.Climate</div>
+                    <div class="stat-progress">
+                        <div class="progress-bar" style="width: 75%"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -112,39 +185,49 @@
         <div class="row g-4">
             <div class="col-md-6">
                 <div class="info-box">
-                    <div class="section-title">Thông tin cơ bản</div>
-                    <div class="kv-row">
-                        <div class="kv-key">Họ thực vật</div>
-                        <div class="kv-value">@Model.Plants.Species?.Family</div>
+                    <div class="section-header">
+                        <i class="bi bi-info-circle section-icon"></i>
+                        <div class="section-title">Thông tin cơ bản</div>
                     </div>
-                    <div class="divider"></div>
-                    <div class="kv-row">
-                        <div class="kv-key">Chi</div>
-                        <div class="kv-value">@Model.Plants.Species?.Genus</div>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="kv-row">
-                        <div class="kv-key">Bộ</div>
-                        <div class="kv-value">@Model.Plants.Species?.OrderName</div>
+                    <div class="info-content">
+                        <div class="kv-row">
+                            <div class="kv-key"><i class="bi bi-flower1"></i> Họ thực vật</div>
+                            <div class="kv-value">@Model.Plants.Species?.Family</div>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="kv-row">
+                            <div class="kv-key"><i class="bi bi-diagram-3"></i> Chi</div>
+                            <div class="kv-value">@Model.Plants.Species?.Genus</div>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="kv-row">
+                            <div class="kv-key"><i class="bi bi-collection"></i> Bộ</div>
+                            <div class="kv-value">@Model.Plants.Species?.OrderName</div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="info-box">
-                    <div class="section-title">Điều kiện sinh trưởng</div>
-                    <div class="kv-row">
-                        <div class="kv-key">Loại đất</div>
-                        <div class="kv-value">@Model.Plants.GrowthCondition?.SoilType</div>
+                    <div class="section-header">
+                        <i class="bi bi-cloud-sun section-icon"></i>
+                        <div class="section-title">Điều kiện sinh trưởng</div>
                     </div>
-                    <div class="divider"></div>
-                    <div class="kv-row">
-                        <div class="kv-key">Ánh sáng</div>
-                        <div class="kv-value">@Model.Plants.GrowthCondition?.Sunlight</div>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="kv-row">
-                        <div class="kv-key">Khí hậu</div>
-                        <div class="kv-value">@Model.Plants.GrowthCondition?.Climate</div>
+                    <div class="info-content">
+                        <div class="kv-row">
+                            <div class="kv-key"><i class="bi bi-layers"></i> Loại đất</div>
+                            <div class="kv-value">@Model.Plants.GrowthCondition?.SoilType</div>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="kv-row">
+                            <div class="kv-key"><i class="bi bi-sun"></i> Ánh sáng</div>
+                            <div class="kv-value">@Model.Plants.GrowthCondition?.Sunlight</div>
+                        </div>
+                        <div class="divider"></div>
+                        <div class="kv-row">
+                            <div class="kv-key"><i class="bi bi-thermometer"></i> Khí hậu</div>
+                            <div class="kv-value">@Model.Plants.GrowthCondition?.Climate</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -156,11 +239,15 @@
         <div class="row g-4">
             <div class="col-md-6">
                 <div class="info-box">
-                    <div class="section-title">Công dụng chính</div>
+                    <div class="section-header">
+                        <i class="bi bi-heart-pulse section-icon"></i>
+                        <div class="section-title">Công dụng chính</div>
+                    </div>
                     <div class="badge-list">
                         @foreach (var use in Model.Plants.Uses)
                         {
-                            <span class="badge-item" data-tooltip-content="@use.Description">
+                            <span class="badge-item use-badge" data-tooltip-content="@use.Description">
+                                <i class="bi bi-check-circle"></i>
                                 @use.UseName
                             </span>
                         }
@@ -169,12 +256,16 @@
             </div>
             <div class="col-md-6">
                 <div class="info-box">
-                    <div class="section-title">Bệnh thường gặp</div>
+                    <div class="section-header">
+                        <i class="bi bi-bug section-icon"></i>
+                        <div class="section-title">Bệnh thường gặp</div>
+                    </div>
                     <div class="badge-list">
                         @foreach (var disease in Model.Plants.Diseases)
                         {
-                            <span class="badge-item"
+                            <span class="badge-item disease-badge"
                                 data-tooltip-content="<b>Triệu chứng:</b> @disease.Symptoms<br/><b>Cách chữa:</b> @disease.Treatment">
+                                <i class="bi bi-exclamation-triangle"></i>
                                 @disease.DiseaseName
                             </span>
                         }
@@ -183,35 +274,43 @@
             </div>
         </div>
     </div>
+
     <!-- References -->
     <div class="info-section" data-aos="fade-up" data-aos-delay="400">
         <div class="info-box">
-            <div class="section-title">Tài liệu tham khảo</div>
+            <div class="section-header">
+                <i class="bi bi-book section-icon"></i>
+                <div class="section-title">Tài liệu tham khảo</div>
+            </div>
             @if (Model.Plants.References != null && Model.Plants.References.Any())
             {
-                <ul class="list-unstyled">
+                <div class="references-grid">
                     @foreach (var reference in Model.Plants.References)
                     {
-                        <li class="mb-2">
-                            <i class="bi bi-book me-2" style="color: var(--accent-green);"></i>
-                            <strong>@reference.SourceName</strong>
-                            @if (!string.IsNullOrEmpty(reference.Author))
-                            {
-                                <span> - @reference.Author</span>
-                            }
-                            @if (reference.PublishedYear.HasValue)
-                            {
-                                <span> (@reference.PublishedYear)</span>
-                            }
-                            @if (!string.IsNullOrEmpty(reference.Url))
-                            {
-                                <a href="@reference.Url" target="_blank" class="ms-2 text-decoration-none text-primary">
-                                    <i class="bi bi-box-arrow-up-right"></i>
-                                </a>
-                            }
-                        </li>
+                        <div class="reference-card">
+                            <div class="reference-icon">
+                                <i class="bi bi-journal-text"></i>
+                            </div>
+                            <div class="reference-content">
+                                <h4>@reference.SourceName</h4>
+                                @if (!string.IsNullOrEmpty(reference.Author))
+                                {
+                                    <p class="author">Tác giả: @reference.Author</p>
+                                }
+                                @if (reference.PublishedYear.HasValue)
+                                {
+                                    <p class="year">Năm: @reference.PublishedYear</p>
+                                }
+                                @if (!string.IsNullOrEmpty(reference.Url))
+                                {
+                                    <a href="@reference.Url" target="_blank" class="reference-link">
+                                        Xem chi tiết <i class="bi bi-arrow-right"></i>
+                                    </a>
+                                }
+                            </div>
+                        </div>
                     }
-                </ul>
+                </div>
             }
             else
             {
@@ -219,6 +318,164 @@
             }
         </div>
     </div>
+
+    <!-- Rating & Review Section -->
+    <div class="info-section" data-aos="fade-up" data-aos-delay="500">
+        <div class="info-box">
+            <div class="section-header">
+                <i class="bi bi-star section-icon"></i>
+                <div class="section-title">Đánh giá & Nhận xét</div>
+            </div>
+
+            <!-- Rating Summary -->
+            <div class="rating-summary">
+                <div class="rating-overview">
+                    <div class="rating-score-large">4.5</div>
+                    <div class="rating-stars-large">
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-fill"></i>
+                        <i class="bi bi-star-half"></i>
+                    </div>
+                    <div class="rating-total">128 đánh giá</div>
+                </div>
+                <div class="rating-breakdown">
+                    <div class="rating-bar-item">
+                        <span>5 <i class="bi bi-star-fill"></i></span>
+                        <div class="bar"><div class="fill" style="width: 75%"></div></div>
+                        <span>96</span>
+                    </div>
+                    <div class="rating-bar-item">
+                        <span>4 <i class="bi bi-star-fill"></i></span>
+                        <div class="bar"><div class="fill" style="width: 15%"></div></div>
+                        <span>19</span>
+                    </div>
+                    <div class="rating-bar-item">
+                        <span>3 <i class="bi bi-star-fill"></i></span>
+                        <div class="bar"><div class="fill" style="width: 6%"></div></div>
+                        <span>8</span>
+                    </div>
+                    <div class="rating-bar-item">
+                        <span>2 <i class="bi bi-star-fill"></i></span>
+                        <div class="bar"><div class="fill" style="width: 3%"></div></div>
+                        <span>3</span>
+                    </div>
+                    <div class="rating-bar-item">
+                        <span>1 <i class="bi bi-star-fill"></i></span>
+                        <div class="bar"><div class="fill" style="width: 1%"></div></div>
+                        <span>2</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Review Form -->
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="review-form">
+                    <h4>Viết đánh giá của bạn</h4>
+                    <div class="rating-input">
+                        <label>Chọn số sao:</label>
+                        <div class="star-rating">
+                            <i class="bi bi-star" data-rating="1"></i>
+                            <i class="bi bi-star" data-rating="2"></i>
+                            <i class="bi bi-star" data-rating="3"></i>
+                            <i class="bi bi-star" data-rating="4"></i>
+                            <i class="bi bi-star" data-rating="5"></i>
+                        </div>
+                    </div>
+                    <textarea class="form-control" rows="4" placeholder="Chia sẻ trải nghiệm của bạn về cây này..."></textarea>
+                    <button class="btn-submit-review">
+                        <i class="bi bi-send"></i> Gửi đánh giá
+                    </button>
+                </div>
+            }
+            else
+            {
+                <div class="login-prompt">
+                    <i class="bi bi-lock"></i>
+                    <p>Vui lòng <a href="/Login">đăng nhập</a> để viết đánh giá</p>
+                </div>
+            }
+
+            <!-- Reviews List -->
+            <div class="reviews-list">
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="user-avatar">
+                            <i class="bi bi-person-circle"></i>
+                        </div>
+                        <div class="user-info">
+                            <h5>Nguyễn Văn A</h5>
+                            <div class="review-meta">
+                                <div class="stars-small">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                </div>
+                                <span class="review-date">2 ngày trước</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="review-content">
+                        <p>Cây rất dễ chăm sóc, phù hợp với người mới bắt đầu. Sau 2 tháng trồng, cây phát triển rất tốt và cho nhiều lá xanh mướt.</p>
+                    </div>
+                    <div class="review-actions">
+                        <button class="review-action-btn">
+                            <i class="bi bi-hand-thumbs-up"></i> Hữu ích (12)
+                        </button>
+                        <button class="review-action-btn">
+                            <i class="bi bi-chat"></i> Trả lời
+                        </button>
+                    </div>
+                </div>
+
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="user-avatar">
+                            <i class="bi bi-person-circle"></i>
+                        </div>
+                        <div class="user-info">
+                            <h5>Trần Thị B</h5>
+                            <div class="review-meta">
+                                <div class="stars-small">
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star"></i>
+                                </div>
+                                <span class="review-date">1 tuần trước</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="review-content">
+                        <p>Cây đẹp nhưng cần chú ý về lượng nước tưới. Ban đầu tôi tưới quá nhiều nên cây bị vàng lá, sau khi điều chỉnh thì cây đã khỏe lại.</p>
+                    </div>
+                    <div class="review-actions">
+                        <button class="review-action-btn">
+                            <i class="bi bi-hand-thumbs-up"></i> Hữu ích (8)
+                        </button>
+                        <button class="review-action-btn">
+                            <i class="bi bi-chat"></i> Trả lời
+                        </button>
+                    </div>
+                </div>
+
+                <button class="btn-load-more">
+                    <i class="bi bi-arrow-down-circle"></i> Xem thêm đánh giá
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Image Modal -->
+<div id="imageModal" class="image-modal">
+    <span class="close-modal">&times;</span>
+    <img class="modal-content" id="modalImage">
 </div>
 
 @section Scripts {
@@ -226,66 +483,36 @@
     <script src="https://unpkg.com/@@popperjs/core@2"></script>
 
     <script>
-        // Initialize AOS
         AOS.init({
             duration: 800,
             easing: 'ease-out-cubic',
             once: true
         });
 
-        // Smooth card/badge effects
-        document.addEventListener('DOMContentLoaded', function () {
-            const cards = document.querySelectorAll('.stat-card, .info-box');
-            cards.forEach(card => {
-                card.addEventListener('mouseenter', function () {
-                    this.style.transform = 'translateY(-8px)';
-                });
-                card.addEventListener('mouseleave', function () {
-                    this.style.transform = 'translateY(0)';
-                });
-            });
-
-            const badges = document.querySelectorAll('.badge-item');
-            badges.forEach(badge => {
-                badge.addEventListener('click', function () {
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        this.style.transform = 'scale(1)';
-                    }, 150);
-                });
-            });
-        });
-
         // Thumbnail carousel logic
         const imageList = [
-                            @foreach (var img in Model.Plants.Images ?? new List<PlantImageDTO>())
+            @foreach (var img in Model.Plants.Images ?? new List<PlantImageDTO>())
             {
                 <text>
-                    {
-                        url: "@img.ImageUrl",
+                {
+                    url: "@img.ImageUrl",
                     isPrimary: @img.IsPrimary.ToString().ToLower()
-                                                },
+                },
                 </text>
-                                    }
-                                                ];
+            }
+        ];
+        
         let thumbStart = 0;
         const thumbPerPage = 5;
 
         function renderThumbnails() {
             const container = document.getElementById('thumbnailList');
             container.innerHTML = '';
-            // Hiển thị 5 ảnh từ thumbStart
             for (let i = thumbStart; i < Math.min(imageList.length, thumbStart + thumbPerPage); i++) {
                 const img = imageList[i];
                 const el = document.createElement('img');
                 el.src = img.url;
                 el.className = 'thumbnail-img' + (img.isPrimary ? ' active' : '');
-                el.style.width = '70px';
-                el.style.height = '70px';
-                el.style.objectFit = 'cover';
-                el.style.margin = '5px';
-                el.style.borderRadius = '8px';
-                el.style.cursor = 'pointer';
                 el.onclick = function () {
                     document.getElementById('mainPlantImage').src = img.url;
                     document.querySelectorAll('.thumbnail-img').forEach(t => t.classList.remove('active'));
@@ -293,50 +520,52 @@
                 };
                 container.appendChild(el);
             }
-            // Disable nút nếu không dịch được nữa
             document.getElementById('thumbPrev').disabled = (thumbStart === 0);
             document.getElementById('thumbNext').disabled = (thumbStart + thumbPerPage >= imageList.length);
         }
 
         function showThumbnail(direction) {
-            // direction: -1 (trái), +1 (phải)
             thumbStart += direction;
-            // Giới hạn thumbStart
             if (thumbStart < 0) thumbStart = 0;
             if (thumbStart > imageList.length - thumbPerPage) thumbStart = imageList.length - thumbPerPage;
             renderThumbnails();
         }
 
-        document.addEventListener('DOMContentLoaded', function () {
-            renderThumbnails();
+        // Image Modal
+        function openImageModal() {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const mainImg = document.getElementById('mainPlantImage');
+            modal.style.display = "block";
+            modalImg.src = mainImg.src;
+        }
+
+        document.querySelector('.close-modal')?.addEventListener('click', function() {
+            document.getElementById('imageModal').style.display = "none";
         });
 
-
+        // Tooltip functionality
         document.addEventListener('DOMContentLoaded', function () {
+            renderThumbnails();
+
             const badgeItems = document.querySelectorAll('.badge-item, .badge-custom');
             let tooltipEl = null;
             let popperInstance = null;
 
             badgeItems.forEach(badge => {
                 badge.addEventListener('mouseenter', function () {
-                    // Tạo tooltip element
                     tooltipEl = document.createElement('div');
                     tooltipEl.className = 'custom-tooltip';
                     tooltipEl.innerHTML = badge.getAttribute('data-tooltip-content');
                     document.body.appendChild(tooltipEl);
 
-                    // Tạo Popper instance
                     popperInstance = Popper.createPopper(badge, tooltipEl, {
                         placement: 'top',
-                        modifiers: [{
-                            name: 'offset',
-                            options: { offset: [0, 8] }
-                        }]
+                        modifiers: [{ name: 'offset', options: { offset: [0, 8] } }]
                     });
                 });
 
                 badge.addEventListener('mouseleave', function () {
-                    // Ẩn tooltip và destroy Popper
                     if (tooltipEl) {
                         document.body.removeChild(tooltipEl);
                         tooltipEl = null;
@@ -347,7 +576,39 @@
                     }
                 });
             });
-        });
 
+            // Star rating interaction
+            const stars = document.querySelectorAll('.star-rating i');
+            let selectedRating = 0;
+
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    selectedRating = parseInt(this.getAttribute('data-rating'));
+                    updateStars(selectedRating);
+                });
+
+                star.addEventListener('mouseenter', function() {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    updateStars(rating);
+                });
+            });
+
+            document.querySelector('.star-rating')?.addEventListener('mouseleave', function() {
+                updateStars(selectedRating);
+            });
+
+            function updateStars(rating) {
+                stars.forEach(star => {
+                    const starRating = parseInt(star.getAttribute('data-rating'));
+                    if (starRating <= rating) {
+                        star.classList.remove('bi-star');
+                        star.classList.add('bi-star-fill');
+                    } else {
+                        star.classList.remove('bi-star-fill');
+                        star.classList.add('bi-star');
+                    }
+                });
+            }
+        });
     </script>
 }

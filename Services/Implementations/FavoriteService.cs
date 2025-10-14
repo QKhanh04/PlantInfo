@@ -66,22 +66,14 @@ namespace PlantManagement.Services.Implementations
             return await _favoriteRepository.IsFavoriteAsync(userId, plantId);
         }
 
-        public async Task<ServiceResult<List<PlantListDTO>>> GetFavoritePlantsAsync(int userId)
+        public async Task<List<PlantListDTO>> GetFavoritePlantsAsync(int userId)
         {
-            try
-            {
-                var plants = await _favoriteRepository.GetFavoritePlantsAsync(userId);
 
-                if (plants == null)
-                    return ServiceResult<List<PlantListDTO>>.Fail("Have No Favorite Plant");
-                var plantDtos = _mapper.Map<List<PlantListDTO>>(plants);
+            var plants = await _favoriteRepository.GetFavoritePlantsAsync(userId);
+            var plantDtos = _mapper.Map<List<PlantListDTO>>(plants);
 
-                return ServiceResult<List<PlantListDTO>>.Ok(plantDtos);
-            }
-            catch (Exception ex)
-            {
-                return ServiceResult<List<PlantListDTO>>.Fail(ex.Message);
-            }
+            return plantDtos;
+
 
         }
     }

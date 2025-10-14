@@ -166,7 +166,9 @@ namespace PlantManagement.Services.Implementations
     List<int>? categoryIds,
     List<int>? useIds,
     List<int>? diseaseIds,
-    string? orderName
+    string? orderName,
+    bool? isFavorited,
+    int? userId
 )
         {
             try
@@ -197,6 +199,10 @@ namespace PlantManagement.Services.Implementations
                 if (!string.IsNullOrEmpty(orderName))
                 {
                     query = query.Where(p => p.Species != null && p.Species.OrderName == orderName);
+                }
+                if (isFavorited == true && userId.HasValue)
+                {
+                    query = query.Where(p => p.Favorites.Any(f => f.UserId == userId.Value));
                 }
 
                 int totalCount = await query.CountAsync();
