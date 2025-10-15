@@ -30,6 +30,8 @@ public partial class PlantDbContext : DbContext
 
     public virtual DbSet<PlantReference> PlantReferences { get; set; }
 
+    public virtual DbSet<PlantReview> PlantReviews { get; set; }
+
     public virtual DbSet<SearchLog> SearchLogs { get; set; }
 
     public virtual DbSet<Species> Species { get; set; }
@@ -255,6 +257,40 @@ public partial class PlantDbContext : DbContext
                 .HasForeignKey(d => d.PlantId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("plant_references_plant_id_fkey");
+        });
+
+        modelBuilder.Entity<PlantReview>(entity =>
+        {
+            entity.HasKey(e => e.ReviewId).HasName("plant_reviews_pkey");
+
+            entity.ToTable("plant_reviews");
+
+            entity.HasIndex(e => new { e.PlantId, e.UserId }, "unique_user_plant").IsUnique();
+
+            entity.Property(e => e.ReviewId).HasColumnName("review_id");
+            entity.Property(e => e.Comment).HasColumnName("comment");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("created_at");
+            entity.Property(e => e.IsActive)
+                .HasDefaultValue(true)
+                .HasColumnName("is_active");
+            entity.Property(e => e.PlantId).HasColumnName("plant_id");
+            entity.Property(e => e.Rating).HasColumnName("rating");
+            entity.Property(e => e.UpdatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("updated_at");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.Plant).WithMany(p => p.PlantReviews)
+                .HasForeignKey(d => d.PlantId)
+                .HasConstraintName("plant_reviews_plant_id_fkey");
+
+            entity.HasOne(d => d.User).WithMany(p => p.PlantReviews)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("plant_reviews_user_id_fkey");
         });
 
         modelBuilder.Entity<SearchLog>(entity =>

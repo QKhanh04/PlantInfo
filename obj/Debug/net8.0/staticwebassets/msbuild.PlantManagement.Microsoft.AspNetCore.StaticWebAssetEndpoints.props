@@ -48,17 +48,17 @@
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"vfrkjbu63f"},{"Name":"integrity","Value":"sha256-6yaDyS\u002BLNPtoeg7hE7RaxpxBJnMhsXbjfFtXHQlNKLc="},{"Name":"label","Value":"_content/PlantManagement/css/auth.css"}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"5699"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00226yaDyS\u002BLNPtoeg7hE7RaxpxBJnMhsXbjfFtXHQlNKLc=\u0022"},{"Name":"Last-Modified","Value":"Fri, 10 Oct 2025 11:51:19 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/PlantManagement/css/detail.biacql29f1.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\detail.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"biacql29f1"},{"Name":"integrity","Value":"sha256-M\u002B5jE6UGc/NNMzv8QJLEY/Dz201uqXDvsvZStF3YRN8="},{"Name":"label","Value":"_content/PlantManagement/css/detail.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"20194"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022M\u002B5jE6UGc/NNMzv8QJLEY/Dz201uqXDvsvZStF3YRN8=\u0022"},{"Name":"Last-Modified","Value":"Tue, 14 Oct 2025 01:00:43 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/PlantManagement/css/detail.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\detail.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-RyJ230xw5GWfJUxt70nJFZBdvJt2ZFVOEbg7klufZmU="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"8443"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022RyJ230xw5GWfJUxt70nJFZBdvJt2ZFVOEbg7klufZmU=\u0022"},{"Name":"Last-Modified","Value":"Fri, 10 Oct 2025 11:51:34 GMT"}]]]></ResponseHeaders>
-    </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/PlantManagement/css/detail.posy41focn.css">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\detail.css'))</AssetFile>
-      <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"posy41focn"},{"Name":"integrity","Value":"sha256-RyJ230xw5GWfJUxt70nJFZBdvJt2ZFVOEbg7klufZmU="},{"Name":"label","Value":"_content/PlantManagement/css/detail.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"8443"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022RyJ230xw5GWfJUxt70nJFZBdvJt2ZFVOEbg7klufZmU=\u0022"},{"Name":"Last-Modified","Value":"Fri, 10 Oct 2025 11:51:34 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-M\u002B5jE6UGc/NNMzv8QJLEY/Dz201uqXDvsvZStF3YRN8="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"20194"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022M\u002B5jE6UGc/NNMzv8QJLEY/Dz201uqXDvsvZStF3YRN8=\u0022"},{"Name":"Last-Modified","Value":"Tue, 14 Oct 2025 01:00:43 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/PlantManagement/css/index.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\index.css'))</AssetFile>

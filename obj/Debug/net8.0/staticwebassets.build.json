@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "vVjzTRiQ0x8w02OHNUiVcYla8BP8GflrwgCjaWyDRLk=",
+  "Hash": "l051tSIOFVwJji0E+HY/EHCwJhzuqp2jYyRglxDg4rw=",
   "Source": "PlantManagement",
   "BasePath": "_content/PlantManagement",
   "Mode": "Default",
@@ -157,8 +157,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "posy41focn",
-      "Integrity": "RyJ230xw5GWfJUxt70nJFZBdvJt2ZFVOEbg7klufZmU=",
+      "Fingerprint": "biacql29f1",
+      "Integrity": "M+5jE6UGc/NNMzv8QJLEY/Dz201uqXDvsvZStF3YRN8=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\detail.css"
@@ -2111,6 +2111,51 @@
       ]
     },
     {
+      "Route": "css/detail.biacql29f1.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\detail.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "20194"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"M+5jE6UGc/NNMzv8QJLEY/Dz201uqXDvsvZStF3YRN8=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 14 Oct 2025 01:00:43 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "biacql29f1"
+        },
+        {
+          "Name": "label",
+          "Value": "css/detail.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-M+5jE6UGc/NNMzv8QJLEY/Dz201uqXDvsvZStF3YRN8="
+        }
+      ]
+    },
+    {
       "Route": "css/detail.css",
       "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\detail.css",
       "Selectors": [],
@@ -2121,7 +2166,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "8443"
+          "Value": "20194"
         },
         {
           "Name": "Content-Type",
@@ -2129,11 +2174,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"RyJ230xw5GWfJUxt70nJFZBdvJt2ZFVOEbg7klufZmU=\""
+          "Value": "\"M+5jE6UGc/NNMzv8QJLEY/Dz201uqXDvsvZStF3YRN8=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 10 Oct 2025 11:51:34 GMT"
+          "Value": "Tue, 14 Oct 2025 01:00:43 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2143,52 +2188,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-RyJ230xw5GWfJUxt70nJFZBdvJt2ZFVOEbg7klufZmU="
-        }
-      ]
-    },
-    {
-      "Route": "css/detail.posy41focn.css",
-      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\detail.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "8443"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"RyJ230xw5GWfJUxt70nJFZBdvJt2ZFVOEbg7klufZmU=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Fri, 10 Oct 2025 11:51:34 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "posy41focn"
-        },
-        {
-          "Name": "label",
-          "Value": "css/detail.css"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-RyJ230xw5GWfJUxt70nJFZBdvJt2ZFVOEbg7klufZmU="
+          "Value": "sha256-M+5jE6UGc/NNMzv8QJLEY/Dz201uqXDvsvZStF3YRN8="
         }
       ]
     },

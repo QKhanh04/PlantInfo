@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using PlantInformation.DTOs;
 using PlantManagement.DTOs;
 using PlantManagement.Models;
 
@@ -64,7 +65,15 @@ namespace PlantManagement.Mappings
             .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.PlantImages))
             .ForMember(dest => dest.References, opt => opt.MapFrom(src => src.PlantReferences));
             CreateMap<PlantDetailDTO, PlantUpdateDTO>();
+            CreateMap<PlantReview, ReviewDTO>()
+                        .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username));
+            CreateMap<ReviewDTO, PlantReview>();
 
+            CreateMap<PlantReview, CreateReviewDTO>();
+            CreateMap<CreateReviewDTO, PlantReview>();
+
+            CreateMap<PlantReview, UpdateReviewDTO>();
+            CreateMap<UpdateReviewDTO, PlantReview>();
 
         }
     }

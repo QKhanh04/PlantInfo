@@ -31,6 +31,8 @@ public partial class Plant
 
     public virtual ICollection<PlantReference> PlantReferences { get; set; } = new List<PlantReference>();
 
+    public virtual ICollection<PlantReview> PlantReviews { get; set; } = new List<PlantReview>();
+
     public virtual Species? Species { get; set; }
 
     public virtual ICollection<ViewLog> ViewLogs { get; set; } = new List<ViewLog>();

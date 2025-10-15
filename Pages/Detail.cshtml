@@ -15,7 +15,7 @@
     <a class="back-button" href="javascript:history.back()" data-aos="fade-down">
         <i class="bi bi-arrow-left me-2"></i> Quay lại
     </a>
-    
+
     <!-- Admin Action Buttons -->
     @if (User.IsInRole("Admin"))
     {
@@ -33,14 +33,29 @@
                 <!-- Rating Display -->
                 <div class="rating-display mb-3">
                     <div class="stars-large">
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-half"></i>
+                        @{
+                            var avg = Model.RatingSummary.AverageRating;
+                            int fullStars = (int)avg;
+                            bool hasHalfStar = avg - fullStars >= 0.25 && avg - fullStars < 0.75;
+                            @* phân từ 0.25 - 0.74 *@
+                            int emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+
+                            for (int i = 0; i < fullStars; i++)
+                            {
+                                <i class="bi bi-star-fill text-warning"></i>
+                            }
+                            if (hasHalfStar)
+                            {
+                                <i class="bi bi-star-half text-warning"></i>
+                            }
+                            for (int i = 0; i < emptyStars; i++)
+                            {
+                                <i class="bi bi-star text-warning"></i>
+                            }
+                        }
                     </div>
-                    <span class="rating-score">4.5</span>
-                    <span class="rating-count">(128 đánh giá)</span>
+                    <span class="rating-score">@Model.RatingSummary.AverageRating</span>
+                    <span class="rating-count">(@Model.RatingSummary.TotalReviews đánh giá)</span>
                 </div>
 
                 <div class="category-badges">
@@ -51,11 +66,11 @@
                         </span>
                     }
                 </div>
-                
+
                 <h1 class="plant-title">@Model.Plants.CommonName</h1>
                 <div class="scientific-name">@Model.Plants.Species?.ScientificName</div>
                 <p class="plant-description">@Model.Plants.Description</p>
-                
+
                 <div class="plant-meta">
                     <div class="meta-item">
                         <i class="bi bi-geo-alt"></i>
@@ -67,7 +82,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-lg-6 mt-4 mt-lg-0">
                 @{
                     var imageList = Model.Plants.Images ?? new List<PlantImageDTO>();
@@ -95,22 +110,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Quick Stats Pills -->
-    <div class="quick-stats" data-aos="fade-up" data-aos-delay="50">
-        <div class="stat-pill">
-            <i class="bi bi-heart"></i>
-            <span>256 yêu thích</span>
-        </div>
-        <div class="stat-pill">
-            <i class="bi bi-bookmark"></i>
-            <span>89 đã lưu</span>
-        </div>
-        <div class="stat-pill">
-            <i class="bi bi-share"></i>
-            <span>43 chia sẻ</span>
         </div>
     </div>
 
@@ -153,7 +152,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg col-md-6">
+            @* <div class="col-lg col-md-6">
                 <div class="stat-card">
                     <div class="stat-icon-wrapper soil">
                         <i class="bi bi-layers stat-icon"></i>
@@ -176,7 +175,7 @@
                         <div class="progress-bar" style="width: 75%"></div>
                     </div>
                 </div>
-            </div>
+            </div> *@
         </div>
     </div>
 
@@ -320,6 +319,7 @@
     </div>
 
     <!-- Rating & Review Section -->
+    <!-- Rating & Review Section -->
     <div class="info-section" data-aos="fade-up" data-aos-delay="500">
         <div class="info-box">
             <div class="section-header">
@@ -330,143 +330,234 @@
             <!-- Rating Summary -->
             <div class="rating-summary">
                 <div class="rating-overview">
-                    <div class="rating-score-large">4.5</div>
+                    <div class="rating-score-large">@Model.RatingSummary.AverageRating</div>
                     <div class="rating-stars-large">
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-fill"></i>
-                        <i class="bi bi-star-half"></i>
+                        @{
+                            for (int i = 0; i < fullStars; i++)
+                            {
+                                <i class="bi bi-star-fill text-warning"></i>
+                            }
+                            if (hasHalfStar)
+                            {
+                                <i class="bi bi-star-half text-warning"></i>
+                            }
+                            for (int i = 0; i < emptyStars; i++)
+                            {
+                                <i class="bi bi-star text-warning"></i>
+                            }
+                        }
                     </div>
-                    <div class="rating-total">128 đánh giá</div>
+                    <div class="rating-total">@Model.RatingSummary.TotalReviews đánh giá</div>
                 </div>
                 <div class="rating-breakdown">
+                    @{
+                        int total = Model.RatingSummary.TotalReviews == 0 ? 1 : Model.RatingSummary.TotalReviews;
+                        double percent5 = Model.RatingSummary.FiveStars * 100.0 / total;
+                        double percent4 = Model.RatingSummary.FourStars * 100.0 / total;
+                        double percent3 = Model.RatingSummary.ThreeStars * 100.0 / total;
+                        double percent2 = Model.RatingSummary.TwoStars * 100.0 / total;
+                        double percent1 = Model.RatingSummary.OneStar * 100.0 / total;
+                    }
                     <div class="rating-bar-item">
                         <span>5 <i class="bi bi-star-fill"></i></span>
-                        <div class="bar"><div class="fill" style="width: 75%"></div></div>
-                        <span>96</span>
+                        <div class="bar">
+                            <div class="fill" style="width: @percent5%"></div>
+                        </div>
+                        <span>@Model.RatingSummary.FiveStars</span>
                     </div>
                     <div class="rating-bar-item">
                         <span>4 <i class="bi bi-star-fill"></i></span>
-                        <div class="bar"><div class="fill" style="width: 15%"></div></div>
-                        <span>19</span>
+                        <div class="bar">
+                            <div class="fill" style="width: @percent4%"></div>
+                        </div>
+                        <span>@Model.RatingSummary.FourStars</span>
                     </div>
                     <div class="rating-bar-item">
                         <span>3 <i class="bi bi-star-fill"></i></span>
-                        <div class="bar"><div class="fill" style="width: 6%"></div></div>
-                        <span>8</span>
+                        <div class="bar">
+                            <div class="fill" style="width: @percent3%"></div>
+                        </div>
+                        <span>@Model.RatingSummary.ThreeStars</span>
                     </div>
                     <div class="rating-bar-item">
                         <span>2 <i class="bi bi-star-fill"></i></span>
-                        <div class="bar"><div class="fill" style="width: 3%"></div></div>
-                        <span>3</span>
+                        <div class="bar">
+                            <div class="fill" style="width: @percent2%"></div>
+                        </div>
+                        <span>@Model.RatingSummary.TwoStars</span>
                     </div>
                     <div class="rating-bar-item">
                         <span>1 <i class="bi bi-star-fill"></i></span>
-                        <div class="bar"><div class="fill" style="width: 1%"></div></div>
-                        <span>2</span>
+                        <div class="bar">
+                            <div class="fill" style="width: @percent1%"></div>
+                        </div>
+                        <span>@Model.RatingSummary.OneStar</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Add Review Form -->
             @if (User.Identity.IsAuthenticated)
             {
-                <div class="review-form">
-                    <h4>Viết đánh giá của bạn</h4>
-                    <div class="rating-input">
-                        <label>Chọn số sao:</label>
-                        <div class="star-rating">
-                            <i class="bi bi-star" data-rating="1"></i>
-                            <i class="bi bi-star" data-rating="2"></i>
-                            <i class="bi bi-star" data-rating="3"></i>
-                            <i class="bi bi-star" data-rating="4"></i>
-                            <i class="bi bi-star" data-rating="5"></i>
+            @* Kiểm tra xem người dùng đã đánh giá chưa *@
+            @functions {
+                public string TimeAgo(DateTime date)
+                {
+                    var ts = DateTime.Now - date;
+                    if (ts.TotalDays >= 7)
+                        return $"{(int)(ts.TotalDays / 7)} tuần trước";
+                    if (ts.TotalDays >= 1)
+                        return $"{(int)ts.TotalDays} ngày trước";
+                    if (ts.TotalHours >= 1)
+                        return $"{(int)ts.TotalHours} giờ trước";
+                    if (ts.TotalMinutes >= 1)
+                        return $"{(int)ts.TotalMinutes} phút trước";
+                    return "Vừa xong";
+                }
+            }
+            var userReview = Model.Reviews?.FirstOrDefault(r => r.UserName == User.Identity.Name);
+
+            @if (userReview != null)
+            {
+                <!-- Hiển thị đánh giá hiện tại của người dùng -->
+                <div class="user-existing-review">
+                    <div class="alert alert-info">
+                        <i class="bi bi-check-circle-fill me-2"></i>
+                        <strong>Bạn đã đánh giá cây này!</strong>
+                        <span class="ms-2">Mỗi người chỉ có thể đánh giá một lần.</span>
+                    </div>
+
+                    <div class="review-item my-review-highlight">
+                        <div class="my-review-badge">
+                            <i class="bi bi-person-check-fill"></i> Đánh giá của bạn
+                        </div>
+                        <div class="review-header">
+                            <div class="user-avatar">
+                                <i class="bi bi-person-circle"></i>
+                            </div>
+                            <div class="user-info">
+                                <h5>@userReview.UserName</h5>
+                                <div class="review-meta">
+                                    <div class="stars-small">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (i <= userReview.Rating)
+                                            {
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                            }
+                                            else
+                                            {
+                                                <i class="bi bi-star text-warning"></i>
+                                            }
+                                        }
+                                    </div>
+                                    <span class="review-date">@TimeAgo(userReview.CreatedAt)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="review-content">
+                            <p>@userReview.Comment</p>
                         </div>
                     </div>
-                    <textarea class="form-control" rows="4" placeholder="Chia sẻ trải nghiệm của bạn về cây này..."></textarea>
-                    <button class="btn-submit-review">
-                        <i class="bi bi-send"></i> Gửi đánh giá
-                    </button>
                 </div>
             }
             else
             {
+                <!-- Form đánh giá cho người chưa đánh giá -->
+                <form method="post" asp-page-handler="Review">
+                    <div class="review-form">
+                        <div class="form-header-info">
+                            <h4>Viết đánh giá của bạn</h4>
+                            <span class="text-muted">
+                                <i class="bi bi-info-circle"></i> Bạn chỉ có thể đánh giá một lần
+                            </span>
+                        </div>
+                        <div class="rating-input">
+                            <label>Chọn số sao:</label>
+                            <div class="star-rating">
+                                <i class="bi bi-star" data-rating="1"></i>
+                                <i class="bi bi-star" data-rating="2"></i>
+                                <i class="bi bi-star" data-rating="3"></i>
+                                <i class="bi bi-star" data-rating="4"></i>
+                                <i class="bi bi-star" data-rating="5"></i>
+                            </div>
+                            <input type="hidden" asp-for="NewReview.Rating" id="rating-value" />
+                        </div>
+                        <textarea class="form-control" rows="4" asp-for="NewReview.Comment"
+                            placeholder="Chia sẻ trải nghiệm của bạn về cây này..."></textarea>
+                        <button type="submit" class="btn-submit-review">
+                            <i class="bi bi-send"></i> Gửi đánh giá
+                        </button>
+                    </div>
+                </form>
+            }
+                        }
+                        else
+            {
                 <div class="login-prompt">
                     <i class="bi bi-lock"></i>
-                    <p>Vui lòng <a href="/Login">đăng nhập</a> để viết đánh giá</p>
+                    <p>Vui lòng <a asp-page="/Auth/Authentication"
+                            asp-route-returnUrl="@PageContext.HttpContext.Request.Path">
+                            Đăng nhập
+                        </a> để viết đánh giá</p>
                 </div>
             }
 
             <!-- Reviews List -->
             <div class="reviews-list">
-                <div class="review-item">
-                    <div class="review-header">
-                        <div class="user-avatar">
-                            <i class="bi bi-person-circle"></i>
-                        </div>
-                        <div class="user-info">
-                            <h5>Nguyễn Văn A</h5>
-                            <div class="review-meta">
-                                <div class="stars-small">
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
+                <h4 class="reviews-list-title">Tất cả đánh giá (@Model.RatingSummary.TotalReviews)</h4>
+
+                @if (Model.Reviews != null && Model.Reviews.Count > 0)
+                {
+                    @* Hiển thị các đánh giá của người khác *@
+                    var otherReviews = Model.Reviews.Where(r => r.UserName != User.Identity.Name).ToList();
+
+                    @foreach (var review in otherReviews)
+                    {
+                        <div class="review-item">
+                            <div class="review-header">
+                                <div class="user-avatar">
+                                    <i class="bi bi-person-circle"></i>
                                 </div>
-                                <span class="review-date">2 ngày trước</span>
+                                <div class="user-info">
+                                    <h5>@(review.UserName ?? "Ẩn danh")</h5>
+                                    <div class="review-meta">
+                                        <div class="stars-small">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                if (i <= review.Rating)
+                                                {
+                                                    <i class="bi bi-star-fill text-warning"></i>
+                                                }
+                                                else
+                                                {
+                                                    <i class="bi bi-star text-warning"></i>
+                                                }
+                                            }
+                                        </div>
+                                        <span class="review-date">@TimeAgo(review.CreatedAt)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="review-content">
+                                <p>@review.Comment</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="review-content">
-                        <p>Cây rất dễ chăm sóc, phù hợp với người mới bắt đầu. Sau 2 tháng trồng, cây phát triển rất tốt và cho nhiều lá xanh mướt.</p>
-                    </div>
-                    <div class="review-actions">
-                        <button class="review-action-btn">
-                            <i class="bi bi-hand-thumbs-up"></i> Hữu ích (12)
-                        </button>
-                        <button class="review-action-btn">
-                            <i class="bi bi-chat"></i> Trả lời
-                        </button>
-                    </div>
-                </div>
+                    }
 
-                <div class="review-item">
-                    <div class="review-header">
-                        <div class="user-avatar">
-                            <i class="bi bi-person-circle"></i>
-                        </div>
-                        <div class="user-info">
-                            <h5>Trần Thị B</h5>
-                            <div class="review-meta">
-                                <div class="stars-small">
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star-fill"></i>
-                                    <i class="bi bi-star"></i>
-                                </div>
-                                <span class="review-date">1 tuần trước</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="review-content">
-                        <p>Cây đẹp nhưng cần chú ý về lượng nước tưới. Ban đầu tôi tưới quá nhiều nên cây bị vàng lá, sau khi điều chỉnh thì cây đã khỏe lại.</p>
-                    </div>
-                    <div class="review-actions">
-                        <button class="review-action-btn">
-                            <i class="bi bi-hand-thumbs-up"></i> Hữu ích (8)
+                    @if (otherReviews.Count > 5)
+                    {
+                        <button class="btn-load-more">
+                            <i class="bi bi-arrow-down-circle"></i> Xem thêm đánh giá
                         </button>
-                        <button class="review-action-btn">
-                            <i class="bi bi-chat"></i> Trả lời
-                        </button>
+                    }
+                }
+                else
+                {
+                    <div class="no-reviews-message">
+                        <i class="bi bi-chat-left-text"></i>
+                        <p>Chưa có đánh giá nào. Hãy là người đầu tiên đánh giá!</p>
                     </div>
-                </div>
-
-                <button class="btn-load-more">
-                    <i class="bi bi-arrow-down-circle"></i> Xem thêm đánh giá
-                </button>
+                }
             </div>
         </div>
     </div>
@@ -491,17 +582,17 @@
 
         // Thumbnail carousel logic
         const imageList = [
-            @foreach (var img in Model.Plants.Images ?? new List<PlantImageDTO>())
+                @foreach (var img in Model.Plants.Images ?? new List<PlantImageDTO>())
             {
                 <text>
-                {
-                    url: "@img.ImageUrl",
+                    {
+                        url: "@img.ImageUrl",
                     isPrimary: @img.IsPrimary.ToString().ToLower()
-                },
+                            },
                 </text>
-            }
-        ];
-        
+                            }
+                            ];
+
         let thumbStart = 0;
         const thumbPerPage = 5;
 
@@ -540,7 +631,7 @@
             modalImg.src = mainImg.src;
         }
 
-        document.querySelector('.close-modal')?.addEventListener('click', function() {
+        document.querySelector('.close-modal')?.addEventListener('click', function () {
             document.getElementById('imageModal').style.display = "none";
         });
 
@@ -582,18 +673,18 @@
             let selectedRating = 0;
 
             stars.forEach(star => {
-                star.addEventListener('click', function() {
+                star.addEventListener('click', function () {
                     selectedRating = parseInt(this.getAttribute('data-rating'));
                     updateStars(selectedRating);
                 });
 
-                star.addEventListener('mouseenter', function() {
+                star.addEventListener('mouseenter', function () {
                     const rating = parseInt(this.getAttribute('data-rating'));
                     updateStars(rating);
                 });
             });
 
-            document.querySelector('.star-rating')?.addEventListener('mouseleave', function() {
+            document.querySelector('.star-rating')?.addEventListener('mouseleave', function () {
                 updateStars(selectedRating);
             });
 
@@ -608,6 +699,7 @@
                         star.classList.add('bi-star');
                     }
                 });
+                document.getElementById('rating-value').value = rating;
             }
         });
     </script>
