@@ -73,8 +73,12 @@
                                         <i class="bi bi-person me-1"></i> @User.Identity.Name
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="adminDropdown">
-                                        <li><a class="dropdown-item d-flex align-items-center" href="#"><i
-                                                    class="bi bi-person me-2"></i> Quản lý người dùng</a></li>
+                                        <li>
+    <a class="dropdown-item d-flex align-items-center" href="#" data-bs-toggle="modal" data-bs-target="#personalInfoModal">
+        <i class="bi bi-person me-2"></i> Thông tin cá nhân
+    </a>
+</li>
+
                                         <li><a class="dropdown-item d-flex align-items-center" href="#"><i
                                                     class="bi bi-heart me-2"></i> Cây yêu thích</a></li>
                                         <li>
@@ -97,8 +101,12 @@
                                         <i class="bi bi-person me-1"></i> @User.Identity.Name
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
-                                        <li><a class="dropdown-item d-flex align-items-center" href="#"><i
-                                                    class="bi bi-person me-2"></i> Thông tin cá nhân</a></li>
+                                        <li>
+    <a class="dropdown-item d-flex align-items-center" href="#" data-bs-toggle="modal" data-bs-target="#personalInfoModal">
+        <i class="bi bi-person me-2"></i> Thông tin cá nhân
+    </a>
+</li>
+
                                         <li><a class="dropdown-item d-flex align-items-center" href="#"><i
                                                     class="bi bi-heart me-2"></i> Cây yêu thích</a></li>
                                         <li>
@@ -129,6 +137,8 @@
     </header>
     <div class="container-body">
         <main role="main" class="pb-3">
+        <partial name="_PersonalInfoPartial" model="new PlantManagement.DTOs.UpdateUserDTO()" />
+
             @RenderBody()
         </main>
     </div>
@@ -226,6 +236,39 @@
                 </text>
         }
     </script>
+    <script>
+document.getElementById("btnSavePersonalInfo").addEventListener("click", async () => {
+    const data = {
+        userId: document.getElementById("UserId").value,
+        email: document.getElementById("Email").value,
+        password: document.getElementById("Password").value
+    };
+
+    const response = await fetch('/api/users/update', { // endpoint thực tế
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+    if (result.success) {
+        showToast(result.message, "success");
+        bootstrap.Modal.getInstance(document.getElementById("personalInfoModal")).hide();
+    } else {
+        showToast(result.message || "Cập nhật thất bại!", "danger");
+    }
+});
+
+function showToast(message, type) {
+    const toast = document.createElement("div");
+    toast.className = `toast align-items-center text-white bg-${type} border-0 position-fixed top-0 end-0 m-3 show`;
+    toast.innerHTML = `<div class="d-flex"><div class="toast-body">${message}</div>
+                       <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+}
+</script>
+
 
     @await RenderSectionAsync(name: "Scripts", required: false)
 </body>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using PlantManagement.Common.Results;
+using PlantManagement.DTOs;
 using PlantManagement.Helper;
 using PlantManagement.Models;
 using PlantManagement.Repositories;
@@ -110,6 +111,30 @@ namespace PlantManagement.Services.Implementations
             await _userRepo.SaveChangesAsync();
             return ServiceResult<User>.Ok(user);
         }
+
+        public async Task<ServiceResult<bool>> UpdateUserAsync(UpdateUserDTO dto)
+        {
+            var user = await _userRepo.GetByIdAsync(dto.UserId);
+            if (user == null)
+                return ServiceResult<bool>.Fail("Không tìm thấy người dùng!");
+
+            if (!string.IsNullOrWhiteSpace(dto.Email))
+                user.Email = dto.Email.Trim();
+
+            if (!string.IsNullOrWhiteSpace(dto.Password))
+                user.Password = PasswordHelper.HashPassword(dto.Password);
+
+            try
+            {
+                await _userRepo.SaveChangesAsync();
+                return ServiceResult<bool>.Ok(true, "Cập nhật thành công!");
+            }
+            catch (Exception)
+            {
+                return ServiceResult<bool>.Fail("Có lỗi xảy ra khi lưu thông tin người dùng!");
+            }
+        }
+
 
 
     }

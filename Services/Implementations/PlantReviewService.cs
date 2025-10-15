@@ -20,15 +20,15 @@ namespace PlantManagement.Services.Implementations
             _plantReviewRepository = plantReviewRepository;
             _mapper = mapper;
         }
-        public async Task<ServiceResult<bool>> AddOrUpdateReviewAsync(int userId, CreateReviewDTO dto)
+        public async Task<ServiceResult<bool>> AddReviewAsync(int userId, CreateReviewDTO dto)
         {
             if (dto.Rating < 1 || dto.Rating > 5)
-                return ServiceResult<bool>.Fail("Rating phải từ 1 đến 5!");
+                return ServiceResult<bool>.Fail("Bạn phải chọn sao đánh giá!");
 
             var review = _mapper.Map<PlantReview>(dto);
             review.UserId = userId;
-            await _plantReviewRepository.AddOrUpdateReviewAsync(review);
-            return ServiceResult<bool>.Ok(true, "Thêm hoặc cập nhật review thành công!");
+            await _plantReviewRepository.AddReviewAsync(review);
+            return ServiceResult<bool>.Ok(true, "Thêm review thành công!");
         }
 
         public async Task<ServiceResult<List<ReviewDTO>>> GetAllReviewsForAdminAsync(int plantId)
@@ -56,7 +56,7 @@ namespace PlantManagement.Services.Implementations
 
         public async Task<ServiceResult<bool>> ToggleVisibilityAsync(int reviewId, bool isActive)
         {
-            var review = await _plantReviewRepository.FindAsync(r => r.ReviewId == reviewId);
+            var review = await _plantReviewRepository.GetByIdAsync(reviewId);
             if (review == null)
                 return ServiceResult<bool>.Fail("Review không tồn tại!");
 
@@ -66,19 +66,15 @@ namespace PlantManagement.Services.Implementations
 
         public async Task<ServiceResult<bool>> UpdateReviewAsync(int userId, UpdateReviewDTO dto)
         {
-            var review = await _plantReviewRepository.GetUserReviewAsync(dto.ReviewId, userId);
+            var review = await _plantReviewRepository.GetUserReviewAsync(dto.PlantId, userId);
             if (review == null)
                 return ServiceResult<bool>.Fail("Review không tồn tại hoặc user không có quyền sửa!");
-            // Cho phép chỉ sửa comment hoặc rating
+
             if (dto.Rating.HasValue)
-            {
-                if (dto.Rating.Value < 1 || dto.Rating.Value > 5)
-                    return ServiceResult<bool>.Fail("Rating phải từ 1 đến 5!");
                 review.Rating = dto.Rating.Value;
-            }
             review.Comment = dto.Comment;
             review.UpdatedAt = DateTime.Now;
-            await _plantReviewRepository.AddOrUpdateReviewAsync(review);
+            await _plantReviewRepository.UpdateReviewAsync(review);
             return ServiceResult<bool>.Ok(true, "Cập nhật review thành công!");
         }
 

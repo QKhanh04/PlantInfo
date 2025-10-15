@@ -6,11 +6,12 @@ using PlantManagement.Models;
 
 namespace PlantManagement.Repositories.Interfaces
 {
-      public interface IPlantReviewRepository : IGenericRepository<PlantReview>
+    public interface IPlantReviewRepository : IGenericRepository<PlantReview>
     {
         Task<List<PlantReview>> GetVisibleReviewsByPlantIdAsync(int plantId);
         Task<PlantReview> GetUserReviewAsync(int plantId, int userId);
-        Task AddOrUpdateReviewAsync(PlantReview review);
+        Task AddReviewAsync(PlantReview review);
+        Task UpdateReviewAsync(PlantReview review);
         Task ToggleVisibilityAsync(int id, bool isVisible);
         Task<List<PlantReview>> GetAllReviewsForAdminAsync(int plantId);
     }

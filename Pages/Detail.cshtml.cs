@@ -14,91 +14,129 @@ using PlantManagement.Services.Interfaces;
 namespace PlantManagement.Pages
 {
 
-      public class DetailModel : PageModel
+    public class DetailModel : PageModel
     {
         private readonly ILogger<DetailModel> _logger;
         private readonly IPlantService _plantService;
         private readonly IViewLogService _viewLogService;
         private readonly IPlantReviewService _plantReviewService;
- 
- 
+        private readonly IFavoriteService _favoritePlantService; // Thêm service này
+
         public DetailModel(
-         ILogger<DetailModel> logger,
-         IPlantService plantService,
-         IViewLogService viewLogService,
-         IPlantReviewService plantReviewService)
+            ILogger<DetailModel> logger,
+            IPlantService plantService,
+            IViewLogService viewLogService,
+            IPlantReviewService plantReviewService,
+            IFavoriteService favoritePlantService) // Inject service
         {
             _logger = logger;
             _plantService = plantService;
             _viewLogService = viewLogService;
             _plantReviewService = plantReviewService;
+            _favoritePlantService = favoritePlantService;
         }
- 
+
         public PlantDetailDTO? Plants { get; set; } = new();
- 
+
         public RatingSummaryDTO? RatingSummary { get; set; }
         public List<ReviewDTO>? Reviews { get; set; }
- 
+
+        public ReviewDTO? UserReview { get; set; }
+
         [BindProperty(SupportsGet = true)]
         public int Id { get; set; }
- 
+
         [BindProperty]
-        public CreateReviewDTO NewReview { get; set; } = new();
- 
+        public CreateReviewDTO NewReview { get; set; }
+
+        [BindProperty]
+        public UpdateReviewDTO UpdateReview { get; set; }
+
+        public bool IsFavorited { get; set; } = false;
+
+
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            // Ghi nhận lượt xem
             await _viewLogService.AddPlantViewLogAsync(id, User.Identity.IsAuthenticated ? GetUserId() : (int?)null);
- 
-            // Lấy thông tin chi tiết cây
+
             var result = await _plantService.GetDetailPlantAsync(id);
- 
             if (!result.Success || result.Data == null)
             {
                 TempData["ToastMessage"] = result.Message;
                 TempData["ToastType"] = "danger";
- 
                 return Redirect("/Index");
             }
- 
             Plants = result.Data;
- 
+
             var ratingResult = await _plantReviewService.GetRatingSummaryAsync(id);
             RatingSummary = ratingResult.Data;
- 
+
             var reviewsResult = await _plantReviewService.GetVisibleReviewsByPlantIdAsync(id);
             Reviews = reviewsResult.Data ?? new List<ReviewDTO>();
+
+            // Lấy review của user (nếu đã đánh giá)
+            if (User.Identity.IsAuthenticated)
+            {
+                int userId = GetUserId() ?? 0;
+                var userReviewResult = await _plantReviewService.GetUserReviewAsync(id, userId);
+                UserReview = userReviewResult.Data;
+
+                var favoriteResult = await _favoritePlantService.IsFavoriteAsync(userId, id);
+                IsFavorited = favoriteResult;
+            }
             return Page();
         }
- 
-        public async Task<IActionResult> OnPostReviewAsync()
+
+        public async Task<IActionResult> OnPostAddReviewAsync()
         {
-            // if (!User.Identity.IsAuthenticated)
-            // {
-            //     ReviewMessage = "Bạn cần đăng nhập để bình luận!";
-            //     return await OnGetAsync(Id);
-            // }
- 
             NewReview.PlantId = Id;
             int userId = GetUserId() ?? 0;
-            var result = await _plantReviewService.AddOrUpdateReviewAsync(userId, NewReview);
+            var result = await _plantReviewService.AddReviewAsync(userId, NewReview);
 
-            if (result.Success)
-            {
-                TempData["ToastMessage"] = "Cảm ơn bạn đã đánh giá!";
-                TempData["ToastType"] = "success";
-                return RedirectToPage(new { id = Id });
-            }
             TempData["ToastMessage"] = result.Message;
-            TempData["ToastType"] = "danger";
-            return await OnGetAsync(Id);
+            TempData["ToastType"] = result.Success ? "success" : "danger";
+            return RedirectToPage(new { id = Id });
         }
- 
- 
-        // Hàm lấy userId, bạn cần tự cài đặt cho phù hợp với hệ thống
+        public async Task<IActionResult> OnPostToggleFavoriteAsync()
+        {
+            int userId = GetUserId() ?? 0;
+            
+            // Check if already favorited
+            var checkResult = await _favoritePlantService.IsFavoriteAsync(userId, Id);
+            
+            if (checkResult)
+            {
+                // Remove from favorites
+                var result = await _favoritePlantService.RemoveFavoriteAsync(userId, Id);
+                // TempData["ToastMessage"] = result.Message;
+                // TempData["ToastType"] = result.Success ? "info" : "danger";
+            }
+            else
+            {
+                // Add to favorites
+                var result = await _favoritePlantService.AddFavoriteAsync(userId, Id);
+                // TempData["ToastMessage"] = result.Message;
+                // TempData["ToastType"] = result.Success ? "success" : "danger";
+            }
+
+            return RedirectToPage(new { id = Id });
+        }
+
+        public async Task<IActionResult> OnPostUpdateReviewAsync()
+        {
+            int userId = GetUserId() ?? 0;
+            UpdateReview.PlantId = Id;
+            var result = await _plantReviewService.UpdateReviewAsync(userId, UpdateReview);
+
+            TempData["ToastMessage"] = result.Message;
+            TempData["ToastType"] = result.Success ? "success" : "danger";
+            
+            return RedirectToPage(new { id = Id });
+        }
+
+
         private int? GetUserId()
         {
-            // Ví dụ lấy userId từ claim, tuỳ hệ thống bạn có thể sửa lại
             var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
             if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
                 return userId;

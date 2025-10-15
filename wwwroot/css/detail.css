@@ -375,39 +375,10 @@ body {
     box-shadow: 0 20px 50px var(--shadow-medium);
 }
 
-.stat-icon-wrapper {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 1rem;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
 
-.stat-icon-wrapper.sunlight {
-    background: linear-gradient(135deg, #fff3cd, #ffc107);
-}
-
-.stat-icon-wrapper.water {
-    background: linear-gradient(135deg, #cfe2ff, #0d6efd);
-}
-
-.stat-icon-wrapper.temp {
-    background: linear-gradient(135deg, #f8d7da, #dc3545);
-}
-
-.stat-icon-wrapper.soil {
-    background: linear-gradient(135deg, #d4a574, #8b6f47);
-}
-
-.stat-icon-wrapper.climate {
-    background: linear-gradient(135deg, #d1ecf1, #17a2b8);
-}
 
 .stat-icon {
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: white;
 }
 
@@ -421,7 +392,6 @@ body {
 .stat-value {
     color: var(--text-muted);
     font-size: 1rem;
-    margin-bottom: 1rem;
 }
 
 .stat-progress {
@@ -640,18 +610,23 @@ body {
 }
 
 .rating-overview {
-    text-align: center;
+    /* text-align: center; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .rating-score-large {
-    font-size: 4rem;
-    font-weight: 700;
+    font-size: 3rem;
+    font-weight: 600;
     color: var(--primary-green);
     line-height: 1;
 }
 
 .rating-stars-large {
     margin: 0.5rem 0;
+    
 }
 
 .rating-stars-large i {
@@ -1143,5 +1118,433 @@ body {
     
     .user-existing-review .alert {
         font-size: 0.9rem;
+    }
+}
+
+/* Edit Review Buttons */
+.btn-edit-review {
+    background: linear-gradient(135deg, #0d6efd, #0a58ca);
+    color: white !important;
+    border: none !important;
+}
+
+.btn-edit-review:hover {
+    background: linear-gradient(135deg, #0a58ca, #084298);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+}
+
+.btn-cancel-edit {
+    background: transparent;
+    border: 2px solid #6c757d;
+    color: #6c757d;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 500;
+}
+
+.btn-cancel-edit:hover {
+    background: #6c757d;
+    color: white;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-cancel {
+    background: transparent;
+    border: 2px solid #6c757d;
+    color: #6c757d;
+    padding: 0.75rem 2rem;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-cancel:hover {
+    background: #6c757d;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+/* Edit Mode Form */
+#reviewEditMode .review-form {
+    background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+    border: 2px solid #ffc107;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Review Actions */
+.review-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* Form Header with Cancel Button */
+.form-header-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .btn-submit-review,
+    .btn-cancel {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .review-actions {
+        flex-direction: column;
+    }
+    
+    .review-action-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Top Actions Bar - Back Button & Admin Actions */
+.top-actions-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Rating & Favorite Row */
+.rating-favorite-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* Favorite Button */
+.btn-favorite {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0.8rem;
+    background: white;
+    border: 2px solid #dc3545;
+    border-radius: 50px;
+    color: #dc3545;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2);
+}
+
+.btn-favorite:hover {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+    border-color: #dc3545;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+}
+
+.btn-favorite.favorited {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    color: white;
+    border-color: #dc3545;
+}
+
+.btn-favorite.favorited:hover {
+    background: white;
+    color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-favorite i {
+    font-size: 1.2rem;
+    transition: var(--transition);
+}
+
+.btn-favorite:hover i {
+    transform: scale(1.2);
+}
+
+.btn-favorite.favorited i {
+    animation: heartBeat 0.5s ease;
+}
+
+@keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.3); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.2); }
+}
+
+/* Disease Cards - Full Display */
+.disease-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.disease-card {
+    background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+    border: 2px solid #ffc107;
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: var(--transition);
+}
+
+.disease-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 193, 7, 0.3);
+    border-color: #ff9800;
+}
+
+.disease-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid rgba(255, 193, 7, 0.3);
+}
+
+.disease-header i {
+    font-size: 1.5rem;
+    color: #ff9800;
+}
+
+.disease-header h5 {
+    margin: 0;
+    color: #856404;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.disease-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.disease-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.disease-info strong {
+    color: #856404;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.disease-info strong i {
+    font-size: 1.1rem;
+    color: #ff9800;
+}
+
+.disease-info p {
+    margin: 0;
+    padding-left: 1.75rem;
+    color: #6c5d2e;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* Edit Review Buttons */
+.btn-edit-review {
+    background: linear-gradient(135deg, #0d6efd, #0a58ca);
+    color: white !important;
+    border: none !important;
+}
+
+.btn-edit-review:hover {
+    background: linear-gradient(135deg, #0a58ca, #084298);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+}
+
+.btn-cancel-edit {
+    background: transparent;
+    border: 2px solid #6c757d;
+    color: #6c757d;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 500;
+}
+
+.btn-cancel-edit:hover {
+    background: #6c757d;
+    color: white;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-cancel {
+    background: transparent;
+    border: 2px solid #6c757d;
+    color: #6c757d;
+    padding: 0.75rem 2rem;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-cancel:hover {
+    background: #6c757d;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+/* Edit Mode Form */
+#reviewEditMode .review-form {
+    background: linear-gradient(135deg, #fff9e6 0%, #fffbf0 100%);
+    border: 2px solid #ffc107;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Review Actions */
+.review-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* Form Header with Cancel Button */
+.form-header-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .top-actions-bar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .admin-actions {
+        justify-content: stretch;
+    }
+    
+    .action-btn {
+        flex: 1;
+        justify-content: center;
+    }
+    
+    .rating-favorite-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .btn-favorite {
+        justify-content: center;
+    }
+    
+    .disease-info p {
+        padding-left: 0;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .btn-submit-review,
+    .btn-cancel {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .review-actions {
+        flex-direction: column;
+    }
+    
+    .review-action-btn {
+        width: 100%;
+        justify-content: center;
     }
 }

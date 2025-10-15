@@ -16,8 +16,17 @@ namespace PlantManagement.Repositories.Implementations
         {
             _context = context;
         }
- 
-        public async Task AddOrUpdateReviewAsync(PlantReview review)
+
+        public async Task AddReviewAsync(PlantReview review)
+        {
+            review.CreatedAt = DateTime.Now;
+            review.UpdatedAt = DateTime.Now;
+            review.IsActive = true;
+            _context.PlantReviews.Add(review);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateReviewAsync(PlantReview review)
         {
             var existing = await GetUserReviewAsync(review.PlantId, review.UserId);
             if (existing != null)
@@ -25,37 +34,31 @@ namespace PlantManagement.Repositories.Implementations
                 existing.Comment = review.Comment;
                 existing.Rating = review.Rating;
                 existing.UpdatedAt = DateTime.Now;
+                await _context.SaveChangesAsync();
             }
-            else
-            {
-                review.CreatedAt = DateTime.Now;
-                review.UpdatedAt = DateTime.Now;
-                review.IsActive = true;
-                _context.PlantReviews.Add(review);
-            }
-            await _context.SaveChangesAsync();
         }
- 
-        public Task<List<PlantReview>> GetAllReviewsForAdminAsync(int plantId)
+
+        public async Task<List<PlantReview>> GetAllReviewsForAdminAsync(int plantId)
         {
-            return _context.PlantReviews
+            return await _context.PlantReviews
             .Include(p => p.User)
             .Where(p => p.PlantId == plantId).OrderByDescending(p => p.UpdatedAt).ToListAsync();
         }
- 
+
         public async Task<PlantReview> GetUserReviewAsync(int plantId, int userId)
         {
             return await _context.PlantReviews.FirstOrDefaultAsync(r => r.PlantId == plantId && r.UserId == userId);
         }
- 
-        public Task<List<PlantReview>> GetVisibleReviewsByPlantIdAsync(int plantId)
+
+        public async Task<List<PlantReview>> GetVisibleReviewsByPlantIdAsync(int plantId)
         {
-            return _context.PlantReviews
+            return await _context.PlantReviews
             .Include(p => p.User)
             .Where(p => p.PlantId == plantId && p.IsActive == true).OrderByDescending(p => p.UpdatedAt).ToListAsync();
- 
+
         }
- 
+
+
         public async Task ToggleVisibilityAsync(int reviewId, bool IsActive)
         {
             var feedback = await _context.PlantReviews.FindAsync(reviewId);

@@ -27,6 +27,7 @@ builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
 builder.Services.AddScoped<IViewLogRepository, ViewLogRepository>();
 builder.Services.AddScoped<IPlantReviewRepository, PlantReviewRepository>();
+builder.Services.AddScoped<ISearchLogRepository, SearchLogRepository>();
 
 // // Nếu có bảng liên kết:
 // builder.Services.AddScoped<IPlantCategoryRepository, PlantCategoryRepository>();
@@ -47,6 +48,7 @@ builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
 builder.Services.AddScoped<IViewLogService, ViewLogService>();
 builder.Services.AddScoped<IPlantReviewService, PlantReviewService>();
+builder.Services.AddScoped<ISearchLogService, SearchLogService>();
 
 // Nếu có bảng liên kết:
 // builder.Services.AddScoped<IPlantCategoryService, PlantCategoryService>();

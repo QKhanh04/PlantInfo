@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using PlantManagement.Common.Results;
+using PlantManagement.DTOs;
 using PlantManagement.Models;
+using PlantManagement.Repositories.Interfaces;
 
 namespace PlantManagement.Services.Interfaces
 {
@@ -18,5 +20,7 @@ namespace PlantManagement.Services.Interfaces
         public Task<ServiceResult<bool>> ChangePassword(string email, string newPassword, string confirmedNewPassword);
         public Task<bool> VerifyOtp(HttpContext httpContext, string otp);
         public void ClearOtpSession(HttpContext httpContext);
+        Task<ServiceResult<bool>> UpdateUserAsync(UpdateUserDTO dto);
+
     }
 }

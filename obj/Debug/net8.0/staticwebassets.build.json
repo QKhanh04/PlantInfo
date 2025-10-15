@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "l051tSIOFVwJji0E+HY/EHCwJhzuqp2jYyRglxDg4rw=",
+  "Hash": "b4Mt2Ukikil9RZ0J3HmowOLSgFtRziRcKPhg+I8nwKA=",
   "Source": "PlantManagement",
   "BasePath": "_content/PlantManagement",
   "Mode": "Default",
@@ -157,8 +157,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "biacql29f1",
-      "Integrity": "M+5jE6UGc/NNMzv8QJLEY/Dz201uqXDvsvZStF3YRN8=",
+      "Fingerprint": "tky56gkqye",
+      "Integrity": "TQTCOVi2gSNeVZV0+v9geQZC6K51QNPrNl2RwBfZhfA=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\detail.css"
@@ -2111,51 +2111,6 @@
       ]
     },
     {
-      "Route": "css/detail.biacql29f1.css",
-      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\detail.css",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "20194"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "text/css"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"M+5jE6UGc/NNMzv8QJLEY/Dz201uqXDvsvZStF3YRN8=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Tue, 14 Oct 2025 01:00:43 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "biacql29f1"
-        },
-        {
-          "Name": "label",
-          "Value": "css/detail.css"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-M+5jE6UGc/NNMzv8QJLEY/Dz201uqXDvsvZStF3YRN8="
-        }
-      ]
-    },
-    {
       "Route": "css/detail.css",
       "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\detail.css",
       "Selectors": [],
@@ -2166,7 +2121,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "20194"
+          "Value": "30757"
         },
         {
           "Name": "Content-Type",
@@ -2174,11 +2129,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"M+5jE6UGc/NNMzv8QJLEY/Dz201uqXDvsvZStF3YRN8=\""
+          "Value": "\"TQTCOVi2gSNeVZV0+v9geQZC6K51QNPrNl2RwBfZhfA=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Tue, 14 Oct 2025 01:00:43 GMT"
+          "Value": "Wed, 15 Oct 2025 20:40:41 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2188,7 +2143,52 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-M+5jE6UGc/NNMzv8QJLEY/Dz201uqXDvsvZStF3YRN8="
+          "Value": "sha256-TQTCOVi2gSNeVZV0+v9geQZC6K51QNPrNl2RwBfZhfA="
+        }
+      ]
+    },
+    {
+      "Route": "css/detail.tky56gkqye.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\detail.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "30757"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"TQTCOVi2gSNeVZV0+v9geQZC6K51QNPrNl2RwBfZhfA=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 15 Oct 2025 20:40:41 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "tky56gkqye"
+        },
+        {
+          "Name": "label",
+          "Value": "css/detail.css"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-TQTCOVi2gSNeVZV0+v9geQZC6K51QNPrNl2RwBfZhfA="
         }
       ]
     },
@@ -7873,7 +7873,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 12 Oct 2025 23:57:17 GMT"
+          "Value": "Wed, 15 Oct 2025 21:12:02 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -7910,7 +7910,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 12 Oct 2025 23:57:17 GMT"
+          "Value": "Wed, 15 Oct 2025 21:12:02 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -7947,7 +7947,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 12 Oct 2025 23:57:17 GMT"
+          "Value": "Wed, 15 Oct 2025 21:12:02 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -7992,7 +7992,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sun, 12 Oct 2025 23:57:17 GMT"
+          "Value": "Wed, 15 Oct 2025 21:12:02 GMT"
         },
         {
           "Name": "Cache-Control",
