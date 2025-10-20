@@ -1,4 +1,5 @@
 @page "{id:int}"
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @using PlantManagement.DTOs
 
 @model DetailModel
@@ -60,16 +61,17 @@
                         <span class="rating-count">(@Model.RatingSummary.TotalReviews đánh giá)</span>
                     </div>
 
+
                     <!-- Favorite Button -->
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <form method="post" asp-page-handler="ToggleFavorite" id="favoriteForm">
-                            <button type="submit" class="btn-favorite @(Model.IsFavorited ? "favorited" : "")"
-                                id="favoriteBtn">
-                                <i class="bi @(Model.IsFavorited ? "bi-heart-fill" : "bi-heart")"></i>
-                                <span>@(Model.IsFavorited ? "Đã yêu thích" : "Yêu thích")</span>
-                            </button>
-                        </form>
+                        <button type="button" class="btn-favorite @(Model.IsFavorited ? "favorited" : "")" id="favoriteBtn"
+                            data-plant-id="@Model.Id">
+                            <i class="bi @(Model.IsFavorited ? "bi-heart-fill" : "bi-heart")"></i>
+                            <span>@(Model.IsFavorited ? "Đã yêu thích" : "Yêu thích")</span>
+                        </button>
+                        @* <input name="__RequestVerificationToken" type="hidden" value="@Antiforgery.GetTokens(HttpContext).RequestToken" /> *@
+
                     }
                     else
                     {
@@ -146,7 +148,7 @@
                     </div>
                     <div class="stat-title">Ánh sáng</div>
                     <div class="stat-value">@Model.Plants.GrowthCondition?.Sunlight</div>
-                  
+
                 </div>
             </div>
             <div class="col-lg col-md-6">
@@ -156,7 +158,7 @@
                     </div>
                     <div class="stat-title">Tưới nước</div>
                     <div class="stat-value">@Model.Plants.GrowthCondition?.WaterRequirement</div>
-                  
+
                 </div>
             </div>
             <div class="col-lg col-md-6">
@@ -166,27 +168,27 @@
                     </div>
                     <div class="stat-title">Nhiệt độ</div>
                     <div class="stat-value">@Model.Plants.GrowthCondition?.TemperatureRange</div>
-                   
+
                 </div>
             </div>
-             <div class="col-lg col-md-6">
+            <div class="col-lg col-md-6">
                 <div class="stat-card">
                     <div class="stat-icon-wrapper temp">
                         <i class="bi bi-cloud stat-icon" style="color:rgb(133, 223, 250)"></i>
                     </div>
                     <div class="stat-title">Thời tiết</div>
                     <div class="stat-value">@Model.Plants.GrowthCondition?.Climate</div>
-                 
+
                 </div>
             </div>
-             <div class="col-lg col-md-6">
+            <div class="col-lg col-md-6">
                 <div class="stat-card">
                     <div class="stat-icon-wrapper temp">
                         <i class="bi bi-grid stat-icon" style="color:brown"></i>
                     </div>
                     <div class="stat-title">Loại đất</div>
                     <div class="stat-value">@Model.Plants.GrowthCondition?.SoilType</div>
-                
+
                 </div>
             </div>
         </div>
@@ -242,55 +244,6 @@
         </div>
     </div>
 
-    <!-- Điều kiện sinh trưởng - 2 cột -->
-    @* <div class="info-section" data-aos="fade-up" data-aos-delay="200">
-        <div class="row g-4">
-            <div class="col-md-6">
-                <div class="info-box">
-                    <div class="section-header">
-                        <i class="bi bi-cloud-sun section-icon"></i>
-                        <div class="section-title">Điều kiện sinh trưởng</div>
-                    </div>
-                    <div class="info-content">
-                        <div class="kv-row">
-                            <div class="kv-key"><i class="bi bi-brightness-high"></i> Ánh sáng</div>
-                            <div class="kv-value">@Model.Plants.GrowthCondition?.Sunlight</div>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="kv-row">
-                            <div class="kv-key"><i class="bi bi-droplet"></i> Tưới nước</div>
-                            <div class="kv-value">@Model.Plants.GrowthCondition?.WaterRequirement</div>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="kv-row">
-                            <div class="kv-key"><i class="bi bi-thermometer-half"></i> Nhiệt độ</div>
-                            <div class="kv-value">@Model.Plants.GrowthCondition?.TemperatureRange</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="info-box">
-                    <div class="section-header">
-                        <i class="bi bi-layers section-icon"></i>
-                        <div class="section-title">Đất & Khí hậu</div>
-                    </div>
-                    <div class="info-content">
-                        <div class="kv-row">
-                            <div class="kv-key"><i class="bi bi-grid-3x3-gap"></i> Loại đất</div>
-                            <div class="kv-value">@Model.Plants.GrowthCondition?.SoilType</div>
-                        </div>
-                        <div class="divider"></div>
-                        <div class="kv-row">
-                            <div class="kv-key"><i class="bi bi-cloud-sun"></i> Khí hậu</div>
-                            <div class="kv-value">@Model.Plants.GrowthCondition?.Climate</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> *@
 
     <!-- Bệnh thường gặp - Full width -->
     <div class="info-section" data-aos="fade-up" data-aos-delay="300">
@@ -389,6 +342,8 @@
                     <div class="rating-score-large">@Model.RatingSummary.AverageRating</div>
                     <div class="rating-stars-large">
                         @{
+
+
                             for (int i = 0; i < fullStars; i++)
                             {
                                 <i class="bi bi-star-fill text-warning"></i>
@@ -470,18 +425,13 @@
 
             @if (User.Identity.IsAuthenticated)
             {
-                @if (Model.UserReview != null)
-                {
-                    <!-- Hiển thị đánh giá hiện tại của người dùng -->
-                    <div class="user-existing-review">
-                        <div class="alert alert-info">
-                            <i class="bi bi-check-circle-fill me-2"></i>
-                            <strong>Bạn đã đánh giá cây này!</strong>
-                            <span class="ms-2">Bạn có thể chỉnh sửa đánh giá của mình.</span>
-                        </div>
-
-                        <!-- View Mode -->
-                        <div id="reviewViewMode" class="review-item my-review-highlight">
+                <!-- User's Review Section -->
+                <div class="user-review-section">
+                    <!-- View Mode: Display existing review -->
+                    <div id="reviewViewMode" class="review-item my-review-highlight"
+                        style="@(Model.UserReview == null ? "display:none;" : "")">
+                        @if (Model.UserReview != null)
+                        {
                             <div class="my-review-badge">
                                 <i class="bi bi-person-check-fill"></i> Đánh giá của bạn
                             </div>
@@ -517,101 +467,163 @@
                                     <i class="bi bi-pencil"></i> Chỉnh sửa
                                 </button>
                             </div>
-                        </div>
+                        }
+                    </div>
 
-                        <!-- Edit Mode -->
-                        <div id="reviewEditMode" style="display: none;">
-                            <form method="post" asp-page-handler="UpdateReview">
+                    <!-- Edit Mode: Edit existing review -->
+                    @if (Model.UserReview != null)
+                    {
+                        <div id="reviewEditMode" class="review-form-container" style="display: none;">
+                            <form id="editReviewForm">
                                 <div class="review-form">
-                                    <div class="form-header-info">
-                                        <h4>Chỉnh sửa đánh giá của bạn</h4>
-                                        <button type="button" class="btn-cancel-edit" onclick="toggleEditMode()">
-                                            <i class="bi bi-x-circle"></i> Hủy
+                                    <div class="form-header">
+                                        <h4>
+                                            <i class="bi bi-pencil-square"></i>
+                                            Chỉnh sửa đánh giá của bạn
+                                        </h4>
+                                        <button type="button" class="btn-close-form" onclick="toggleEditMode()" title="Hủy">
+                                            <i class="bi bi-x-lg"></i>
                                         </button>
                                     </div>
-                                    <div class="rating-input">
-                                        <label>Chọn số sao:</label>
-                                        <div class="star-rating" id="editStarRating">
-                                            <i class="bi bi-star" data-rating="1"></i>
-                                            <i class="bi bi-star" data-rating="2"></i>
-                                            <i class="bi bi-star" data-rating="3"></i>
-                                            <i class="bi bi-star" data-rating="4"></i>
-                                            <i class="bi bi-star" data-rating="5"></i>
+
+                                    <div class="form-body">
+                                        <div class="rating-input">
+                                            <label class="form-label">
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                                Đánh giá của bạn
+                                            </label>
+                                            <div class="star-rating" id="editStarRating">
+                                                <i class="bi bi-star" data-rating="1"></i>
+                                                <i class="bi bi-star" data-rating="2"></i>
+                                                <i class="bi bi-star" data-rating="3"></i>
+                                                <i class="bi bi-star" data-rating="4"></i>
+                                                <i class="bi bi-star" data-rating="5"></i>
+                                            </div>
+                                            <input type="hidden" asp-for="UpdateReview.Rating" id="edit-rating-value"
+                                                value="@Model.UserReview.Rating" />
+                                            <span asp-validation-for="UpdateReview.Rating" class="text-danger"></span>
                                         </div>
-                                        <input type="hidden" asp-for="UpdateReview.Rating" id="edit-rating-value"
-                                            value="@Model.UserReview.Rating" required />
-                                        <span asp-validation-for="UpdateReview.Rating" class="text-danger"></span>
+
+                                        <div class="comment-input">
+                                            <label class="form-label" for="edit-review-comment">
+                                                <i class="bi bi-chat-left-text"></i>
+                                                Nhận xét của bạn
+                                            </label>
+                                            <textarea class="form-control" rows="4" asp-for="UpdateReview.Comment"
+                                                id="edit-review-comment"
+                                                placeholder="Chia sẻ trải nghiệm của bạn về cây này...">@Model.UserReview.Comment</textarea>
+                                            <span asp-validation-for="UpdateReview.Comment" class="text-danger"></span>
+                                        </div>
                                     </div>
-                                    <textarea class="form-control" rows="4" asp-for="UpdateReview.Comment"
-                                        placeholder="Chia sẻ trải nghiệm của bạn về cây này..."
-                                        required>@Model.UserReview.Comment</textarea>
-                                    <span asp-validation-for="UpdateReview.Comment" class="text-danger"></span>
+
                                     <div class="form-actions">
-                                        <button type="submit" class="btn-submit-review">
+                                        <button type="button" class="btn btn-secondary" onclick="toggleEditMode()">
+                                            <i class="bi bi-x-circle"></i> Hủy
+                                        </button>
+                                        <button type="submit" class="btn btn-primary">
                                             <i class="bi bi-check-circle"></i> Cập nhật đánh giá
                                         </button>
-                                        <button type="button" class="btn-cancel" onclick="toggleEditMode()">
-                                            <i class="bi bi-x-circle"></i> Hủy
-                                        </button>
                                     </div>
+
+                                    <input name="__RequestVerificationToken" type="hidden"
+                                        value="@Antiforgery.GetTokens(HttpContext).RequestToken" />
                                 </div>
                             </form>
                         </div>
-                    </div>
-                }
-                else
-                {
-                    <!-- Form đánh giá cho người chưa đánh giá -->
-                    <form method="post" asp-page-handler="AddReview">
-                        <div class="review-form">
-                            <div class="form-header-info">
-                                <h4>Viết đánh giá của bạn</h4>
-                                <span class="text-muted">
-                                    <i class="bi bi-info-circle"></i> Bạn chỉ có thể đánh giá một lần
-                                </span>
-                            </div>
-                            <div class="rating-input">
-                                <label>Chọn số sao:</label>
-                                <div class="star-rating" id="addStarRating">
-                                    <i class="bi bi-star" data-rating="1"></i>
-                                    <i class="bi bi-star" data-rating="2"></i>
-                                    <i class="bi bi-star" data-rating="3"></i>
-                                    <i class="bi bi-star" data-rating="4"></i>
-                                    <i class="bi bi-star" data-rating="5"></i>
+                    }
+                    else
+                    {
+                        <!-- Add New Review Form -->
+                        <div class="review-form-container">
+                            <form id="addReviewForm">
+                                <div class="review-form">
+                                    <div class="form-header">
+                                        <h4>
+                                            <i class="bi bi-pencil-square"></i>
+                                            Viết đánh giá của bạn
+                                        </h4>
+                                        <span class="form-note">
+                                            <i class="bi bi-info-circle"></i>
+                                            Bạn chỉ có thể đánh giá một lần
+                                        </span>
+                                    </div>
+
+                                    <div class="form-body">
+                                        <div class="rating-input">
+                                            <label class="form-label">
+                                                <i class="bi bi-star-fill text-warning"></i>
+                                                Chọn số sao
+                                            </label>
+                                            <div class="star-rating" id="addStarRating">
+                                                <i class="bi bi-star" data-rating="1"></i>
+                                                <i class="bi bi-star" data-rating="2"></i>
+                                                <i class="bi bi-star" data-rating="3"></i>
+                                                <i class="bi bi-star" data-rating="4"></i>
+                                                <i class="bi bi-star" data-rating="5"></i>
+                                            </div>
+                                            <input type="hidden" asp-for="AddReview.Rating" id="add-rating-value" />
+                                            <span asp-validation-for="AddReview.Rating" class="text-danger"></span>
+                                        </div>
+
+                                        <div class="comment-input">
+                                            <label class="form-label" for="add-review-comment">
+                                                <i class="bi bi-chat-left-text"></i>
+                                                Nhận xét của bạn
+                                            </label>
+                                            <textarea class="form-control" rows="4" asp-for="AddReview.Comment"
+                                                id="add-review-comment"
+                                                placeholder="Chia sẻ trải nghiệm của bạn về cây này..."></textarea>
+                                            <span asp-validation-for="AddReview.Comment" class="text-danger"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn btn-primary btn-submit-review">
+                                            <i class="bi bi-send"></i> Gửi đánh giá
+                                        </button>
+                                    </div>
+
+                                    <input name="__RequestVerificationToken" type="hidden"
+                                        value="@Antiforgery.GetTokens(HttpContext).RequestToken" />
                                 </div>
-                                <input type="hidden" asp-for="NewReview.Rating" id="add-rating-value" required />
-                                <span asp-validation-for="NewReview.Rating" class="text-danger"></span>
-                            </div>
-                            <textarea class="form-control" rows="4" asp-for="NewReview.Comment"
-                                placeholder="Chia sẻ trải nghiệm của bạn về cây này..." required></textarea>
-                            <span asp-validation-for="NewReview.Comment" class="text-danger"></span>
-                            <button type="submit" class="btn-submit-review">
-                                <i class="bi bi-send"></i> Gửi đánh giá
-                            </button>
+                            </form>
                         </div>
-                    </form>
-                }
+                    }
+                </div>
             }
             else
             {
+                <!-- Login Prompt -->
                 <div class="login-prompt">
-                    <i class="bi bi-lock"></i>
-                    <p>Vui lòng <a asp-page="/Auth/Authentication"
-                            asp-route-returnUrl="@PageContext.HttpContext.Request.Path">
-                            Đăng nhập
-                        </a> để viết đánh giá</p>
+                    <div class="login-prompt-icon">
+                        <i class="bi bi-lock"></i>
+                    </div>
+                    <div class="login-prompt-content">
+                        <h5>Đăng nhập để đánh giá</h5>
+                        <p>Vui lòng <a asp-page="/Auth/Authentication"
+                                asp-route-returnUrl="@PageContext.HttpContext.Request.Path">
+                                Đăng nhập
+                            </a> để viết đánh giá về cây này</p>
+
+                    </div>
                 </div>
             }
 
             <!-- Reviews List -->
             <div class="reviews-list">
-                <h4 class="reviews-list-title">Tất cả đánh giá (@Model.RatingSummary.TotalReviews)</h4>
+                <div class="reviews-list-header">
+                    <h4 class="reviews-list-title">
+                        Tất cả đánh giá
+                        <span class="review-count-badge">@Model.RatingSummary.TotalReviews</span>
+                    </h4>
+                </div>
 
                 @if (Model.Reviews != null && Model.Reviews.Count > 0)
                 {
                     @foreach (var review in Model.Reviews)
                     {
-                        <div class="review-item">
+                        <div class="review-item @(review.UserId == Model.CurrentUserId ? "my-review-item" : "")"
+                            data-review-id="@review.ReviewId" data-review-user-id="@review.UserId">
                             <div class="review-header">
                                 <div class="user-avatar">
                                     <i class="bi bi-person-circle"></i>
@@ -672,175 +684,18 @@
     <script src="https://unpkg.com/@@popperjs/core@2"></script>
 
     <script>
-        AOS.init({
-            duration: 800,
-            easing: 'ease-out-cubic',
-            once: true
-        });
-
         // Thumbnail carousel logic
         const imageList = [
-                        @foreach (var img in Model.Plants.Images ?? new List<PlantImageDTO>())
+                                    @foreach (var img in Model.Plants.Images ?? new List<PlantImageDTO>())
             {
                 <text>
                     {
                         url: "@img.ImageUrl",
                     isPrimary: @img.IsPrimary.ToString().ToLower()
-                                            },
+                                                                                                                                                                                            },
                 </text>
-                                    }
-                                    ];
-
-        let thumbStart = 0;
-        const thumbPerPage = 5;
-
-        function renderThumbnails() {
-            const container = document.getElementById('thumbnailList');
-            container.innerHTML = '';
-            for (let i = thumbStart; i < Math.min(imageList.length, thumbStart + thumbPerPage); i++) {
-                const img = imageList[i];
-                const el = document.createElement('img');
-                el.src = img.url;
-                el.className = 'thumbnail-img' + (img.isPrimary ? ' active' : '');
-                el.onclick = function () {
-                    document.getElementById('mainPlantImage').src = img.url;
-                    document.querySelectorAll('.thumbnail-img').forEach(t => t.classList.remove('active'));
-                    el.classList.add('active');
-                };
-                container.appendChild(el);
-            }
-            document.getElementById('thumbPrev').disabled = (thumbStart === 0);
-            document.getElementById('thumbNext').disabled = (thumbStart + thumbPerPage >= imageList.length);
-        }
-
-        function showThumbnail(direction) {
-            thumbStart += direction;
-            if (thumbStart < 0) thumbStart = 0;
-            if (thumbStart > imageList.length - thumbPerPage) thumbStart = imageList.length - thumbPerPage;
-            renderThumbnails();
-        }
-
-        // Image Modal
-        function openImageModal() {
-            const modal = document.getElementById('imageModal');
-            const modalImg = document.getElementById('modalImage');
-            const mainImg = document.getElementById('mainPlantImage');
-            modal.style.display = "block";
-            modalImg.src = mainImg.src;
-        }
-
-        document.querySelector('.close-modal')?.addEventListener('click', function () {
-            document.getElementById('imageModal').style.display = "none";
-        });
-
-        // Toggle Edit Mode
-        function toggleEditMode() {
-            const viewMode = document.getElementById('reviewViewMode');
-            const editMode = document.getElementById('reviewEditMode');
-
-            if (viewMode.style.display === 'none') {
-                viewMode.style.display = 'block';
-                editMode.style.display = 'none';
-            } else {
-                viewMode.style.display = 'none';
-                editMode.style.display = 'block';
-                const currentRating = parseInt(document.getElementById('edit-rating-value').value);
-                updateEditStars(currentRating);
-            }
-        }
-
-        // Star rating for Add Review
-        document.addEventListener('DOMContentLoaded', function () {
-            renderThumbnails();
-
-            const addStarRating = document.getElementById('addStarRating');
-            if (addStarRating) {
-                initializeStarRating(addStarRating, 'add-rating-value');
-            }
-
-            const editStarRating = document.getElementById('editStarRating');
-            if (editStarRating) {
-                initializeStarRating(editStarRating, 'edit-rating-value');
-                const currentRating = parseInt(document.getElementById('edit-rating-value').value);
-                updateStarsDisplay(editStarRating, currentRating);
-            }
-
-            // Tooltip functionality
-            const badgeItems = document.querySelectorAll('.badge-custom');
-            let tooltipEl = null;
-            let popperInstance = null;
-
-            badgeItems.forEach(badge => {
-                badge.addEventListener('mouseenter', function () {
-                    tooltipEl = document.createElement('div');
-                    tooltipEl.className = 'custom-tooltip';
-                    tooltipEl.innerHTML = badge.getAttribute('data-tooltip-content');
-                    document.body.appendChild(tooltipEl);
-
-                    popperInstance = Popper.createPopper(badge, tooltipEl, {
-                        placement: 'top',
-                        modifiers: [{ name: 'offset', options: { offset: [0, 8] } }]
-                    });
-                });
-
-                badge.addEventListener('mouseleave', function () {
-                    if (tooltipEl) {
-                        document.body.removeChild(tooltipEl);
-                        tooltipEl = null;
-                    }
-                    if (popperInstance) {
-                        popperInstance.destroy();
-                        popperInstance = null;
-                    }
-                });
-            });
-        });
-
-        function initializeStarRating(container, inputId) {
-            const stars = container.querySelectorAll('i');
-            let selectedRating = parseInt(document.getElementById(inputId).value) || 0;
-
-            stars.forEach(star => {
-                star.addEventListener('click', function () {
-                    selectedRating = parseInt(this.getAttribute('data-rating'));
-                    updateStarsDisplay(container, selectedRating);
-                    document.getElementById(inputId).value = selectedRating;
-                });
-
-                star.addEventListener('mouseenter', function () {
-                    const rating = parseInt(this.getAttribute('data-rating'));
-                    updateStarsDisplay(container, rating);
-                });
-            });
-
-            container.addEventListener('mouseleave', function () {
-                updateStarsDisplay(container, selectedRating);
-            });
-
-            if (selectedRating > 0) {
-                updateStarsDisplay(container, selectedRating);
-            }
-        }
-
-        function updateStarsDisplay(container, rating) {
-            const stars = container.querySelectorAll('i');
-            stars.forEach(star => {
-                const starRating = parseInt(star.getAttribute('data-rating'));
-                if (starRating <= rating) {
-                    star.classList.remove('bi-star');
-                    star.classList.add('bi-star-fill');
-                } else {
-                    star.classList.remove('bi-star-fill');
-                    star.classList.add('bi-star');
-                }
-            });
-        }
-
-        function updateEditStars(rating) {
-            const editStarRating = document.getElementById('editStarRating');
-            if (editStarRating) {
-                updateStarsDisplay(editStarRating, rating);
-            }
-        }
+                                }
+                                ];
     </script>
+    <script src="~/js/detail.js"></script>
 }

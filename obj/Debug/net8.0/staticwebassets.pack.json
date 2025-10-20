@@ -9,8 +9,8 @@
       "PackagePath": "staticwebassets\\css\\admin\\create.css"
     },
     {
-      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\index.css",
-      "PackagePath": "staticwebassets\\css\\admin\\index.css"
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\dashboard.css",
+      "PackagePath": "staticwebassets\\css\\admin\\dashboard.css"
     },
     {
       "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\report.css",
@@ -55,6 +55,10 @@
     {
       "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\js\\auth.js",
       "PackagePath": "staticwebassets\\js\\auth.js"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\js\\detail.js",
+      "PackagePath": "staticwebassets\\js\\detail.js"
     },
     {
       "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\js\\site.js",

@@ -16,7 +16,7 @@ using PlantManagement.Services.Interfaces;
 
 namespace PlantManagement.Pages.Admin
 {
-     [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class ReportModel : PageModel
     {
         private readonly IReportService _reportService;
@@ -276,6 +276,78 @@ namespace PlantManagement.Pages.Admin
                 pdfExport.Export(report.Document, ms);
                 ms.Position = 0;
                 return File(ms.ToArray(), "application/pdf", "TopCayCoLuotXemCaoNhat.pdf");
+            }
+        }
+
+        public async Task<IActionResult> OnGetExportTopKeyWordReportAsync(DateTime? startDate, DateTime? endDate)
+        {
+            var topFavorites = await _reportService.GetTopSearchKeywordsAsync(top, startDate, endDate);
+
+            var report = new SectionReport();
+
+            var reportHeader = new ReportHeader();
+            var pageHeader = new PageHeader { Height = 0.3f };
+            var detail = new Detail { Height = 0.3f };
+            var pageFooter = new PageFooter();
+            var reportFooter = new ReportFooter();
+
+            report.Sections.Add(reportHeader);
+            report.Sections.Add(pageHeader);
+            report.Sections.Add(detail);
+            report.Sections.Add(pageFooter);
+            report.Sections.Add(reportFooter);
+
+            // Header
+            float left = 0f, width = 3f;
+            var headers = new[] { "Từ khóa", "Lượt tìm kiếm" };
+            for (int i = 0; i < headers.Length; i++)
+            {
+                var tb = new TextBox
+                {
+                    Left = left,
+                    Top = 0,
+                    Width = width,
+                    Height = 0.3f,
+                    Text = headers[i],
+                    Style = "font-weight: bold; background-color: LightGray;"
+                };
+                pageHeader.Controls.Add(tb);
+                left += width;
+            }
+
+            // Detail
+            left = 0f;
+            var dataFields = new[] { "Keyword", "SearchCount" };
+            for (int i = 0; i < dataFields.Length; i++)
+            {
+                var tb = new TextBox
+                {
+                    Left = left,
+                    Top = 0,
+                    Width = width,
+                    Height = 0.3f,
+                    DataField = dataFields[i]
+                };
+                detail.Controls.Add(tb);
+                left += width;
+            }
+
+            // Data source
+            var dataList = topFavorites.Select(s => new
+            {
+                Keyword = s.Keyword,
+                SearchCount = s.Count
+            }).ToList();
+            report.DataSource = dataList;
+
+            report.Run();
+
+            using (var ms = new MemoryStream())
+            {
+                var pdfExport = new GrapeCity.ActiveReports.Export.Pdf.Section.PdfExport();
+                pdfExport.Export(report.Document, ms);
+                ms.Position = 0;
+                return File(ms.ToArray(), "application/pdf", "TopTuKhoaTimKiem.pdf");
             }
         }
 

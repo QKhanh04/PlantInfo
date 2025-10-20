@@ -14,8 +14,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thống Kê Admin - Quản Lý Cây Trồng</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    @* <link rel="stylesheet" *@
-    @* href="https://cdn.jsdelivr.net/npm/@@eonasdan/tempus-dominus@6/dist/css/tempus-dominus.min.css"> *@
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@@eonasdan/tempus-dominus@6/dist/css/tempus-dominus.min.css">
     <link rel="stylesheet" href="~/css/admin/report.css">
 </head>
 
@@ -154,6 +154,43 @@
             </div>
         </div>
 
+        <div id="topKeywordModal" class="modal-bg">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeTopKeywordModal()">&times;</button>
+                <h2>Top từ khóa được tìm kiếm nhiều nhất</h2>
+                <table class="favorite-table">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Từ khóa</th>
+                            <th>Lượt tìm kiếm</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.TopKeywords != null && Model.TopKeywords.Count > 0)
+                        {
+                            int idx = 1;
+                            foreach (var top in Model.TopKeywords)
+                            {
+                                <tr>
+                                    <td>@idx</td>
+                                    <td>@top.Keyword</td>
+                                    <td>@top.Count</td>
+                                </tr>
+                                idx++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3" style="text-align:center;">Không có dữ liệu </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- Stats Cards -->
         <div class="stats-grid">
             <div class="stat-card">
@@ -162,7 +199,9 @@
                         <h3>Tổng số cây trồng</h3>
                         <div class="stat-value">@Model.PlantSummary?.TotalPlants</div>
                     </div>
-                    <div class="stat-icon">🌱</div>
+                    <div class="stat-icon">
+                        <i class="bi bi-flower1" style="color:#28a745;"></i>
+                    </div>
                 </div>
             </div>
 
@@ -172,7 +211,9 @@
                         <h3>Tổng số người dùng</h3>
                         <div class="stat-value">@Model.UserSummary.TotalUsers</div>
                     </div>
-                    <div class="stat-icon">👥</div>
+                    <div class="stat-icon">
+                        <i class="bi bi-people" style="color:#6c757d;"></i>
+                    </div>
                 </div>
             </div>
 
@@ -182,7 +223,9 @@
                         <h3>Lượt tìm kiếm</h3>
                         <div class="stat-value">@Model.TopKeywords.Count</div>
                     </div>
-                    <div class="stat-icon">🔍</div>
+                    <div class="stat-icon">
+                        <i class="bi bi-search" style="color:#007bff;"></i>
+                    </div>
                 </div>
             </div>
 
@@ -192,7 +235,9 @@
                         <h3>Cây yêu thích</h3>
                         <div class="stat-value">@Model.FavoriteTotal.Data</div>
                     </div>
-                    <div class="stat-icon">❤️</div>
+                    <div class="stat-icon">
+                        <i class="bi bi-heart-fill" style="color:#dc3545;"></i>
+                    </div>
                 </div>
             </div>
 
@@ -202,91 +247,102 @@
                         <h3>Tổng lượt xem</h3>
                         <div class="stat-value">@Model.TopViewTotal.Data</div>
                     </div>
-                    <div class="stat-icon"></div>
+                    <div class="stat-icon">
+                        <i class="bi bi-eye" style="color:orange;"></i>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Charts Row 1 -->
-        <div class="charts-grid">
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h2>Phân bố theo danh mục</h2>
-                    <div style="display: flex; gap: 8px;">
-                        <button class="btn-download" onclick="downloadChart('pieChart')">📥</button>
-                        <button class="btn btn-info" onclick="openCategoryModal()">Chi tiết</button>
-                        <a href="/Admin/Report?handler=ExportCategoryReport&startDate=@Request.Query["startDate"]&endDate=@Request.Query["endDate"]"
-                            class="btn btn-danger btn-export-pdf">
-                            Xuất PDF
-                        </a>
-                    </div>
-                </div>
-                <div style="max-width:600px; margin:0 auto;">
-                    <canvas id="pieChart"></canvas>
+    <!-- Charts Row 1 -->
+    <div class="charts-grid">
+        <div class="chart-card">
+            <div class="chart-header">
+                <h2>Phân bố theo danh mục</h2>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-download" onclick="downloadChart('pieChart')">📥</button>
+                    <button class="btn btn-info" onclick="openCategoryModal()">Chi tiết</button>
+                    <a href="/Admin/Report?handler=ExportCategoryReport&startDate=@Request.Query["startDate"]&endDate=@Request.Query["endDate"]"
+                        class="btn btn-danger btn-export-pdf">
+                        Xuất PDF
+                    </a>
                 </div>
             </div>
+            <div style="max-width:600px; margin:0 auto;">
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
 
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h2>Từ khóa tìm kiếm phổ biến</h2>
+        <div class="chart-card">
+            <div class="chart-header">
+                <h2>Từ khóa tìm kiếm phổ biến</h2>
+                <div style="display: flex; gap: 8px;">
+
                     <button class="btn-download" onclick="exportKeywords()">📥</button>
+                    <button class="btn btn-info" onclick="openTopKeywordModal()">Chi tiết</button>
+                    <a href="/Admin/Report?handler=ExportTopKeywordReport&startDate=@Request.Query["startDate"]&endDate=@Request.Query["endDate"]"
+                        class="btn btn-danger btn-export-pdf">
+                        Xuất PDF
+                    </a>
                 </div>
-                <ul class="keywords-list" id="keywordsList"></ul>
             </div>
+            <ul class="keywords-list" id="keywordsList"></ul>
+        </div>
+    </div>
+
+    <!-- Charts Row 2 -->
+    <div class="charts-grid">
+        <div class="chart-card">
+            <div class="chart-header">
+                <h2>Top cây được yêu thích</h2>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-download" onclick="downloadChart('barChart')">📥</button>
+                    <button class="btn btn-info" onclick="openFavoriteModal()">Chi tiết</button>
+                    <a href="/Admin/Report?handler=ExportTopFavoritesReport&startDate=@Request.Query["startDate"]&endDate=@Request.Query["endDate"]"
+                        class="btn btn-danger btn-export-pdf">
+                        Xuất PDF
+                    </a>
+                </div>
+            </div>
+            <canvas id="barChart"></canvas>
+        </div>
+        <div class="chart-card">
+            <div class="chart-header">
+                <h2>Top cây được xem nhiều nhất</h2>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn-download" onclick="downloadChart('topViewChart')">📥</button>
+                    <button class="btn btn-info" onclick="openTopViewModal()">Chi tiết</button>
+                    <a href="/Admin/Report?handler=OnGetExportTopVỉewReportAsync&startDate=@Request.Query["startDate"]&endDate=@Request.Query["endDate"]"
+                        class="btn btn-danger btn-export-pdf">
+                        Xuất PDF
+                    </a>
+                </div>
+            </div>
+            <canvas id="topViewChart"></canvas>
         </div>
 
-        <!-- Charts Row 2 -->
-        <div class="charts-grid">
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h2>Top cây được yêu thích</h2>
-                    <div style="display: flex; gap: 8px;">
-                        <button class="btn-download" onclick="downloadChart('barChart')">📥</button>
-                        <button class="btn btn-info" onclick="openFavoriteModal()">Chi tiết</button>
-                        <a href="/Admin/Report?handler=ExportTopFavoritesReport&startDate=@Request.Query["startDate"]&endDate=@Request.Query["endDate"]"
-                            class="btn btn-danger btn-export-pdf">
-                            Xuất PDF
-                        </a>
-                    </div>
-                </div>
-                <canvas id="barChart"></canvas>
-            </div>
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h2>Top cây được xem nhiều nhất</h2>
-                    <div style="display: flex; gap: 8px;">
-                        <button class="btn-download" onclick="downloadChart('topViewChart')">📥</button>
-                        <button class="btn btn-info" onclick="openTopViewModal()">Chi tiết</button>
-                        <a href="/Admin/Report?handler=OnGetExportTopVỉewReportAsync&startDate=@Request.Query["startDate"]&endDate=@Request.Query["endDate"]"
-                            class="btn btn-danger btn-export-pdf">
-                            Xuất PDF
-                        </a>
-                    </div>
-                </div>
-                <canvas id="topViewChart"></canvas>
-            </div>
+    </div>
 
+    <div class="charts-grid">
+        <div class="chart-card">
+            <div class="chart-header" style="display: flex; align-items: center; gap: 16px;">
+                <h2>Số cây thêm mới và người đăng ký mỗi tháng</h2>
+                <select id="yearSelector" style="padding: 4px 8px;">
+                    @for (int y = DateTime.Now.Year; y >= DateTime.Now.Year - 5; y--)
+                    {
+                        var selected = y == DateTime.Now.Year ? "selected" : "";
+                        <option value="@y" selected="@selected">@y</option>
+                    }
+                </select>
+                <button class="btn-download" onclick="downloadChart('plantMonthChart')">📥</button>
+            </div>
+            <canvas id="plantMonthChart" height="100"></canvas>
         </div>
-
-        <div class="charts-grid">
-            <div class="chart-card">
-                <div class="chart-header" style="display: flex; align-items: center; gap: 16px;">
-                    <h2>Số cây thêm mới và người đăng ký mỗi tháng</h2>
-                    <select id="yearSelector" style="padding: 4px 8px;">
-                        @for (int y = DateTime.Now.Year; y >= DateTime.Now.Year - 5; y--)
-                        {
-                            var selected = y == DateTime.Now.Year ? "selected" : "";
-                            <option value="@y" selected="@selected">@y</option>
-                        }
-                    </select>
-                    <button class="btn-download" onclick="downloadChart('plantMonthChart')">📥</button>
-                </div>
-                <canvas id="plantMonthChart" height="100"></canvas>
-            </div>
-        </div>
+    </div>
 
 
-        @* <!-- Summary Table -->
+    @* <!-- Summary Table -->
         <div class="summary-table">
             <div class="chart-header" style="margin-bottom: 20px;">
                 <h2>Bảng tổng hợp chi tiết</h2>
@@ -306,296 +362,356 @@
         </div>
     </div> *@
 
-        <script>
+    <script>
 
-            document.getElementById('yearSelector').addEventListener('change', function () {
-                const selectedYear = this.value;
-                const url = new URL(window.location.href);
-                url.searchParams.set('year', selectedYear); // Thay 'year' bằng tên tham số bạn xử lý ở backend
-                window.location.href = url.toString();
-            });
-            const categories = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CategoryStats ?? new List<CategoryStatDto>()));
-            const topFavorites = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TopFavorites ?? new List<FavoriteStatDto>()));
-            const topKeywords = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TopKeywords ?? new List<KeywordStatDto>()));
-            const plantMonthly = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.PlantMonthly ?? new List<PlantMonthlyStatDto>()));
-            const userMonthly = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.UserMonthly ?? new List<UserMonthlyStatDto>()));
-            const topPLantView = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TopPlantView ?? new List<PlantViewStatDto>()));
+        document.getElementById('yearSelector').addEventListener('change', function () {
+            const selectedYear = this.value;
+            const url = new URL(window.location.href);
+            url.searchParams.set('year', selectedYear); // Thay 'year' bằng tên tham số bạn xử lý ở backend
+            window.location.href = url.toString();
+        });
+        const categories = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.CategoryStats ?? new List<CategoryStatDto>()));
+        const topFavorites = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TopFavorites ?? new List<FavoriteStatDto>()));
+        const topKeywords = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TopKeywords ?? new List<KeywordStatDto>()));
+        const plantMonthly = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.PlantMonthly ?? new List<PlantMonthlyStatDto>()));
+        const userMonthly = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.UserMonthly ?? new List<UserMonthlyStatDto>()));
+        const topPLantView = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.TopPlantView ?? new List<PlantViewStatDto>()));
 
-            console.log(userMonthly)
-            // Initialize Pie Chart
-            const pieCtx = document.getElementById('pieChart').getContext('2d');
-            new Chart(pieCtx, {
-                type: 'pie',
-                data: {
-                    labels: categories.map(c => c.CategoryName),
-                    datasets: [{
-                        data: categories.map(c => c.PlantCount),
-                        backgroundColor: [
-                            '#3b82f6', // Blue
-                            '#8b5cf6', // Purple
-                            '#f59e0b', // Amber
-                            '#ef4444', // Red
-                            '#10b981', // Green
+        console.log(userMonthly)
+        // Initialize Pie Chart
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: categories.map(c => c.CategoryName),
+                datasets: [{
+                    data: categories.map(c => c.PlantCount),
+                    backgroundColor: [
+                        '#3b82f6', // Blue
+                        '#8b5cf6', // Purple
+                        '#f59e0b', // Amber
+                        '#ef4444', // Red
+                        '#10b981', // Green
 
-                            '#6366f1', // Indigo
-                            '#f43f5e', // Rose
-                            '#22d3ee', // Cyan
-                            '#fde68a', // Yellow
-                            '#a3e635', // Lime
-                            '#38bdf8', // Sky Blue
-                            '#eab308', // Gold
-                            '#fca5a5', // Light Red
-                            '#f472b6', // Pink
-                            '#4ade80', // Light Green
-                            '#818cf8', // Light Indigo
-                            '#f87171', // Salmon
-                            '#2dd4bf', // Teal
-                            '#facc15', // Yellow
-                            '#c026d3', // Fuchsia
-                            '#fb7185', // Light Rose
-                            '#64748b', // Slate
-                            '#0891b2', // Dark Cyan
-                            '#78716c', // Stone
-                        ],
-                        borderColor: '#ffffff',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: {
-                                padding: 16,
-                                font: { size: 13, weight: '500' },
-                                color: '#627d6b'
-                            }
+                        '#6366f1', // Indigo
+                        '#f43f5e', // Rose
+                        '#22d3ee', // Cyan
+                        '#fde68a', // Yellow
+                        '#a3e635', // Lime
+                        '#38bdf8', // Sky Blue
+                        '#eab308', // Gold
+                        '#fca5a5', // Light Red
+                        '#f472b6', // Pink
+                        '#4ade80', // Light Green
+                        '#818cf8', // Light Indigo
+                        '#f87171', // Salmon
+                        '#2dd4bf', // Teal
+                        '#facc15', // Yellow
+                        '#c026d3', // Fuchsia
+                        '#fb7185', // Light Rose
+                        '#64748b', // Slate
+                        '#0891b2', // Dark Cyan
+                        '#78716c', // Stone
+                    ],
+                    borderColor: '#ffffff',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            padding: 16,
+                            font: { size: 13, weight: '500' },
+                            color: '#627d6b'
                         }
                     }
                 }
-            });
+            }
+        });
 
-            // Initialize Bar Chart
-            const barCtx = document.getElementById('barChart').getContext('2d');
-            new Chart(barCtx, {
-                type: 'bar',
-                data: {
-                    labels: topFavorites.map(f => f.PlantName),
-                    datasets: [{
-                        label: 'Lượt yêu thích',
-                        data: topFavorites.map(f => Number(f.FavoriteCount)),
-                        backgroundColor: '#f43f5e',
-                        borderRadius: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    indexAxis: 'y',
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: { beginAtZero: true },
-                        x: { beginAtZero: true }
-                    }
+        // Initialize Bar Chart
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: topFavorites.map(f => f.PlantName),
+                datasets: [{
+                    label: 'Lượt yêu thích',
+                    data: topFavorites.map(f => Number(f.FavoriteCount)),
+                    backgroundColor: '#f43f5e',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                indexAxis: 'y',
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true },
+                    x: { beginAtZero: true }
                 }
-            });
+            }
+        });
 
-            const topViewbarCtx = document.getElementById('topViewChart').getContext('2d');
-            new Chart(topViewbarCtx, {
-                type: 'bar',
-                data: {
-                    labels: topPLantView.map(v => v.PlantName),
-                    datasets: [{
-                        label: 'Top cây có lượt xem nhiều nhất',
-                        data: topPLantView.map(v => Number(v.ViewCount)),
-                        backgroundColor: '#006600',
-                        borderRadius: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    indexAxis: 'x',
-                    plugins: { legend: { display: false } },
-                    scales: {
-                        y: { beginAtZero: true },
-                        x: { beginAtZero: true }
-                    }
+        const topViewbarCtx = document.getElementById('topViewChart').getContext('2d');
+        new Chart(topViewbarCtx, {
+            type: 'bar',
+            data: {
+                labels: topPLantView.map(v => v.PlantName),
+                datasets: [{
+                    label: 'Top cây có lượt xem nhiều nhất',
+                    data: topPLantView.map(v => Number(v.ViewCount)),
+                    backgroundColor: '#006600',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                indexAxis: 'x',
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true },
+                    x: { beginAtZero: true }
                 }
-            });
+            }
+        });
 
 
-            const months = Array.from({ length: 12 }, (_, i) => i + 1); // [1, 2, ..., 12]
+        const months = Array.from({ length: 12 }, (_, i) => i + 1); // [1, 2, ..., 12]
 
-            const plantCountByMonth = months.map(m => {
-                const found = plantMonthly.find(pm => Number(pm.Month) === m);
-                return found ? Number(found.PlantCount) : 0;
-            });
-            const userCountByMonth = months.map(m => {
-                const found = userMonthly.find(um => Number(um.Month) === m);
-                return found ? Number(found.UserCount) : 0;
-            });
-            const plantCtx = document.getElementById('plantMonthChart').getContext('2d');
-            // Initialize Plant Monthly Chart
-            new Chart(plantCtx, {
-                type: 'line',
-                data: {
-                    labels: months.map(m => `T${m}`),
-                    datasets: [
-                        {
-                            label: 'Số lượng cây được thêm',
-                            data: plantCountByMonth,
-                            borderColor: '#006600',
-                            borderRadius: 4,
-                            tension: 0.4
-                        },
-                        {
-                            label: 'Số lượng người đăng ký',
-                            data: userCountByMonth,
-                            borderColor: '#663300',
-                            borderRadius: 4,
-                            tension: 0.4
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    indexAxis: 'x',
-                    plugins: {
-                        legend:
-                        {
-                            display: true,
+        const plantCountByMonth = months.map(m => {
+            const found = plantMonthly.find(pm => Number(pm.Month) === m);
+            return found ? Number(found.PlantCount) : 0;
+        });
+        const userCountByMonth = months.map(m => {
+            const found = userMonthly.find(um => Number(um.Month) === m);
+            return found ? Number(found.UserCount) : 0;
+        });
+        const plantCtx = document.getElementById('plantMonthChart').getContext('2d');
+        // Initialize Plant Monthly Chart
+        new Chart(plantCtx, {
+            type: 'line',
+            data: {
+                labels: months.map(m => `T${m}`),
+                datasets: [
+                    {
+                        label: 'Số lượng cây được thêm',
+                        data: plantCountByMonth,
+                        borderColor: '#006600',
+                        borderRadius: 4,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Số lượng người đăng ký',
+                        data: userCountByMonth,
+                        borderColor: '#663300',
+                        borderRadius: 4,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                indexAxis: 'x',
+                plugins: {
+                    legend:
+                    {
+                        display: true,
                             @* position: 'bottom' *@
                         }
                     }, // Để phân biệt các line
-                scales: {
-                y: { beginAtZero: true }
-            }
+            scales: {
+            y: { beginAtZero: true }
+        }
                 }
             });
 
-            // Render Keywords List
-            const keywordsList = document.getElementById('keywordsList');
-            if (topKeywords.length > 0) {
-                const maxCount = topKeywords[0].count;
-                topKeywords.forEach((item, index) => {
-                    const percentage = (item.count / maxCount) * 100;
-                    keywordsList.innerHTML += `
+        // Render Keywords List
+        const keywordsList = document.getElementById('keywordsList');
+        if (topKeywords.length > 0) {
+            const maxCount = topKeywords[0].Count;
+            topKeywords.forEach((item, index) => {
+                const percentage = (item.Count / maxCount) * 100;
+                keywordsList.innerHTML += `
                     <li class="keyword-item">
                         <div class="keyword-left">
                             <span class="keyword-rank">#${index + 1}</span>
-                            <span class="keyword-name">${item.keyword}</span>
+                            <span class="keyword-name">${item.Keyword}</span>
                         </div>
                         <div class="keyword-right">
                             <div class="progress-bar">
-                                <div class="progress-fill" style="width: ${percentage}%"></div>
+                                <div class="progress-fill" style="width: ${item.Percentage}%"></div>
                             </div>
-                            <span class="keyword-count">${item.count}</span>
+                            <span class="keyword-count">${item.Count}</span>
                         </div>
                     </li>
                 `;
-                });
-            }
-
-            // Modal Functions
-            function openCategoryModal() {
-                document.getElementById('categoryTableModal').classList.add('active');
-            }
-
-            function closeCategoryModal() {
-                document.getElementById('categoryTableModal').classList.remove('active');
-            }
-
-            function openFavoriteModal() {
-                document.getElementById('favoriteTableModal').classList.add('active');
-            }
-
-            function closeFavoriteModal() {
-                document.getElementById('favoriteTableModal').classList.remove('active');
-            }
-
-            function openTopViewModal() {
-                document.getElementById('topViewModal').classList.add('active');
-            }
-
-            function closeTopViewModal() {
-                document.getElementById('topViewModal').classList.remove('active');
-            }
-
-            // Close modal when clicking outside
-            document.getElementById('categoryTableModal').addEventListener('click', (e) => {
-                if (e.target.id === 'categoryTableModal') closeCategoryModal();
             });
+        }
 
-            document.getElementById('favoriteTableModal').addEventListener('click', (e) => {
-                if (e.target.id === 'favoriteTableModal') closeFavoriteModal();
-            });
+        // Modal Functions
+        function openCategoryModal() {
+            document.getElementById('categoryTableModal').classList.add('active');
+        }
 
-            document.getElementById('topViewModal').addEventListener('click', (e) => {
-                if (e.target.id === 'topViewModal') closeTopViewModal();
-            });
+        function closeCategoryModal() {
+            document.getElementById('categoryTableModal').classList.remove('active');
+        }
 
-            // Export Functions
-            function downloadChart(chartId) {
-                const canvas = document.getElementById(chartId);
-                const url = canvas.toDataURL('image/png');
-                const link = document.createElement('a');
-                link.download = `${chartId}_${new Date().toISOString().split('T')[0]}.png`;
-                link.href = url;
-                link.click();
-            }
+        function openFavoriteModal() {
+            document.getElementById('favoriteTableModal').classList.add('active');
+        }
+
+        function closeFavoriteModal() {
+            document.getElementById('favoriteTableModal').classList.remove('active');
+        }
+
+        function openTopViewModal() {
+            document.getElementById('topViewModal').classList.add('active');
+        }
+
+        function closeTopViewModal() {
+            document.getElementById('topViewModal').classList.remove('active');
+        }
+
+        function openTopKeywordModal() {
+            document.getElementById('topKeywordModal').classList.add('active');
+        }
+
+        function closeTopKeywordModal() {
+            document.getElementById('topKeywordModal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('categoryTableModal').addEventListener('click', (e) => {
+            if (e.target.id === 'categoryTableModal') closeCategoryModal();
+        });
+
+        document.getElementById('favoriteTableModal').addEventListener('click', (e) => {
+            if (e.target.id === 'favoriteTableModal') closeFavoriteModal();
+        });
+
+        document.getElementById('topViewModal').addEventListener('click', (e) => {
+            if (e.target.id === 'topViewModal') closeTopViewModal();
+        });
+
+        document.getElementById('topKeywordModal').addEventListener('click', (e) => {
+            if (e.target.id === 'topKeywordModal') closeTopKeywordModal();
+        });
+
+        // Export Functions
+        function downloadChart(chartId) {
+            const canvas = document.getElementById(chartId);
+            const url = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.download = `${chartId}_${new Date().toISOString().split('T')[0]}.png`;
+            link.href = url;
+            link.click();
+        }
 
 
-        </script>
+    </script>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const startPicker = new tempusDominus.TempusDominus(document.getElementById('startDate'), {
-                    localization: {
-                        format: 'yyyy-MM-dd'
-                    },
-                    display: {
-                        components: {
-                            calendar: true,
-                            date: true,
-                            month: true,
-                            year: true,
-                            decades: true,
-                            clock: false
-                        }
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const startPicker = new tempusDominus.TempusDominus(document.getElementById('startDate'), {
+                localization: {
+                    format: 'yyyy-MM-dd'
+                },
+                display: {
+                    components: {
+                        calendar: true,
+                        date: true,
+                        month: true,
+                        year: true,
+                        decades: true,
+                        clock: false
                     }
-                });
-                const endPicker = new tempusDominus.TempusDominus(document.getElementById('endDate'), {
-                    localization: {
-                        format: 'yyyy-MM-dd'
-                    },
-                    display: {
-                        components: {
-                            calendar: true,
-                            date: true,
-                            month: true,
-                            year: true,
-                            decades: true,
-                            clock: false
-                        }
-                    }
-                });
-
-                // Khi chọn "Từ ngày", chặn "Đến ngày" nhỏ hơn
-                document.getElementById('startDate').addEventListener('change', function (e) {
-                    const startDate = e.target.value;
-                    if (startDate) {
-                        endPicker.updateOptions({
-                            restrictions: {
-                                minDate: new Date(startDate)
-                            }
-                        });
-                        if (document.getElementById('endDate').value && document.getElementById('endDate').value < startDate) {
-                            document.getElementById('endDate').value = startDate;
-                        }
-                    }
-                });
+                }
             });
-        </script>
+            const endPicker = new tempusDominus.TempusDominus(document.getElementById('endDate'), {
+                localization: {
+                    format: 'yyyy-MM-dd'
+                },
+                display: {
+                    components: {
+                        calendar: true,
+                        date: true,
+                        month: true,
+                        year: true,
+                        decades: true,
+                        clock: false
+                    }
+                }
+            });
+
+            // Khi chọn "Từ ngày", chặn "Đến ngày" nhỏ hơn
+            document.getElementById('startDate').addEventListener('change', function (e) {
+                const startDate = e.target.value;
+                if (startDate) {
+                    endPicker.updateOptions({
+                        restrictions: {
+                            minDate: new Date(startDate)
+                        }
+                    });
+                    if (document.getElementById('endDate').value && document.getElementById('endDate').value < startDate) {
+                        document.getElementById('endDate').value = startDate;
+                    }
+                }
+            });
+        });
+
+        $(document).ready(function () {
+            let chart = null;
+
+            function fetchChartData(year) {
+                // Gọi AJAX lấy dữ liệu theo năm từ server
+                $.get('/Admin/Dashboard?handler=PlantChartData', { year: year })
+                    .done(function (data) {
+                        // data: { labels: [...], plantCounts: [...], userCounts: [...] }
+                        updateChart(data);
+                    })
+                    .fail(function () {
+                        alert('Không thể tải dữ liệu biểu đồ!');
+                    });
+            }
+
+            function updateChart(data) {
+                if (!chart) {
+                    // Nếu chưa khởi tạo, tạo mới chart
+                    chart = new Chart($('#plantMonthChart'), {
+                        type: 'bar',
+                        data: {
+                            labels: data.labels,
+                            datasets: [
+                                { label: 'Cây mới', data: data.plantCounts, backgroundColor: '#4CAF50' },
+                                { label: 'Người đăng ký', data: data.userCounts, backgroundColor: '#2196F3' }
+                            ]
+                        },
+                        options: { responsive: true }
+                    });
+                } else {
+                    // Nếu đã có chart, cập nhật lại dữ liệu
+                    chart.data.labels = data.labels;
+                    chart.data.datasets[0].data = data.plantCounts;
+                    chart.data.datasets[1].data = data.userCounts;
+                    chart.update();
+                }
+            }
+
+            // Bắt sự kiện thay đổi năm
+            $('#yearSelector').on('change', function () {
+                let year = $(this).val();
+                fetchChartData(year);
+            });
+
+            // Load dữ liệu ban đầu
+            fetchChartData($('#yearSelector').val());
+        });
+    </script>
 </body>
 
 </html>

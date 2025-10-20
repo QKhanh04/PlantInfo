@@ -1,5 +1,5 @@
 @page
-@model LookUpPlantModel
+@model FavoritePlantModel
 @{
     ViewData["Title"] = "Tra cứu cây trồng";
 }
@@ -26,8 +26,7 @@
     <!-- Page Header -->
     <section class="page-header">
         <div class="container-fluid">
-            <h1 class="page-title"><i class="bi bi-search me-3"></i>Tra Cứu Cây Trồng</h1>
-            <p class="page-subtitle">Tìm kiếm và khám phá hàng trăm loại cây trồng với bộ lọc thông minh</p>
+            <h1 class="page-title"><i class="bi bi-heart me-3"></i>Cây yêu thích</h1>
         </div>
     </section>
 
@@ -95,7 +94,7 @@
 
                              <div class="filter-group">
                             <label for="order">Bộ</label>
-                            <select asp-for="FilterVM.OrderName" id="order" class="form-select" asp-items="@(new SelectList(Model.OrderList))">
+                            <select asp-for="FilterVM.OrderName" class="form-select" asp-items="@(new SelectList(Model.OrderList))">
                                 <option value="">-- Tất cả bộ --</option>
                             </select>
                         </div>
@@ -146,9 +145,9 @@
                                                 </div>
                                             }
                               
-                                            <button class="favorite-btn @(plant.IsFavorited ? "active" : "")" data-id="@plant.PlantId" >
-    <i class="bi bi-heart-fill"></i>
-</button>
+                                            <button class="favorite-btn @(plant.IsFavorited ? "active" : "")" data-id="@plant.PlantId">
+                                                <i class="bi bi-heart-fill"></i>
+                                            </button>
                                         </div>
                                         <div class="card-body">
                                             <h5 class="plant-title">@plant.CommonName</h5>
@@ -176,7 +175,7 @@
                                     <ul class="pagination mb-0">
                                         <li class="page-item @(Model.CurrentPage <= 1 ? "disabled" : "")">
                                             <a class="page-link" href="@(Model.CurrentPage > 1
-                                                   ? Url.Page("/LookUpPlant", null, new {
+                                                   ? Url.Page("/FavoritePlant", null, new {
                                                        CurrentPage = Model.CurrentPage - 1,
                                                        keyword = Model.FilterVM?.Keyword,
                                                        categoryId = Model.FilterVM?.CategoryId,
@@ -203,7 +202,7 @@
                                         @if (start > 1)
                                         {
                                             <li class="page-item">
-                                                <a class="page-link" href="@Url.Page("/LookUpPlant", null, new {
+                                                <a class="page-link" href="@Url.Page("/FavoritePlant", null, new {
                                                        CurrentPage = 1,
                                                        keyword = Model.FilterVM?.Keyword,
                                                        categoryId = Model.FilterVM?.CategoryId,
@@ -217,7 +216,7 @@
                                         @for (int i = start; i <= end; i++)
                                         {
                                             <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                                                <a class="page-link" href="@Url.Page("/LookUpPlant", null, new {
+                                                <a class="page-link" href="@Url.Page("/FavoritePlant", null, new {
                                                        CurrentPage = i,
                                                        keyword = Model.FilterVM?.Keyword,
                                                        categoryId = Model.FilterVM?.CategoryId,
@@ -231,7 +230,7 @@
                                         {
                                             <li class="page-item disabled"><span class="page-link">...</span></li>
                                             <li class="page-item">
-                                                <a class="page-link" href="@Url.Page("/LookUpPlant", null, new {
+                                                <a class="page-link" href="@Url.Page("/FavoritePlant", null, new {
                                                        CurrentPage = Model.TotalPages,
                                                        keyword = Model.FilterVM?.Keyword,
                                                        categoryId = Model.FilterVM?.CategoryId,
@@ -243,7 +242,7 @@
                                         }
                                         <li class="page-item @(Model.CurrentPage >= Model.TotalPages ? "disabled" : "")">
                                             <a class="page-link" href="@(Model.CurrentPage < Model.TotalPages
-                                                   ? Url.Page("/LookUpPlant", null, new {
+                                                   ? Url.Page("/FavoritePlant", null, new {
                                                        CurrentPage = Model.CurrentPage + 1,
                                                        keyword = Model.FilterVM?.Keyword,
                                                        categoryId = Model.FilterVM?.CategoryId,
@@ -325,8 +324,9 @@
         selectedUsages.forEach(function (u) {
             queryParams.append('FilterVM.UseIds', u);
         });
+        
 
-        window.location.href = '/LookUpPlant?' + queryParams.toString();
+        window.location.href = '/FavoritePlant?' + queryParams.toString();
     }
 
     var isLoggedIn = @(User.Identity.IsAuthenticated.ToString().ToLower());
@@ -340,7 +340,7 @@
     }
     var btn = $(this);
     var plantId = btn.data('id');
-    var token = $('input[name="__RequestVerificationToken"]').val(); 
+    var token = $('input[name="__RequestVerificationToken"]').val(); // lấy token nếu dùng AntiForgery
 
     $.ajax({
         type: 'POST',
@@ -357,6 +357,7 @@
             }
         },
         error: function (xhr) {
+            // Nếu cần debug thêm, xem xhr.status và responseText
             alert('Có lỗi xảy ra!');
         }
     });

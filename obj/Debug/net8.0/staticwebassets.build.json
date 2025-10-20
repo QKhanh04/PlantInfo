@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "b4Mt2Ukikil9RZ0J3HmowOLSgFtRziRcKPhg+I8nwKA=",
+  "Hash": "xofPG7dq1jHotc3TiTroRKQrFS2DYqqfHEPRGDgY8wg=",
   "Source": "PlantManagement",
   "BasePath": "_content/PlantManagement",
   "Mode": "Default",
@@ -80,12 +80,12 @@
       "OriginalItemSpec": "wwwroot\\css\\admin\\create.css"
     },
     {
-      "Identity": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\index.css",
+      "Identity": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\dashboard.css",
       "SourceId": "PlantManagement",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\",
       "BasePath": "_content/PlantManagement",
-      "RelativePath": "css/admin/index#[.{fingerprint}]?.css",
+      "RelativePath": "css/admin/dashboard#[.{fingerprint}]?.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -98,7 +98,7 @@
       "Integrity": "BRE/W5rVAecyI4YI27goQLWS+e0cbooME0p5jppdi64=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\css\\admin\\index.css"
+      "OriginalItemSpec": "wwwroot\\css\\admin\\dashboard.css"
     },
     {
       "Identity": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\report.css",
@@ -157,8 +157,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "tky56gkqye",
-      "Integrity": "TQTCOVi2gSNeVZV0+v9geQZC6K51QNPrNl2RwBfZhfA=",
+      "Fingerprint": "yipigbiafm",
+      "Integrity": "ug0RfCEurHEdAv3tO49+91Yib6bvLx4KTYfAugA1ElU=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\detail.css"
@@ -220,8 +220,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "kwzkpte9pe",
-      "Integrity": "PKC3XcXESVKer8h6ZJga9MATE41ON5sLvZyq/y9D3dI=",
+      "Fingerprint": "neqy1uvxb5",
+      "Integrity": "L8MZGYbIu+U3ISdoeNxLD4U5dH8aNi8OgFGb/zlsCNE=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\css\\site.css"
@@ -330,6 +330,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\auth.js"
+    },
+    {
+      "Identity": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\js\\detail.js",
+      "SourceId": "PlantManagement",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\",
+      "BasePath": "_content/PlantManagement",
+      "RelativePath": "js/detail#[.{fingerprint}]?.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "7wlyx219bf",
+      "Integrity": "qQMu75JorwmWzF+Wd0hnKF02bYqXkJRO86SfxYdQjw4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\detail.js"
     },
     {
       "Identity": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\js\\site.js",
@@ -1865,8 +1886,8 @@
       ]
     },
     {
-      "Route": "css/admin/index.931m6f8eua.css",
-      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\index.css",
+      "Route": "css/admin/dashboard.931m6f8eua.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\dashboard.css",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1901,7 +1922,7 @@
         },
         {
           "Name": "label",
-          "Value": "css/admin/index.css"
+          "Value": "css/admin/dashboard.css"
         },
         {
           "Name": "integrity",
@@ -1910,8 +1931,8 @@
       ]
     },
     {
-      "Route": "css/admin/index.css",
-      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\index.css",
+      "Route": "css/admin/dashboard.css",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\dashboard.css",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -2121,7 +2142,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "30757"
+          "Value": "27503"
         },
         {
           "Name": "Content-Type",
@@ -2129,11 +2150,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"TQTCOVi2gSNeVZV0+v9geQZC6K51QNPrNl2RwBfZhfA=\""
+          "Value": "\"ug0RfCEurHEdAv3tO49+91Yib6bvLx4KTYfAugA1ElU=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 15 Oct 2025 20:40:41 GMT"
+          "Value": "Sat, 18 Oct 2025 15:38:13 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2143,12 +2164,12 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-TQTCOVi2gSNeVZV0+v9geQZC6K51QNPrNl2RwBfZhfA="
+          "Value": "sha256-ug0RfCEurHEdAv3tO49+91Yib6bvLx4KTYfAugA1ElU="
         }
       ]
     },
     {
-      "Route": "css/detail.tky56gkqye.css",
+      "Route": "css/detail.yipigbiafm.css",
       "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\detail.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -2158,7 +2179,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "30757"
+          "Value": "27503"
         },
         {
           "Name": "Content-Type",
@@ -2166,11 +2187,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"TQTCOVi2gSNeVZV0+v9geQZC6K51QNPrNl2RwBfZhfA=\""
+          "Value": "\"ug0RfCEurHEdAv3tO49+91Yib6bvLx4KTYfAugA1ElU=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 15 Oct 2025 20:40:41 GMT"
+          "Value": "Sat, 18 Oct 2025 15:38:13 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2180,7 +2201,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "tky56gkqye"
+          "Value": "yipigbiafm"
         },
         {
           "Name": "label",
@@ -2188,7 +2209,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-TQTCOVi2gSNeVZV0+v9geQZC6K51QNPrNl2RwBfZhfA="
+          "Value": "sha256-ug0RfCEurHEdAv3tO49+91Yib6bvLx4KTYfAugA1ElU="
         }
       ]
     },
@@ -2367,7 +2388,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "4847"
+          "Value": "6392"
         },
         {
           "Name": "Content-Type",
@@ -2375,11 +2396,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"PKC3XcXESVKer8h6ZJga9MATE41ON5sLvZyq/y9D3dI=\""
+          "Value": "\"L8MZGYbIu+U3ISdoeNxLD4U5dH8aNi8OgFGb/zlsCNE=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 11 Oct 2025 10:42:06 GMT"
+          "Value": "Mon, 20 Oct 2025 00:55:38 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2389,12 +2410,12 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-PKC3XcXESVKer8h6ZJga9MATE41ON5sLvZyq/y9D3dI="
+          "Value": "sha256-L8MZGYbIu+U3ISdoeNxLD4U5dH8aNi8OgFGb/zlsCNE="
         }
       ]
     },
     {
-      "Route": "css/site.kwzkpte9pe.css",
+      "Route": "css/site.neqy1uvxb5.css",
       "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\site.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -2404,7 +2425,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "4847"
+          "Value": "6392"
         },
         {
           "Name": "Content-Type",
@@ -2412,11 +2433,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"PKC3XcXESVKer8h6ZJga9MATE41ON5sLvZyq/y9D3dI=\""
+          "Value": "\"L8MZGYbIu+U3ISdoeNxLD4U5dH8aNi8OgFGb/zlsCNE=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 11 Oct 2025 10:42:06 GMT"
+          "Value": "Mon, 20 Oct 2025 00:55:38 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2426,7 +2447,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "kwzkpte9pe"
+          "Value": "neqy1uvxb5"
         },
         {
           "Name": "label",
@@ -2434,7 +2455,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-PKC3XcXESVKer8h6ZJga9MATE41ON5sLvZyq/y9D3dI="
+          "Value": "sha256-L8MZGYbIu+U3ISdoeNxLD4U5dH8aNi8OgFGb/zlsCNE="
         }
       ]
     },
@@ -2845,6 +2866,88 @@
         {
           "Name": "integrity",
           "Value": "sha256-hbMgjFbWtNfUsh4C/Wh6W4YdqkjAeNwdlENxO+E/skQ="
+        }
+      ]
+    },
+    {
+      "Route": "js/detail.7wlyx219bf.js",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\js\\detail.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "10010"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"qQMu75JorwmWzF+Wd0hnKF02bYqXkJRO86SfxYdQjw4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 18 Oct 2025 19:02:55 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "7wlyx219bf"
+        },
+        {
+          "Name": "label",
+          "Value": "js/detail.js"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-qQMu75JorwmWzF+Wd0hnKF02bYqXkJRO86SfxYdQjw4="
+        }
+      ]
+    },
+    {
+      "Route": "js/detail.js",
+      "AssetFile": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\js\\detail.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "10010"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"qQMu75JorwmWzF+Wd0hnKF02bYqXkJRO86SfxYdQjw4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 18 Oct 2025 19:02:55 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-qQMu75JorwmWzF+Wd0hnKF02bYqXkJRO86SfxYdQjw4="
         }
       ]
     },
@@ -7873,7 +7976,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 15 Oct 2025 21:12:02 GMT"
+          "Value": "Sat, 18 Oct 2025 15:58:54 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -7910,7 +8013,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 15 Oct 2025 21:12:02 GMT"
+          "Value": "Sat, 18 Oct 2025 15:58:54 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -7947,7 +8050,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 15 Oct 2025 21:12:02 GMT"
+          "Value": "Sat, 18 Oct 2025 15:58:54 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -7992,7 +8095,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 15 Oct 2025 21:12:02 GMT"
+          "Value": "Sat, 18 Oct 2025 15:58:54 GMT"
         },
         {
           "Name": "Cache-Control",

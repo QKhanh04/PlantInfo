@@ -27,7 +27,7 @@ namespace PlantManagement.Pages
         public string ActiveTab { get; set; } = "login";
         public void OnGet() { }
 
-        public async Task<IActionResult> OnPostLogin()
+        public async Task<IActionResult> OnPostLogin(string returnUrl = null)
         {
             ModelState.Clear();
             TryValidateModel(LoginVM, nameof(LoginVM));
@@ -68,8 +68,14 @@ namespace PlantManagement.Pages
                     });
             TempData["ToastMessage"] = "Đăng nhập thành công!";
             TempData["ToastType"] = "success";
+
+            // Kiểm tra returnUrl có hợp lệ không
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
             if (user.Data.Role == "Admin")
-                return RedirectToPage("/Admin/Index");
+                return RedirectToPage("/Admin/Dashboard");
             else
                 return RedirectToPage("/Index");
         }

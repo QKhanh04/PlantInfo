@@ -23,7 +23,7 @@ namespace PlantManagement.Services.Implementations
         public async Task<ServiceResult<bool>> AddReviewAsync(int userId, CreateReviewDTO dto)
         {
             if (dto.Rating < 1 || dto.Rating > 5)
-                return ServiceResult<bool>.Fail("Bạn phải chọn sao đánh giá!");
+                return ServiceResult<bool>.Fail("Bạn phải đánh giá!");
 
             var review = _mapper.Map<PlantReview>(dto);
             review.UserId = userId;

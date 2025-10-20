@@ -6,7 +6,7 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/admin/index.css">
+    <link rel="stylesheet" href="~/css/admin/dashboard.css">
 }
 
 <!-- Loading Overlay -->
@@ -84,7 +84,7 @@
             var orderName = $('[name="FilterVM.OrderName"]').val();
 
             showLoading();
-            $.get('@Url.Page("Index", "Partial")', {
+            $.get('@Url.Page("Dashboard", "Partial")', {
                 keyword: keyword,
                 categoryId: categoryId,
                 orderName: orderName,
@@ -131,7 +131,7 @@
                 showLoading();
 
                 $.ajax({
-                    url: '@Url.Page("/Admin/Index", "ToggleActive")',
+                    url: '@Url.Page("/Admin/Dashboard", "ToggleActive")',
                     method: 'POST',
                     data: { id: plantId, __RequestVerificationToken: token },
                     success: function (data) {

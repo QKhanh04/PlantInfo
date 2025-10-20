@@ -139,7 +139,7 @@ namespace PlantManagement.Pages.Admin
                 {
                     TempData["ToastMessage"] = result.Message ?? "Thêm cây thành công!";
                     TempData["ToastType"] = "success";
-                    return RedirectToPage("/Admin/Index");
+                    return RedirectToPage("/Admin/Dashboard");
                 }
 
                 TempData["ToastMessage"] = result.Message ?? "Thêm cây thất bại!";

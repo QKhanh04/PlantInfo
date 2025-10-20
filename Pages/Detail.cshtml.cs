@@ -20,14 +20,14 @@ namespace PlantManagement.Pages
         private readonly IPlantService _plantService;
         private readonly IViewLogService _viewLogService;
         private readonly IPlantReviewService _plantReviewService;
-        private readonly IFavoriteService _favoritePlantService; // Thêm service này
+        private readonly IFavoriteService _favoritePlantService;
 
         public DetailModel(
             ILogger<DetailModel> logger,
             IPlantService plantService,
             IViewLogService viewLogService,
             IPlantReviewService plantReviewService,
-            IFavoriteService favoritePlantService) // Inject service
+            IFavoriteService favoritePlantService)
         {
             _logger = logger;
             _plantService = plantService;
@@ -47,19 +47,21 @@ namespace PlantManagement.Pages
         public int Id { get; set; }
 
         [BindProperty]
-        public CreateReviewDTO NewReview { get; set; }
+        public CreateReviewDTO AddReview { get; set; } = new();
 
         [BindProperty]
-        public UpdateReviewDTO UpdateReview { get; set; }
+        public UpdateReviewDTO UpdateReview { get; set; } = new();
 
         public bool IsFavorited { get; set; } = false;
+
+        public int? CurrentUserId { get; set; }
 
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
             await _viewLogService.AddPlantViewLogAsync(id, User.Identity.IsAuthenticated ? GetUserId() : (int?)null);
-
-            var result = await _plantService.GetDetailPlantAsync(id);
+            CurrentUserId = GetUserId();
+                        var result = await _plantService.GetDetailPlantAsync(id);
             if (!result.Success || result.Data == null)
             {
                 TempData["ToastMessage"] = result.Message;
@@ -86,41 +88,46 @@ namespace PlantManagement.Pages
             }
             return Page();
         }
-
-        public async Task<IActionResult> OnPostAddReviewAsync()
-        {
-            NewReview.PlantId = Id;
-            int userId = GetUserId() ?? 0;
-            var result = await _plantReviewService.AddReviewAsync(userId, NewReview);
-
-            TempData["ToastMessage"] = result.Message;
-            TempData["ToastType"] = result.Success ? "success" : "danger";
-            return RedirectToPage(new { id = Id });
-        }
         public async Task<IActionResult> OnPostToggleFavoriteAsync()
         {
             int userId = GetUserId() ?? 0;
-            
-            // Check if already favorited
+
             var checkResult = await _favoritePlantService.IsFavoriteAsync(userId, Id);
-            
+
+            bool isFavorited;
             if (checkResult)
             {
-                // Remove from favorites
-                var result = await _favoritePlantService.RemoveFavoriteAsync(userId, Id);
-                // TempData["ToastMessage"] = result.Message;
-                // TempData["ToastType"] = result.Success ? "info" : "danger";
+                await _favoritePlantService.RemoveFavoriteAsync(userId, Id);
+                isFavorited = false;
             }
             else
             {
-                // Add to favorites
-                var result = await _favoritePlantService.AddFavoriteAsync(userId, Id);
-                // TempData["ToastMessage"] = result.Message;
-                // TempData["ToastType"] = result.Success ? "success" : "danger";
+                await _favoritePlantService.AddFavoriteAsync(userId, Id);
+                isFavorited = true;
             }
 
-            return RedirectToPage(new { id = Id });
+            return new JsonResult(new { isFavorited });
         }
+
+        public async Task<IActionResult> OnPostAddReviewAsync()
+        {
+            AddReview.PlantId = Id;
+            int userId = GetUserId() ?? 0;
+            var result = await _plantReviewService.AddReviewAsync(userId, AddReview);
+            _logger.LogInformation("User {UserId} added review for Plant {PlantId}", userId, Id);
+            _logger.LogInformation("AddReviewAsync result: {Result}", AddReview.Rating);
+            _logger.LogError("AddReviewAsync result: {Result}", result.Data);
+            // TempData["ToastMessage"] = result.Message;
+            // TempData["ToastType"] = result.Success ? "success" : "danger";
+            // return RedirectToPage(new { id = Id });
+            return new JsonResult(new
+            {
+                success = result.Success,
+                message = result.Message,
+                toastType = result.Success ? "success" : "danger"
+            }); 
+        }
+
 
         public async Task<IActionResult> OnPostUpdateReviewAsync()
         {
@@ -128,10 +135,17 @@ namespace PlantManagement.Pages
             UpdateReview.PlantId = Id;
             var result = await _plantReviewService.UpdateReviewAsync(userId, UpdateReview);
 
-            TempData["ToastMessage"] = result.Message;
-            TempData["ToastType"] = result.Success ? "success" : "danger";
-            
-            return RedirectToPage(new { id = Id });
+            // Có thể bỏ TempData nếu không dùng cho AJAX
+            // TempData["ToastMessage"] = result.Message;
+            // TempData["ToastType"] = result.Success ? "success" : "danger";
+
+            // Trả về dữ liệu JSON cho client
+            return new JsonResult(new
+            {
+                success = result.Success,
+                message = result.Message,
+                toastType = result.Success ? "success" : "danger"
+            });
         }
 
 
