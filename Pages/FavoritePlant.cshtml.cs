@@ -90,7 +90,6 @@ namespace PlantManagement.Pages
                     CurrentPage = CurrentPage,
                     PageSize = pageSize,
                     TotalItems = 0,
-                    TotalPages = 0
                 };
 
                 Categories = categories.Data ?? new List<Category>();

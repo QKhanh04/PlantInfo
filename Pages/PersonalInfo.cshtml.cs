@@ -45,25 +45,25 @@ namespace PlantManagement.Pages
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (!ModelState.IsValid)
-                return Page();
+        // public async Task<IActionResult> OnPostAsync()
+        // {
+        //     if (!ModelState.IsValid)
+        //         return Page();
 
-            var result = await _userService.UpdateUserAsync(UserDTO);
+        //     var result = await _userService.UpdateUserAsync(UserDTO);
 
-            if (result.Success)
-            {
-                TempData["ToastMessage"] = result.Message;
-                TempData["ToastType"] = "success";
-                return RedirectToPage("/Index", new { id = UserDTO.UserId });
-            }
-            else
-            {
+        //     if (result.Success)
+        //     {
+        //         TempData["ToastMessage"] = result.Message;
+        //         TempData["ToastType"] = "success";
+        //         return RedirectToPage("/Index", new { id = UserDTO.UserId });
+        //     }
+        //     else
+        //     {
 
-                ModelState.AddModelError("UserDTO.Email", result.Message);
-                return Page();
-            }
-        }
+        //         ModelState.AddModelError("UserDTO.Email", result.Message);
+        //         return Page();
+        //     }
+        // }
     }
 }

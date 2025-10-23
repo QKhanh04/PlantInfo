@@ -50,32 +50,18 @@ namespace PlantManagement.Pages
 
         public async Task<IActionResult> OnGetAsync()
         {
-            var result = await _plantService.GetPagedAsync(FilterVM?.Keyword, CurrentPage, pageSize,FilterVM?.CategoryId, FilterVM?.OrderName);
-            var categories = await _categoryService.GetAllCategoryAsync();
-            OrderList = await _speciesService.GetDistinctOrderNameAsync();
-
-            if (!result.Success || result.Data == null)
-            {
-                _logger.LogWarning("Lỗi khi lấy danh sách cây: {Message}", result.Message);
-                TempData["Error"] = result.Message;
-                Plants = new PagedResult<PlantListDTO>
-                {
-                    Items = new List<PlantListDTO>(),
-                    CurrentPage = CurrentPage,
-                    PageSize = pageSize,
-                    TotalItems = 0,
-                    TotalPages = 0
-                };
-                Categories = categories.Data ?? new List<Category>();
-                return Page();
-            }
-
-            Plants = result.Data;
-            TotalPages = result.Data.TotalPages;
-            Categories = categories.Data ?? new List<Category>();
-
-            _logger.LogInformation("Tìm thấy {Count} cây.", result.Data.Items?.Count() ?? 0);
-
+            // int? userId = null;
+            // var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "UserId");
+            // if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int id)) userId = id;
+            // var favoritePlant = await _favoriteService.GetFavoritePlantsAsync(userId.Value);
+            // if (userId.HasValue)
+            // {
+            //     ViewData["FavoriteCount"] = favoritePlant.Count;
+            // }
+            // else
+            // {
+            //     ViewData["FavoriteCount"] = 0;
+            // }
             return Page();
         }
 
@@ -135,4 +121,5 @@ namespace PlantManagement.Pages
 
         }
     }
+
 }

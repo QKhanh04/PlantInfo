@@ -22,5 +22,16 @@ namespace PlantManagement.Services.Interfaces
         public void ClearOtpSession(HttpContext httpContext);
         Task<ServiceResult<bool>> UpdateUserAsync(UpdateUserDTO dto);
 
+        Task<ServiceResult<User>> ToggleLockUserAsync(int userId);
+
+        Task<ServiceResult<PagedResult<UserDTO>>> SearchUsersAsync(
+             string? keyword,
+             int page,
+             int pageSize,
+             string? role = null,
+             bool? isLocked = null
+        );
+        Task<ServiceResult<User>> GetUserByIdAsync(int userId);
+
     }
 }

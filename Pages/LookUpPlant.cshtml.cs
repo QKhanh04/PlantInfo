@@ -86,14 +86,15 @@ namespace PlantManagement.Pages
             if (!result.Success || result.Data == null)
             {
                 _logger.LogWarning("Lỗi khi lấy danh sách cây: {Message}", result.Message);
-                TempData["Error"] = result.Message;
+                TempData["ToastMessage"] = result.Message;
+                TempData["ToastType"] = "danger";
+
                 Plants = new PagedResult<PlantListDTO>
                 {
                     Items = new List<PlantListDTO>(),
                     CurrentPage = CurrentPage,
                     PageSize = pageSize,
                     TotalItems = 0,
-                    TotalPages = 0
                 };
 
                 Categories = categories.Data ?? new List<Category>();

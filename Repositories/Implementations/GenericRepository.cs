@@ -119,7 +119,6 @@ namespace PlantManagement.Repositories.Implementations
                 CurrentPage = page,
                 PageSize = pageSize,
                 TotalItems = total,
-                TotalPages = (int)Math.Ceiling((double)total / pageSize)
             };
         }
 

@@ -7,7 +7,7 @@ namespace PlantManagement.DTOs
 {
     public class SpeciesCreateDTO
     {
-        public string? ScientificName { get; set; } = string.Empty;
+        public string ScientificName { get; set; } = string.Empty;
         public string? Genus { get; set; }
         public string? Family { get; set; }
         public string? OrderName { get; set; }
@@ -25,7 +25,7 @@ namespace PlantManagement.DTOs
     // }
 
     // DTO cho Disease
-    public class DiseaseDTO
+    public class DiseaseCreateDTO
     {
         public int? DiseaseId { get; set; }
         public string? DiseaseName { get; set; } = string.Empty;
@@ -84,7 +84,7 @@ namespace PlantManagement.DTOs
 
         public List<CategoryCreateDTO>? NewCategories { get; set; }
         public List<UseCreateDTO>? NewUses { get; set; }
-        public List<DiseaseDTO>? NewDiseases { get; set; }
+        public List<DiseaseCreateDTO>? NewDiseases { get; set; }
 
 
         public GrowthConditionDTO? GrowthCondition { get; set; }
@@ -93,5 +93,4 @@ namespace PlantManagement.DTOs
         public List<IFormFile>? ImageFiles { get; set; }
 
     }
-    
 }

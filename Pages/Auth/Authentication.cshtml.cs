@@ -40,12 +40,18 @@ namespace PlantManagement.Pages
             }
             var user = await _userService.Login(LoginVM.UserNameOrEmail, LoginVM.Password);
 
-            if (!user.Success) // TODO: hash password
+            if (!user.Success)
             {
                 if (user.Message.Contains("UserName"))
                     ModelState.AddModelError("LoginVM.UserNameOrEmail", user.Message);
-                else
+                else if (user.Message.Contains("Password"))
                     ModelState.AddModelError("LoginVM.Password", user.Message);
+                else
+                {
+                    TempData["ToastMessage"] = user.Message;
+                    TempData["ToastType"] = "danger";
+                }
+
                 return Page();
             }
 
@@ -54,6 +60,7 @@ namespace PlantManagement.Pages
             {
                 new Claim(ClaimTypes.Name, user.Data.Username),
                 new Claim(ClaimTypes.Role, user.Data.Role),
+                new Claim(ClaimTypes.NameIdentifier, user.Data.UserId.ToString()),
                 new Claim("UserId", user.Data.UserId.ToString())
             };
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -74,10 +81,11 @@ namespace PlantManagement.Pages
             {
                 return Redirect(returnUrl);
             }
-            if (user.Data.Role == "Admin")
-                return RedirectToPage("/Admin/Dashboard");
-            else
-                return RedirectToPage("/Index");
+
+            // if (user.Data.Role == "Admin")
+            //     return RedirectToPage("/Admin/Index");
+            // else
+            return RedirectToPage("/Index");
         }
 
 
@@ -123,7 +131,7 @@ namespace PlantManagement.Pages
 
             TempData["ToastMessage"] = "Đăng ký thành công!";
             TempData["ToastType"] = "success";
-             return RedirectToPage("/Auth/Authentication");
+            return RedirectToPage("/Auth/Authentication");
         }
 
         public async Task<IActionResult> OnPostLogout()

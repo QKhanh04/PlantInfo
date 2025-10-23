@@ -16,7 +16,7 @@ using PlantManagement.Services.Interfaces;
 
 namespace PlantManagement.Pages.Admin
 {
-    [Authorize(Roles = "Admin")]
+     [Authorize(Roles = "Admin")]
     public class ReportModel : PageModel
     {
         private readonly IReportService _reportService;
@@ -281,7 +281,7 @@ namespace PlantManagement.Pages.Admin
 
         public async Task<IActionResult> OnGetExportTopKeyWordReportAsync(DateTime? startDate, DateTime? endDate)
         {
-            var topFavorites = await _reportService.GetTopSearchKeywordsAsync(top, startDate, endDate);
+            var topFavorites = await _reportService.GetTopSearchKeywordsAsync(10, startDate, endDate);
 
             var report = new SectionReport();
 

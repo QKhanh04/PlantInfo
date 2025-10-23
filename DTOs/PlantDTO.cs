@@ -17,7 +17,7 @@ namespace PlantManagement.DTOs
         // Tham chiếu
         public SpeciesDTO? Species { get; set; }
         public GrowthConditionDTO? GrowthCondition { get; set; }
-        public List<DiseaseDTO>? Diseases { get; set; }
+        public List<DiseasesDTO>? Diseases { get; set; }
         public List<CategoryDTO>? Categories { get; set; }
         public List<UseDTO>? Uses { get; set; }
         public List<PlantImageDTO>? Images { get; set; }

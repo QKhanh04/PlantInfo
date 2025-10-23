@@ -303,6 +303,7 @@ body {
     border: none;
     box-shadow: 0 4px 20px var(--shadow-light);
     height: 100%;
+    
 }
 
 .plant-card:hover {
@@ -376,6 +377,9 @@ body {
 
 .card-body {
     padding: 25px;
+    display : flex;
+    flex-direction: column;
+    flex: 1 1 auto;
 }
 
 .plant-title {
@@ -421,6 +425,7 @@ body {
     transition: var(--transition);
     font-size: 14px;
     border-radius: 8px;
+    margin-top: auto;
 }
 
 .view-detail-btn:hover {

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using PlantManagement.Data;
+using PlantManagement.Hubs;
 using PlantManagement.Repositories.Implementations;
 using PlantManagement.Repositories.Interfaces;
 using PlantManagement.Services.Implementations;
@@ -66,6 +67,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddSession();
 builder.Services.AddRazorPages();
+builder.Services.AddSignalR();
+
 builder.Services.AddAuthorization();
 var app = builder.Build();
 
@@ -80,6 +83,8 @@ if (!app.Environment.IsDevelopment())
 // app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+app.MapHub<LockUserHub>("/lockUserHub");
 app.UseSession();
 
 app.UseAuthentication();

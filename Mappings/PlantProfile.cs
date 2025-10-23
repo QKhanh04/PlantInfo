@@ -39,8 +39,8 @@ namespace PlantManagement.Mappings
             CreateMap<GrowthConditionDTO, GrowthCondition>();
             CreateMap<GrowthCondition, GrowthConditionDTO>();
 
-            CreateMap<DiseaseDTO, Disease>();
-            CreateMap<Disease, DiseaseDTO>();
+            CreateMap<DiseaseCreateDTO, Disease>();
+            CreateMap<Disease, DiseaseCreateDTO>();
 
             CreateMap<PlantImageDTO, PlantImage>();
             CreateMap<PlantImage, PlantImageDTO>();
@@ -64,9 +64,11 @@ namespace PlantManagement.Mappings
             CreateMap<Plant, PlantUpdateDTO>()
             .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.PlantImages))
             .ForMember(dest => dest.References, opt => opt.MapFrom(src => src.PlantReferences));
+
             CreateMap<PlantDetailDTO, PlantUpdateDTO>();
+
             CreateMap<PlantReview, ReviewDTO>()
-                        .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username));
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username));
             CreateMap<ReviewDTO, PlantReview>();
 
             CreateMap<PlantReview, CreateReviewDTO>();
@@ -74,6 +76,9 @@ namespace PlantManagement.Mappings
 
             CreateMap<PlantReview, UpdateReviewDTO>();
             CreateMap<UpdateReviewDTO, PlantReview>();
+
+            CreateMap<User, UserDTO>();
+            CreateMap<UserDTO, User>();
 
         }
     }

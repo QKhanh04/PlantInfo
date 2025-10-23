@@ -1,0 +1,114 @@
+@page
+@using PlantManagement.Pages.Shared
+@model UserManagementModel
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "UserManagement";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/user-management.css">
+    <link rel="stylesheet" href="~/css/shared/pagination.css">
+}
+
+
+<div class="search-section">
+    <form method="get" class="search-form">
+        <input type="text" 
+               name="SearchTerm" 
+               value="@Model.SearchTerm" 
+               placeholder="Tìm kiếm username hoặc email"
+               class="search-input" />
+
+        <select name="Status" class="status-select">
+            <option value="">Tất cả trạng thái</option>
+            <option value="locked" selected="@(Model.Status == "locked" ? "selected" : null)"> Đã khóa</option>
+            <option value="active" selected="@(Model.Status == "active" ? "selected" : null)"> Hoạt động</option>
+        </select>
+
+        <button type="submit" class="btn-search">Tìm kiếm</button>
+    </form>
+</div>
+
+<div class="table-container">
+    <table class="user-table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Users.Items.Any())
+            {
+                foreach (var user in Model.Users.Items)
+                {
+                    <tr>
+                        <td><strong>@user.Username</strong></td>
+                        <td>@user.Email</td>
+                        <td><span class="role-badge">@user.Role</span></td>
+                        <td>
+                            <span class="status-badge @(user.IsLocked ? "status-locked" : "status-active")">
+                                @(user.IsLocked ? " Đã khóa" : " Hoạt động")
+                            </span>
+                        </td>
+                        <td>
+                            @if (user.UserId != Model.CurrentUserId)
+                            {
+                                <form method="post" 
+                                      asp-page-handler="ToggleLock" 
+                                      asp-route-id="@user.UserId" 
+                                      class="action-form">
+                                    <input type="hidden" name="SearchTerm" value="@Model.SearchTerm" />
+                                    <input type="hidden" name="Status" value="@Model.Status" />
+                                    <input type="hidden" name="CurrentPage" value="@Model.CurrentPage" />
+                                    <input type="hidden" name="PageSize" value="@Model.PageSize" />
+                                    <button type="submit" 
+                                            class="btn-action @(user.IsLocked ? "btn-unlock" : "btn-lock")"
+                                            onclick="return confirm('@(user.IsLocked ? "Bạn muốn mở khóa tài khoản này?" : "Bạn muốn khóa tài khoản này?")');">
+                                        @(user.IsLocked ? " Mở khóa" : " Khóa")
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span class="current-user-text"> Tài khoản của bạn</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <div>Không tìm thấy người dùng nào.</div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (Model.TotalPages > 1)
+{
+    var paginationModel = new PaginationModel
+    {
+        CurrentPage = Model.CurrentPage,
+        TotalPages = Model.TotalPages,
+        PageUrl = (page) => Url.Page("/Admin/Management/UserManagement", null, new
+        {
+            CurrentPage = page,
+            SearchTerm = Model.SearchTerm,
+            Status = Model.Status
+        }, null) ?? "#"
+    };
+
+    <div class="pagination-container">
+        @await Html.PartialAsync("Shared/_Pagination", paginationModel)
+    </div>
+}

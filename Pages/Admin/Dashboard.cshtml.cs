@@ -16,15 +16,15 @@ using PlantManagement.ViewModel;
 namespace PlantManagement.Pages.Admin
 {
     [Authorize(Roles = "Admin")]
-    public class IndexModel : PageModel
+    public class DashboardModel : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
+        private readonly ILogger<DashboardModel> _logger;
         private readonly IPlantService _plantService;
         private readonly ICategoryService _categoryService;
         private readonly ISpeciesService _speciesService;
 
 
-        public IndexModel(ILogger<IndexModel> logger, IPlantService plantService, ICategoryService categoryService, ISpeciesService speciesService)
+        public DashboardModel(ILogger<DashboardModel> logger, IPlantService plantService, ICategoryService categoryService, ISpeciesService speciesService)
         {
             _logger = logger;
             _plantService = plantService;
@@ -64,7 +64,6 @@ namespace PlantManagement.Pages.Admin
                     CurrentPage = CurrentPage,
                     PageSize = pageSize,
                     TotalItems = 0,
-                    TotalPages = 0
                 };
                 Categories = categories.Data ?? new List<Category>();
                 return Page();
@@ -110,6 +109,7 @@ namespace PlantManagement.Pages.Admin
             await OnGetAsync();
             return Partial("_PlantListPartial", this);
         }
-        
+
+  
     }
 }

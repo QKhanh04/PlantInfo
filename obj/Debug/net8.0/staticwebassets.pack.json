@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets\\PlantManagement.zk67hu4z5c.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\category-management.css",
+      "PackagePath": "staticwebassets\\css\\admin\\category-management.css"
+    },
+    {
       "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\create.css",
       "PackagePath": "staticwebassets\\css\\admin\\create.css"
     },
@@ -15,6 +19,10 @@
     {
       "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\report.css",
       "PackagePath": "staticwebassets\\css\\admin\\report.css"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\admin\\user-management.css",
+      "PackagePath": "staticwebassets\\css\\admin\\user-management.css"
     },
     {
       "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\auth.css",
@@ -31,6 +39,10 @@
     {
       "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\look-up-plant.css",
       "PackagePath": "staticwebassets\\css\\look-up-plant.css"
+    },
+    {
+      "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\shared\\pagination.css",
+      "PackagePath": "staticwebassets\\css\\shared\\pagination.css"
     },
     {
       "Id": "C:\\Users\\Admin\\Desktop\\PlantManagement\\wwwroot\\css\\site.css",

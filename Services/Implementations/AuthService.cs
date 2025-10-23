@@ -2,9 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using PlantManagement.Common.Results;
 using PlantManagement.DTOs;
 using PlantManagement.Helper;
+using PlantManagement.Hubs;
 using PlantManagement.Models;
 using PlantManagement.Repositories;
 using PlantManagement.Repositories.Interfaces;
@@ -16,12 +20,17 @@ namespace PlantManagement.Services.Implementations
     {
         private readonly IAuthRepository _userRepo;
         private readonly IEmailSender _emailSender;
+        private readonly IHubContext<LockUserHub> _hubContext;
+        private readonly IMapper _mapper;
+
         private const string OtpSessionKey = "OTP";
         private const string EmailSessionKey = "OTP_EMAIL";
-        public AuthService(IAuthRepository userRepo, IEmailSender emailSender)
+        public AuthService(IAuthRepository userRepo, IEmailSender emailSender, IHubContext<LockUserHub> hubContext, IMapper mapper)
         {
             _userRepo = userRepo;
             _emailSender = emailSender;
+            _hubContext = hubContext;
+            _mapper = mapper;
         }
 
 
@@ -78,6 +87,11 @@ namespace PlantManagement.Services.Implementations
             {
                 return ServiceResult<User>.Fail("UserName or Email is not existed");
             }
+            if (user.IsLocked)
+            {
+                return ServiceResult<User>.Fail("Your account has been locked");
+
+            }
             bool verify = PasswordHelper.VerifyPassword(password, user.Password);
             if (verify) return ServiceResult<User>.Ok(user);
             return ServiceResult<User>.Fail("Password is not correct");
@@ -118,24 +132,97 @@ namespace PlantManagement.Services.Implementations
             if (user == null)
                 return ServiceResult<bool>.Fail("Không tìm thấy người dùng!");
 
-            if (!string.IsNullOrWhiteSpace(dto.Email))
-                user.Email = dto.Email.Trim();
-
+            user.Email = dto.Email;
             if (!string.IsNullOrWhiteSpace(dto.Password))
+            {
                 user.Password = PasswordHelper.HashPassword(dto.Password);
+            }
+            await _userRepo.SaveChangesAsync();
+            return ServiceResult<bool>.Ok(true, "Cập nhật thành công!");
+        }
 
-            try
+        public async Task<ServiceResult<User>> ToggleLockUserAsync(int userId)
+        {
+            var user = await _userRepo.GetByIdAsync(userId);
+            if (user == null)
+                return ServiceResult<User>.Fail("Không tìm thấy người dùng.");
+
+            user.IsLocked = !user.IsLocked;
+            await _userRepo.SaveChangesAsync();
+
+            if (user.IsLocked)
             {
-                await _userRepo.SaveChangesAsync();
-                return ServiceResult<bool>.Ok(true, "Cập nhật thành công!");
+                await _hubContext.Clients.User(userId.ToString()).SendAsync("Locked", "Tài khoản của bạn đã bị khóa bởi quản trị viên!");
             }
-            catch (Exception)
-            {
-                return ServiceResult<bool>.Fail("Có lỗi xảy ra khi lưu thông tin người dùng!");
-            }
+            Console.WriteLine($"Sending lock event to UserId: {userId}");
+
+            var message = user.IsLocked ? "Người dùng đã bị khóa." : "Người dùng đã được mở khóa.";
+            return ServiceResult<User>.Ok(user, message);
         }
 
 
+
+        public async Task<ServiceResult<PagedResult<UserDTO>>> SearchUsersAsync(
+     string? keyword,
+     int page,
+     int pageSize,
+     string? role = null,
+     bool? isLocked = null
+ )
+        {
+            try
+            {
+                var query = _userRepo.Query().AsQueryable();
+
+                // Lọc theo khóa/mở khóa nếu cần
+                if (isLocked.HasValue)
+                    query = query.Where(u => u.IsLocked == isLocked);
+
+                // Lọc theo role nếu cần
+                if (!string.IsNullOrEmpty(role))
+                    query = query.Where(u => u.Role == role);
+
+                // Tìm kiếm theo username hoặc email
+                if (!string.IsNullOrWhiteSpace(keyword))
+                {
+                    string lowered = keyword.ToLower().Trim();
+                    query = query.Where(u => u.Username.ToLower().Contains(lowered)
+                                          || u.Email.ToLower().Contains(lowered));
+                }
+
+                int totalCount = await query.CountAsync();
+
+                var items = await query
+                    .OrderBy(u => u.Username)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .Select(u => _mapper.Map<UserDTO>(u))
+                    .ToListAsync();
+
+                var pagedResult = new PagedResult<UserDTO>
+                {
+                    Items = items,
+                    TotalItems = totalCount,
+                    CurrentPage = page,
+                    PageSize = pageSize
+                };
+
+                return ServiceResult<PagedResult<UserDTO>>.Ok(pagedResult);
+            }
+            catch (Exception ex)
+            {
+                return ServiceResult<PagedResult<UserDTO>>.Fail($"Lỗi khi lấy danh sách người dùng: {ex.Message}");
+            }
+        }
+
+        public async Task<ServiceResult<User>> GetUserByIdAsync(int userId)
+        {
+            var user = await _userRepo.GetByIdAsync(userId);
+            if (user == null)
+                return ServiceResult<User>.Fail("Không tìm thấy người dùng!");
+
+            return ServiceResult<User>.Ok(user);
+        }
 
     }
 }

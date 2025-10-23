@@ -378,6 +378,9 @@ public partial class PlantDbContext : DbContext
             entity.Property(e => e.Email)
                 .HasMaxLength(255)
                 .HasColumnName("email");
+            entity.Property(e => e.IsLocked)
+                .HasDefaultValue(false)
+                .HasColumnName("is_locked");
             entity.Property(e => e.Password)
                 .HasMaxLength(255)
                 .HasColumnName("password");

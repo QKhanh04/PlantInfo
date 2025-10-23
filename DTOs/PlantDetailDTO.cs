@@ -19,6 +19,5 @@ namespace PlantManagement.DTOs
         public GrowthConditionDTO? GrowthCondition { get; set; }
         public List<PlantImageDTO>? Images { get; set; }
         public List<PlantReferenceDTO>? References { get; set; }
-
     }
 }

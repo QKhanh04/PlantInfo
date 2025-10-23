@@ -23,7 +23,7 @@ namespace PlantManagement.DTOs
         public List<UseCreateDTO>? NewUses { get; set; }
 
         public List<int>? DiseaseIds { get; set; } // Nếu cho phép thay đổi danh mục
-        public List<DiseaseDTO>? NewDiseases { get; set; }
+        public List<DiseaseCreateDTO>? NewDiseases { get; set; }
 
         public GrowthConditionDTO? GrowthCondition { get; set; }
 

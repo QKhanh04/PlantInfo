@@ -121,7 +121,8 @@
     <div id="NewDiseases">
         <div class="mb-2" id="diseaseRow_0">
             <input name="Plant.NewDiseases[0].DiseaseName" class="form-control" placeholder="Tên bệnh" />
-            <input name="Plant.NewDiseases[0].Description" class="form-control mt-2" placeholder="Mô tả" />
+            <input name="Plant.NewDiseases[0].Symptoms" class="form-control mt-2" placeholder="Triệu chứng" />
+            <input name="Plant.NewDiseases[0].Treatment" class="form-control mt-2" placeholder="Cách chữa" />
             <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('diseaseRow_0')">Xóa</button>
         </div>
     </div>
@@ -222,7 +223,7 @@
     }
 </div>
 <button type="button" class="btn btn-outline-primary mt-2" onclick="addReference()">+ Thêm nguồn tham khảo</button>
-@* <div>@TempData["ToastMessage"]</div> *@
+<div>@TempData["ToastMessage"]</div>
 <button type="submit" class="btn btn-success mt-4">Cập nhật cây</button>
 </form>
 
@@ -283,8 +284,9 @@ function addDisease() {
     const index = container.querySelectorAll('[id^="diseaseRow_"]').length;
     container.insertAdjacentHTML('beforeend',
         `<div class="mb-2" id="diseaseRow_${index}">
-            <input name="Plant.NewDiseases[${index}].DiseaseName" class="form-control" placeholder="Tên bệnh" />
-            <input name="Plant.NewDiseases[${index}].Description" class="form-control mt-2" placeholder="Mô tả" />
+            <input name="Plant.NewDiseases[0].DiseaseName" class="form-control" placeholder="Tên bệnh" />
+            <input name="Plant.NewDiseases[0].Symptoms" class="form-control mt-2" placeholder="Triệu chứng" />
+            <input name="Plant.NewDiseases[0].Treatment" class="form-control mt-2" placeholder="Cách chữa" />
             <button type="button" class="btn btn-danger btn-sm mt-2" onclick="removeRow('diseaseRow_${index}')">Xóa</button>
         </div>`);
     reindexDiseases();

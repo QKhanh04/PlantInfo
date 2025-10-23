@@ -197,23 +197,7 @@
             </div>
         </div>
     </div>
-    <!-- Chatbot Button -->
-<div id="chatbot-toggle" class="chatbot-toggle">
-    💬
-</div>
-
-<!-- Chatbot Popup -->
-<div id="chatbot-popup" class="chatbot-popup">
-    <div class="chatbot-header">
-        <span>Trợ lý cây trồng AI 🌿</span>
-        <button id="chatbot-close" class="close-btn">&times;</button>
-    </div>
-    <div id="chatbot-messages" class="chatbot-messages"></div>
-    <div class="chatbot-input">
-        <input type="text" id="chatbot-text" placeholder="Nhập câu hỏi về cây trồng..." />
-        <button id="chatbot-send" class="btn btn-success">Gửi</button>
-    </div>
-</div>
+    <partial name="_Chatbot" />
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -243,76 +227,24 @@
                 </text>
         }
     </script>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
     <script>
-document.getElementById("btnSavePersonalInfo").addEventListener("click", async () => {
-    const data = {
-        userId: document.getElementById("UserId").value,
-        email: document.getElementById("Email").value,
-        password: document.getElementById("Password").value
-    };
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/lockUserHub")
+            .build();
 
-    const response = await fetch('/api/users/update', { // endpoint thực tế
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data)
-    });
+        connection.on("Locked", function(message) {
+            alert(message);
+            console.log("Received locked event", message); 
+            window.location.href = "/Auth/Authentication?locked=true";
+        });
 
-    const result = await response.json();
-    if (result.success) {
-        showToast(result.message, "success");
-        bootstrap.Modal.getInstance(document.getElementById("personalInfoModal")).hide();
-    } else {
-        showToast(result.message || "Cập nhật thất bại!", "danger");
-    }
-});
-
-function showToast(message, type) {
-    const toast = document.createElement("div");
-    toast.className = `toast align-items-center text-white bg-${type} border-0 position-fixed top-0 end-0 m-3 show`;
-    toast.innerHTML = `<div class="d-flex"><div class="toast-body">${message}</div>
-                       <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div>`;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 3000);
-}
-</script>
-<script>
-    // --- Chatbot popup logic ---
-$('#chatbot-toggle').click(() => $('#chatbot-popup').fadeToggle());
-$('#chatbot-close').click(() => $('#chatbot-popup').fadeOut());
-
-$('#chatbot-send').click(sendChatMessage);
-$('#chatbot-text').keypress(e => { if (e.which === 13) sendChatMessage(); });
-
-function appendMessage(text, sender) {
-    const msg = $('<div>').addClass('message').addClass(sender === 'user' ? 'user-msg' : 'bot-msg').text(text);
-    $('#chatbot-messages').append(msg);
-    $('#chatbot-messages').scrollTop($('#chatbot-messages')[0].scrollHeight);
-}
-
-function sendChatMessage() {
-    const input = $('#chatbot-text');
-    const message = input.val().trim();
-    if (!message) return;
-
-    appendMessage(message, 'user');
-    input.val('');
-
-    appendMessage('Đang suy nghĩ...', 'bot');
-
-    $.ajax({
-        type: 'POST',
-        url: '/LookUpPlant?handler=ChatAI',
-        data: { question: message, __RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val() },
-        success: function (res) {
-            $('.bot-msg:last').text(res.answer || 'Xin lỗi, tôi chưa có thông tin về cây này.');
-        },
-        error: function () {
-            $('.bot-msg:last').text('Có lỗi xảy ra khi kết nối đến AI.');
-        }
-    });
-}
-
-</script>
+        connection.start().catch(function(err) {
+            return console.error(err.toString());
+        });
+    </script>
+    
 
 
     @await RenderSectionAsync(name: "Scripts", required: false)

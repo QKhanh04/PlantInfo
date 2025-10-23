@@ -1,0 +1,183 @@
+/* =============== GENERAL LAYOUT =============== */
+body {
+    font-family: "Inter", "Segoe UI", sans-serif;
+    color: #333;
+    background-color: #f8faf8;
+    line-height: 1.6;
+}
+
+h2 {
+    color: #2f513b;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* =============== SEARCH SECTION =============== */
+.search-section {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.search-input {
+    width: 280px;
+    padding: 8px 12px;
+    border: 1px solid #c7d7c4;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.search-input:focus {
+    border-color: #58a065;
+    box-shadow: 0 0 0 3px rgba(88, 160, 101, 0.15);
+    outline: none;
+}
+
+.status-select {
+    padding: 8px 12px;
+    border: 1px solid #c7d7c4;
+    border-radius: 8px;
+    background-color: white;
+    transition: border-color 0.2s ease;
+}
+
+.status-select:focus {
+    border-color: #58a065;
+}
+
+.btn-search {
+    background-color: #58a065;
+    border: none;
+    color: white;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-search:hover {
+    background-color: #4b8a57;
+    transform: translateY(-1px);
+}
+
+/* =============== TABLE STYLING =============== */
+.table-container {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.user-table th {
+    background-color: #e9f3ec;
+    color: #2f513b;
+    font-weight: 600;
+    padding: 12px 15px;
+    border-bottom: 2px solid #d6e3d8;
+    text-align: left;
+}
+
+.user-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #eef3ef;
+}
+
+.user-table tr:hover {
+    background-color: #f9fcf9;
+    transition: background-color 0.2s ease;
+}
+
+/* =============== ROLE BADGE =============== */
+.role-badge {
+    background-color: #d9f2e1;
+    color: #2f513b;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* =============== STATUS BADGE =============== */
+.status-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.status-active {
+    background-color: #e7f8ec;
+    color: #2b7a34;
+}
+
+.status-locked {
+    background-color: #fdecec;
+    color: #b22b2b;
+}
+
+/* =============== ACTION BUTTONS =============== */
+.action-form {
+    display: inline-block;
+}
+
+.btn-action {
+    border: none;
+    border-radius: 8px;
+    padding: 6px 14px;
+    color: white;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-lock {
+    background-color: #d9534f;
+}
+
+.btn-lock:hover {
+    background-color: #b93733;
+}
+
+.btn-unlock {
+    background-color: #5cb85c;
+}
+
+.btn-unlock:hover {
+    background-color: #4a9c4a;
+}
+
+.current-user-text {
+    color: #7a7a7a;
+    font-style: italic;
+}
+
+/* =============== EMPTY STATE =============== */
+.empty-state {
+    text-align: center;
+    padding: 40px 0;
+    color: #777;
+}
+
+.empty-state-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+/* =============== PAGINATION =============== */
+

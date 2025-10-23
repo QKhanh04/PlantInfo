@@ -17,6 +17,8 @@ public partial class User
 
     public DateTime? CreateAt { get; set; }
 
+    public bool IsLocked { get; set; }
+
     public virtual ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
 
     public virtual ICollection<PlantReview> PlantReviews { get; set; } = new List<PlantReview>();
