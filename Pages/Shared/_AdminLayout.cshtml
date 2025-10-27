@@ -318,6 +318,292 @@
                 justify-content: center;
             }
         }
+
+        .toast-container-custom {
+            position: fixed;
+            top: 90px;
+            /* Dưới header (header height ~70px + padding) */
+            right: 30px;
+            z-index: 1050;
+            max-width: 400px;
+        }
+
+        /* Toast Base Styles */
+        .toast-custom {
+            display: flex;
+            align-items: center;
+            min-width: 350px;
+            padding: 16px 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            margin-bottom: 15px;
+            border-left: 4px solid;
+            animation: slideInRight 0.4s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @@keyframes
+        slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @@keyframes
+        slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+
+        .toast-custom.hiding {
+            animation: slideOutRight 0.3s ease-in forwards;
+        }
+
+        /* Toast Icon Container */
+        .toast-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+            font-size: 20px;
+        }
+
+        /* Toast Content */
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .toast-message {
+            font-size: 13px;
+            color: #6c757d;
+            line-height: 1.4;
+        }
+
+        /* Close Button */
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #999;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+            margin-left: 10px;
+        }
+
+        .toast-close:hover {
+            background: rgba(0, 0, 0, 0.05);
+            color: #333;
+        }
+
+        /* Progress Bar */
+        .toast-progress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 3px;
+            width: 100%;
+            transform-origin: left;
+            animation: progressBar 5s linear forwards;
+        }
+
+        @@keyframes
+        progressBar {
+            from {
+                transform: scaleX(1);
+            }
+
+            to {
+                transform: scaleX(0);
+            }
+        }
+
+        /* Success Toast - Xanh lá */
+        .toast-success {
+            border-left-color: #22c55e;
+        }
+
+        .toast-success .toast-icon {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: white;
+        }
+
+        .toast-success .toast-title {
+            color: #16a34a;
+        }
+
+        .toast-success .toast-progress {
+            background: linear-gradient(to right, #22c55e, #16a34a);
+        }
+
+        /* Warning Toast - Cam/Vàng */
+        .toast-warning {
+            border-left-color: #f59e0b;
+        }
+
+        .toast-warning .toast-icon {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+        }
+
+        .toast-warning .toast-title {
+            color: #d97706;
+        }
+
+        .toast-warning .toast-progress {
+            background: linear-gradient(to right, #fbbf24, #f59e0b);
+        }
+
+        /* Error Toast - Đỏ */
+        .toast-danger {
+            border-left-color: #ef4444;
+        }
+
+        .toast-danger .toast-icon {
+            background: linear-gradient(135deg, #f87171, #ef4444);
+            color: white;
+        }
+
+        .toast-danger .toast-title {
+            color: #dc2626;
+        }
+
+        .toast-danger .toast-progress {
+            background: linear-gradient(to right, #f87171, #ef4444);
+        }
+
+        /* Info Toast - Xanh dương (optional) */
+        .toast-info {
+            border-left-color: #3b82f6;
+        }
+
+        .toast-info .toast-icon {
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+            color: white;
+        }
+
+        .toast-info .toast-title {
+            color: #2563eb;
+        }
+
+        .toast-info .toast-progress {
+            background: linear-gradient(to right, #60a5fa, #3b82f6);
+        }
+
+        /* Responsive */
+        @@media
+        (max-width: 576px) {
+            .toast-container-custom {
+                right: 15px;
+                left: 15px;
+                top: 80px;
+            }
+
+            .toast-custom {
+                min-width: auto;
+                width: 100%;
+            }
+        }
+
+        /* Demo Styles */
+        .demo-container {
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .demo-header {
+            background: linear-gradient(135deg, #2d5016, #4a7c59);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .demo-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn-demo {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f87171, #ef4444);
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(248, 113, 113, 0.3);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #60a5fa, #3b82f6);
+        }
+
+        .btn-info:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(96, 165, 250, 0.3);
+        }
     </style>
 </head>
 
@@ -364,6 +650,10 @@
                     <span>Quản lý cây trồng</span>
                     <span class="nav-badge">245</span>
                 </a> *@
+                <a href="/Admin/Management/SpeciesManagement" class="sidebar-nav-item">
+                    <i class="bi bi-tree"></i>
+                    <span>Loài cây</span>
+                </a>
                 <a href="/Admin/Management/CategoryManagement" class="sidebar-nav-item">
                     <i class="bi bi-grid"></i>
                     <span>Danh mục</span>
@@ -424,43 +714,83 @@
             </div>
         </main>
     </div>
-    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1100">
-        <div id="globalToast" class="toast text-bg-primary border-0" role="alert" aria-live="assertive"
-            aria-atomic="true">
-            <div class="d-flex">
-                <div id="toastMessage" class="toast-body"></div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
-            </div>
-        </div>
-    </div>  
+    <div class="toast-container-custom" id="toastContainer"></div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <!-- JS Tempus Dominus + Popper -->
     <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@@eonasdan/tempus-dominus@6.10.1/dist/js/tempus-dominus.min.js"></script>
+    </div>
+
     <script>
-        function showToast(message, type = "info") {
-            const toastEl = document.getElementById("globalToast");
-            const toastBody = document.getElementById("toastMessage");
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
 
-            toastEl.className = "toast border-0 text-bg-" + type;
-            toastBody.innerText = message;
+            // Title mapping - gán cứng theo type
+            const titles = {
+                success: 'Thành công!',
+                warning: 'Cảnh báo!',
+                danger: 'Lỗi!',
+                info: 'Thông báo'
+            };
 
-            const toast = new bootstrap.Toast(toastEl);
-            toast.show();
+            // Icon mapping
+            const icons = {
+                success: 'bi-check-circle-fill',
+                warning: 'bi-exclamation-triangle-fill',
+                danger: 'bi-x-circle-fill',
+                info: 'bi-info-circle-fill'
+            };
+
+            const title = titles[type] || titles.info;
+
+            // Create toast element
+            const toast = document.createElement('div');
+            toast.className = `toast-custom toast-${type}`;
+            toast.innerHTML = `
+                <div class="toast-icon">
+                    <i class="bi ${icons[type]}"></i>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close" onclick="closeToast(this)">
+                    <i class="bi bi-x"></i>
+                </button>
+                <div class="toast-progress"></div>
+            `;
+
+            container.appendChild(toast);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                closeToast(toast.querySelector('.toast-close'));
+            }, 5000);
+        }
+
+        function closeToast(button) {
+            const toast = button.closest('.toast-custom');
+            toast.classList.add('hiding');
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
         }
 
         @if (TempData["ToastMessage"] != null)
             {
                 <text>
-                    console.log('Toast Type:', "@TempData["ToastType"]");
-
                     document.addEventListener("DOMContentLoaded", function () {
                         showToast("@Html.Raw(TempData["ToastMessage"])", "@TempData["ToastType"]");
-                                    });
+                        });
                 </text>
         }
     </script>
+
+
+
+
     <script>
             // Mobile menu toggle
             $('#mobileMenuToggle').on('click', function () {

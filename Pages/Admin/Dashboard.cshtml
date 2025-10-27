@@ -45,8 +45,7 @@
             </div>
             <div class="col-md-3">
                 <label class="form-label fw-semibold">Bộ phân loại</label>
-                <select asp-for="FilterVM.OrderName" class="form-select"
-                    asp-items="@(new SelectList(Model.OrderList))">
+                <select asp-for="FilterVM.OrderName" class="form-select" asp-items="@(new SelectList(Model.OrderList))">
                     <option value="">-- Tất cả bộ --</option>
                 </select>
             </div>
@@ -96,8 +95,6 @@
                         scrollTop: $('#ajax-content').offset().top - 100
                     }, 500);
 
-                    bindToggleActiveBtn();
-
                     // --- Đặt thêm đoạn này ---
                     if (pushState) {
                         // Tạo query string mới
@@ -112,12 +109,12 @@
                 })
                 .fail(function () {
                     $('#ajax-content').html(`
-                <div class="empty-state">
-                    <i class="bi bi-exclamation-circle"></i>
-                    <h3>Có lỗi xảy ra</h3>
-                    <p>Không thể tải dữ liệu. Vui lòng thử lại sau.</p>
-                </div>
-            `);
+                    <div class="empty-state">
+                        <i class="bi bi-exclamation-circle"></i>
+                        <h3>Có lỗi xảy ra</h3>
+                        <p>Không thể tải dữ liệu. Vui lòng thử lại sau.</p>
+                    </div>
+                `);
                 })
                 .always(function () {
                     hideLoading();
@@ -125,23 +122,45 @@
         }
 
         function bindToggleActiveBtn() {
-            $('#ajax-content').off('click', '.toggle-active-btn').on('click', '.toggle-active-btn', function () {
-                var plantId = $(this).data('id');
+            $(document).on('click', '.toggle-active-btn', function () {
+                var $btn = $(this);
+                var plantId = $btn.data('id');
                 var token = $('input[name="__RequestVerificationToken"]').val();
                 showLoading();
-
                 $.ajax({
                     url: '@Url.Page("/Admin/Dashboard", "ToggleActive")',
                     method: 'POST',
                     data: { id: plantId, __RequestVerificationToken: token },
                     success: function (data) {
-                        @* $('#ajax-content').html(data); *@
-                        var currentPage = getCurrentPage();
-                        loadPlants(currentPage);
-                        bindToggleActiveBtn(); // Re-bind sau khi HTML thay đổi
+                        if (data.success) {
+                            // Tìm thẻ card chứa nút này
+                            var $card = $btn.closest('.plant-card');
+                            // Cập nhật trạng thái hiển thị Active/InActive
+                            var $badge = $card.find('.active-badge');
+                            if (data.isActive === true) {
+                                // Active
+                                $badge
+                                    .removeClass('border-danger text-danger bg-danger-light')
+                                    .addClass('border-success text-success bg-success-light')
+                                    .html('<i class="bi bi-check-circle"></i> Active');
+                                // Cập nhật nút
+                                $btn.html('<i class="bi bi-eye-slash"></i> Ẩn');
+                            } else {
+                                // InActive
+                                $badge
+                                    .removeClass('border-success text-success bg-success-light')
+                                    .addClass('border-danger text-danger bg-danger-light')
+                                    .html('<i class="bi bi-x-circle"></i> InActive');
+                                // Cập nhật nút
+                                $btn.html('<i class="bi bi-eye"></i> Hiện');
+                            }
+                            showToast(data.message, "success");
+                        } else {
+                            showToast(data.message || "Không thể thay đổi trạng thái.", "danger");
+                        }
                     },
                     error: function () {
-                        alert('Lỗi khi cập nhật trạng thái cây!');
+                        showToast("Lỗi khi cập nhật trạng thái cây!", "danger");
                     },
                     complete: function () {
                         hideLoading();

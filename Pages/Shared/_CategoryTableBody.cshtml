@@ -1,0 +1,15 @@
+@model IEnumerable<PlantManagement.DTOs.CategoryDTO>
+
+@foreach (var cat in Model)
+{
+    <tr>
+        <td>@cat.CategoryName</td>
+        <td id="desc_@cat.CategoryId">@cat.Description</td>
+        <td>
+            <button class="btn btn-primary btn-sm" onclick="openEditModal(@cat.CategoryId)">Xem chi tiết</button>
+            <button class="btn btn-danger btn-sm" onclick="checkBeforeDelete(@cat.CategoryId)">
+                <i class="bi bi-trash"></i> Xóa
+            </button>
+        </td>
+    </tr>
+}

@@ -32,6 +32,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cTWFuYWdlbWVudFxDYXRlZ29yeU1hbmFnZW1lbnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Admin/Desktop/PlantManagement/Pages/Admin/Management/SpeciesManagement.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cTWFuYWdlbWVudFxTcGVjaWVzTWFuYWdlbWVudC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Admin/Desktop/PlantManagement/Pages/Admin/Management/UserManagement.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cTWFuYWdlbWVudFxVc2VyTWFuYWdlbWVudC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -90,6 +94,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Admin/Desktop/PlantManagement/Pages/Shared/_AdminLayout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9BZG1pbkxheW91dC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Admin/Desktop/PlantManagement/Pages/Shared/_CategoryTableBody.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9DYXRlZ29yeVRhYmxlQm9keS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Admin/Desktop/PlantManagement/Pages/Shared/_Chatbot.cshtml]

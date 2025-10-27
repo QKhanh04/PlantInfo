@@ -18,6 +18,8 @@ public partial class PlantDbContext : DbContext
 
     public virtual DbSet<Category> Categories { get; set; }
 
+    public virtual DbSet<ChatLog> ChatLogs { get; set; }
+
     public virtual DbSet<Disease> Diseases { get; set; }
 
     public virtual DbSet<Favorite> Favorites { get; set; }
@@ -61,6 +63,27 @@ public partial class PlantDbContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("category_name");
             entity.Property(e => e.Description).HasColumnName("description");
+        });
+
+        modelBuilder.Entity<ChatLog>(entity =>
+        {
+            entity.HasKey(e => e.ChatId).HasName("chat_logs_pkey");
+
+            entity.ToTable("chat_logs");
+
+            entity.Property(e => e.ChatId).HasColumnName("chat_id");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("created_at");
+            entity.Property(e => e.Message).HasColumnName("message");
+            entity.Property(e => e.Response).HasColumnName("response");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
+
+            entity.HasOne(d => d.User).WithMany(p => p.ChatLogs)
+                .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("chat_logs_user_id_fkey");
         });
 
         modelBuilder.Entity<Disease>(entity =>

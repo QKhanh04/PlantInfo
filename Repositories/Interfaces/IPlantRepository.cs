@@ -8,6 +8,8 @@ namespace PlantManagement.Repositories.Interfaces
 {
     public interface IPlantRepository : IGenericRepository<Plant>
     {
-        
+        Task<Plant?> FindByNameAsync(string name);
+        Task<List<Plant>> SearchAsync(string query, int limit = 5);
+        Task<Plant?> GetFullPlantInfoAsync(int id);
     }
 }

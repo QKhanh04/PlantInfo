@@ -16,6 +16,10 @@ namespace PlantManagement.Services.Interfaces
         Task<ServiceResult<Category>> UpdateCategoryAsync(CategoryDTO dto);
         Task<ServiceResult<Category>> GetByIdAsync(int id);
         Task<ServiceResult<IEnumerable<Category>>> GetAllCategoryAsync();
+        Task<ServiceResult<bool>> DeleteCategoryAsync(int categoryId);
+        Task<List<Plant>> GetPlantsByCategoryIdAsync(int categoryId);
+
+
 
     }
 }

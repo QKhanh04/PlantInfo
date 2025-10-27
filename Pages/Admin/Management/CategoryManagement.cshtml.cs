@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -13,9 +14,10 @@ using PlantManagement.Services.Interfaces;
 namespace PlantManagement.Pages.Admin.Management
 {
     [IgnoreAntiforgeryToken]
-
+    [Authorize (Roles = "Admin")]
     public class CategoryManagementModel : PageModel
     {
+
         private readonly ILogger<CategoryManagementModel> _logger;
         private readonly ICategoryService _categoryService;
 
@@ -33,25 +35,12 @@ namespace PlantManagement.Pages.Admin.Management
         public int PageSize { get; set; } = 5;
         [BindProperty(SupportsGet = true)]
         public int TotalPages { get; set; }
-
+        public List<Plant> PlantsInCategory { get; set; } = new();
+        [BindProperty]
+        public int DeleteCategoryId { get; set; }
         public async Task OnGetAsync()
         {
-            var result = await _categoryService.GetPagedCategoriesAsync(Keyword, CurrentPage, PageSize);
-            if (!result.Success || result.Data == null)
-            {
-                Categories = new PagedResult<CategoryDTO>
-                {
-                    Items = new List<CategoryDTO>(),
-                    CurrentPage = CurrentPage,
-                    PageSize = PageSize,
-                    TotalItems = 0,
-                };
-            }
-            else
-            {
-                Categories = result.Data;
-            }
-
+            Categories = await LoadPagedCategoriesAsync(Keyword, CurrentPage);
             TotalPages = Categories.TotalPages;
         }
 
@@ -97,15 +86,124 @@ namespace PlantManagement.Pages.Admin.Management
             var result = await _categoryService.UpdateCategoryAsync(dto);
             _logger.LogInformation("CategoryId: {CategoryId}, Description: {Description}", req?.CategoryId, req?.Description);
             if (result.Success)
-                return new JsonResult(new { success = true });
+                return new JsonResult(new { success = true, message = result.Message });
             return new JsonResult(new { success = false, message = result.Message });
         }
 
-    }
+        public async Task<IActionResult> OnPostAddAsync([FromForm] AddCategoryRequest req)
+        {
+            ModelState.Remove("Keyword");
 
+            // Kiểm tra dữ liệu đầu vào
+            if (!ModelState.IsValid)
+            {
+                foreach (var key in ModelState.Keys)
+                {
+                    var state = ModelState[key];
+                    foreach (var error in state.Errors)
+                    {
+                        _logger.LogError("Field: {Field}, Error: {Error}", key, error.ErrorMessage);
+                    }
+                }
+                // Luôn trả về JSON! (tránh lỗi JS như ảnh)
+                return new JsonResult(new { success = false, message = "Invalid input data." });
+            }
+
+            var dto = new CategoryDTO
+            {
+                CategoryName = req.CategoryName,
+                Description = req.Description
+            };
+
+            var result = await _categoryService.CreateCategoryAsync(dto);
+            if (result.Success)
+            {
+                // Trả về thông tin danh mục vừa tạo (bạn có thể trả về nhiều trường hơn nếu muốn)
+                return new JsonResult(new
+                {
+                    success = true,
+                    category = new
+                    {
+                        categoryId = result.Data.CategoryId,
+                        categoryName = result.Data.CategoryName,
+                        description = result.Data.Description
+                    },
+                    message = result.Message
+                });
+            }
+            // Nếu lỗi (ví dụ trùng tên), trả về thông báo chi tiết
+            return new JsonResult(new { success = false, message = result.Message });
+        }
+        public async Task<IActionResult> OnPostCheckBeforeDeleteAsync([FromBody] CheckDeleteRequest req)
+        {
+            int id = req.Id;
+            var plants = await _categoryService.GetPlantsByCategoryIdAsync(id);
+
+            if (plants == null || !plants.Any())
+            {
+                return new JsonResult(new
+                {
+                    success = true,
+                    message = "Không có cây nào sử dụng danh mục này. Bạn có thể xóa an toàn."
+                });
+            }
+
+            // Ghép tên cây (ưu tiên CommonName, fallback ScientificName)
+            string plantList = string.Join(", ", plants.Select(p => p.CommonName ?? p.Species?.ScientificName ?? "Không rõ"));
+
+            return new JsonResult(new
+            {
+                success = false,
+                message = $"Danh mục này đang được sử dụng bởi {plants.Count} cây: {plantList}"
+            });
+        }
+        public async Task<IActionResult> OnPostDeleteConfirmedAsync(int id)
+        {
+            var result = await _categoryService.DeleteCategoryAsync(id);
+            return new JsonResult(new { success = result.Success, message = result.Message });
+        }
+        public async Task<PartialViewResult> OnGetListAsync(string keyword, int currentPage = 1)
+        {
+            var data = await LoadPagedCategoriesAsync(keyword, currentPage);
+            return Partial("Shared/_CategoryTableBody", data.Items);
+        }
+
+        private async Task<PagedResult<CategoryDTO>> LoadPagedCategoriesAsync(string keyword, int currentPage)
+        {
+            var result = await _categoryService.GetPagedCategoriesAsync(keyword, currentPage, PageSize);
+
+            if (!result.Success || result.Data == null)
+            {
+                result.Data = new PagedResult<CategoryDTO>
+                {
+                    Items = new List<CategoryDTO>(),
+                    CurrentPage = currentPage,
+                    PageSize = PageSize,
+                    TotalItems = 0
+                };
+            }
+
+            return result.Data;
+        }
+
+
+
+
+
+    }
+    public class AddCategoryRequest
+    {
+        public string CategoryName { get; set; }
+        public string Description { get; set; }
+    }
     public class EditCategoryRequest
     {
         public int CategoryId { get; set; }
         public string Description { get; set; }
+    }
+
+    public class CheckDeleteRequest
+    {
+        public int Id { get; set; }
     }
 }

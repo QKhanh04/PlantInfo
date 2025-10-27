@@ -654,7 +654,7 @@ namespace PlantManagement.Services.Implementations
 
                 await _plantRepo.SaveChangesAsync();
                 string msg = (plant.IsActive ?? false) ? "Đã hiện cây thành công!" : "Đã ẩn cây thành công!";
-                return ServiceResult<bool>.Ok(true, msg);
+                return ServiceResult<bool>.Ok(plant.IsActive ?? false, msg);
             }
             catch (Exception ex)
             {

@@ -12,8 +12,8 @@ namespace PlantManagement.Repositories.Implementations
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly PlantDbContext _context;
-        private readonly DbSet<T> _dbSet;
+        protected readonly PlantDbContext _context;
+        protected readonly DbSet<T> _dbSet;
 
         public GenericRepository(PlantDbContext context)
         {

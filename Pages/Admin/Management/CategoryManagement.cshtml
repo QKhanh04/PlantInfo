@@ -12,16 +12,13 @@
 }
 
 <div class="search-section">
-    <form method="get" class="search-form">
-        <input type="text" 
-               name="Keyword" 
-               value="@Model.Keyword" 
-               placeholder="Tìm kiếm tên danh mục"
-               class="search-input" />
+  <form method="get" class="search-form">
+    <input type="text" name="Keyword" value="@Model.Keyword" placeholder="Tìm kiếm tên danh mục" class="search-input" />
 
 
-        <button type="submit" class="btn-search">Tìm kiếm</button>
-    </form>
+    <button type="submit" class="btn-search">Tìm kiếm</button>
+  </form>
+  <button class="btn btn-success ms-2" onclick="openAddModal()">Thêm danh mục mới</button>
 </div>
 <table class="table table-bordered">
   <thead>
@@ -39,11 +36,16 @@
         <td id="desc_@cat.CategoryId">@cat.Description</td>
         <td>
           <button class="btn btn-primary btn-sm" onclick="openEditModal(@cat.CategoryId)">Xem chi tiết</button>
+          <button class="btn btn-danger btn-sm" onclick="checkBeforeDelete(@cat.CategoryId)">
+            <i class="bi bi-trash"></i> Xóa
+          </button>
         </td>
       </tr>
     }
   </tbody>
 </table>
+
+
 
 <!-- Modal chỉnh sửa danh mục -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -74,22 +76,70 @@
     </form>
   </div>
 </div>
+
+<!-- Modal thêm danh mục -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <form id="addForm" onsubmit="return saveAddCategory();">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Thêm danh mục mới</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="addCategoryName" class="form-label">Tên danh mục</label>
+            <input type="text" class="form-control" id="addCategoryName" name="CategoryName" required />
+          </div>
+          <div class="mb-3">
+            <label for="addDescription" class="form-label">Mô tả</label>
+            <textarea class="form-control" id="addDescription" name="Description"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <span id="addError" class="text-danger me-auto"></span>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+          <button type="submit" class="btn btn-success">Thêm mới</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal xác nhận -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">Xác nhận xóa danh mục</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="deleteModalBody"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Xóa</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 @if (Model.TotalPages > 1)
 {
-    var paginationModel = new PaginationModel
+  var paginationModel = new PaginationModel
+  {
+    CurrentPage = Model.CurrentPage,
+    TotalPages = Model.TotalPages,
+    PageUrl = (page) => Url.Page("/Admin/Management/CategoryManagement", null, new
     {
-        CurrentPage = Model.CurrentPage,
-        TotalPages = Model.TotalPages,
-        PageUrl = (page) => Url.Page("/Admin/Management/CategoryManagement", null, new
-        {
-            CurrentPage = page,
-            Keyword = Model.Keyword,
-        }, null) ?? "#"
-    };
+      CurrentPage = page,
+      Keyword = Model.Keyword,
+    }, null) ?? "#"
+  };
 
-    <div class="pagination-container">
-        @await Html.PartialAsync("Shared/_Pagination", paginationModel)
-    </div>
+  <div class="pagination-container">
+    @await Html.PartialAsync("Shared/_Pagination", paginationModel)
+  </div>
 }
 
 @section Scripts {
@@ -127,6 +177,7 @@
         .then(r => r.json())
         .then(data => {
           if (data.success) {
+            showToast(data.message, "success");
             document.getElementById(`desc_${formData.get("CategoryId")}`).innerText = formData.get("Description");
             editModal.hide();
           } else {
@@ -135,6 +186,99 @@
         });
 
       return false;
+    }
+
+    let addModal = new bootstrap.Modal(document.getElementById('addModal'));
+
+    function openAddModal() {
+      document.getElementById('addError').innerText = '';
+      document.getElementById('addCategoryName').value = '';
+      document.getElementById('addDescription').value = '';
+      addModal.show();
+    }
+
+    function saveAddCategory() {
+      const formData = new FormData();
+      formData.append("CategoryName", document.getElementById("addCategoryName").value);
+      formData.append("Description", document.getElementById("addDescription").value);
+
+      fetch(`/Admin/Management/CategoryManagement?handler=Add`, {
+        method: 'POST',
+        body: formData
+      })
+        .then(r => r.json())
+        .then(data => {
+          if (data.success) {
+            showToast(data.message, "success");
+            addModal.hide();
+            reloadCategoryList(); // ✅ reload danh sách mà không cần reload trang
+          } else {
+            document.getElementById('addError').innerText = data.message || "Có lỗi xảy ra!";
+          }
+        })
+        .catch(err => console.error("Error adding category:", err));
+
+      return false;
+    }
+
+
+
+
+    let deleteCategoryId = 0;
+    let hasPlants = false;
+
+    function checkBeforeDelete(id) {
+      fetch(`/Admin/Management/CategoryManagement?handler=CheckBeforeDelete`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      })
+        .then(res => res.json())
+        .then(data => {
+          deleteCategoryId = id;
+          hasPlants = data.success;
+          document.getElementById("deleteModalBody").innerHTML = data.message;
+          new bootstrap.Modal(document.getElementById("deleteConfirmModal")).show();
+        });
+    }
+
+    document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
+      fetch(`/Admin/Management/CategoryManagement?handler=DeleteConfirmed&id=${deleteCategoryId}`, {
+        method: 'POST'
+      })
+        .then(res => res.json())
+        .then(data => {
+          showToast(data.message, data.success ? "success" : "error");
+          if (data.success) {
+            reloadCategoryList(); // ✅ cập nhật lại list sau xoá
+            bootstrap.Modal.getInstance(document.getElementById("deleteConfirmModal")).hide();
+          }
+        });
+    });
+
+
+    function reloadCategoryList() {
+      const url = `/Admin/Management/CategoryManagement?handler=List&keyword=${encodeURIComponent("@Model.Keyword")}&currentPage=${@Model.CurrentPage}`;
+
+      fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          document.querySelector("table tbody").innerHTML = html;
+
+          // Sau khi cập nhật list, có thể reload lại phân trang nếu muốn
+          // (gọi lại chính trang, nhưng lấy phần pagination)
+          fetch(window.location.pathname + `?Keyword=${encodeURIComponent("@Model.Keyword")}&CurrentPage=${@Model.CurrentPage}`)
+            .then(r => r.text())
+            .then(pageHtml => {
+              const parser = new DOMParser();
+              const newDoc = parser.parseFromString(pageHtml, 'text/html');
+              const newPagination = newDoc.querySelector('.pagination-container');
+              if (newPagination) {
+                document.querySelector('.pagination-container').innerHTML = newPagination.innerHTML;
+              }
+            });
+        })
+        .catch(err => console.error("Error reloading categories:", err));
     }
 
   </script>

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using PlantManagement.Data;
 using PlantManagement.Hubs;
+using PlantManagement.Middlewares;
 using PlantManagement.Repositories.Implementations;
 using PlantManagement.Repositories.Interfaces;
 using PlantManagement.Services.Implementations;
@@ -88,6 +89,7 @@ app.MapHub<LockUserHub>("/lockUserHub");
 app.UseSession();
 
 app.UseAuthentication();
+app.UseMiddleware<UserLockMiddleware>();
 app.UseAuthorization();
 
 app.MapRazorPages();

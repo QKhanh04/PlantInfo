@@ -19,6 +19,8 @@ public partial class User
 
     public bool IsLocked { get; set; }
 
+    public virtual ICollection<ChatLog> ChatLogs { get; set; } = new List<ChatLog>();
+
     public virtual ICollection<Favorite> Favorites { get; set; } = new List<Favorite>();
 
     public virtual ICollection<PlantReview> PlantReviews { get; set; } = new List<PlantReview>();

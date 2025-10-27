@@ -57,7 +57,7 @@ namespace PlantManagement.Pages.Admin
             if (!result.Success || result.Data == null)
             {
                 _logger.LogWarning("Lỗi khi lấy danh sách cây: {Message}", result.Message);
-                TempData["Error"] = result.Message;
+                // TempData["Error"] = result.Message;
                 Plants = new PagedResult<PlantListDTO>
                 {
                     Items = new List<PlantListDTO>(),
@@ -97,17 +97,14 @@ namespace PlantManagement.Pages.Admin
             var result = await _plantService.DeletePlantAsync(id);
             if (result.Success)
             {
-                TempData["ToastType"] = "success";
-                TempData["ToastMessage"] = result.Message;
+                return new JsonResult(new { success = true, message = result.Message, isActive = result.Data });
 
             }
             else
             {
-                TempData["ToastType"] = "error";
-                TempData["ToastMessage"] = result.Message;
+                return new JsonResult(new { success = false, message = result.Message, isActive = false });
             }
-            await OnGetAsync();
-            return Partial("_PlantListPartial", this);
+           
         }
 
   

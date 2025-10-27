@@ -13,72 +13,54 @@ namespace PlantManagement.Mappings
     {
         public PlantProfile()
         {
+            // Plant <-> PlantListDTO, PlantDetailDTO, PlantDTO, PlantCreateDTO, PlantUpdateDTO
             CreateMap<Plant, PlantListDTO>()
                 .ForMember(dest => dest.SpeciesName, opt => opt.MapFrom(src => src.Species != null ? src.Species.ScientificName : null))
                 .ForMember(dest => dest.CategoryNames, opt => opt.MapFrom(src => src.Categories.Select(c => c.CategoryName).ToList()))
                 .ForMember(dest => dest.ImageUrls, opt => opt.MapFrom(src => src.PlantImages.Select(img => img.ImageUrl).ToList()));
-
 
             CreateMap<Plant, PlantDetailDTO>()
                 .ForMember(dest => dest.ImageUrls, opt => opt.MapFrom(src => src.PlantImages.Select(img => img.ImageUrl).ToList()))
                 .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.PlantImages))
                 .ForMember(dest => dest.References, opt => opt.MapFrom(src => src.PlantReferences));
 
-            CreateMap<Disease, DiseasesDTO>();
-            // CreateMap<Use, UseDTO>();
-            CreateMap<Species, SpeciesDTO>();
-            CreateMap<GrowthCondition, GrowthConditionDTO>();
-            CreateMap<PlantImage, PlantImageDTO>();
-            // CreateMap<Category, CategoryDTO>();
-
+            CreateMap<Plant, PlantDTO>().ReverseMap();
             CreateMap<PlantCreateDTO, Plant>()
                 .ForMember(d => d.CreateAt, o => o.MapFrom(_ => DateTime.UtcNow))
                 .ForMember(d => d.UpdateAt, o => o.MapFrom(_ => DateTime.UtcNow));
-            CreateMap<Plant, PlantDTO>();
-
-            CreateMap<GrowthConditionDTO, GrowthCondition>();
-            CreateMap<GrowthCondition, GrowthConditionDTO>();
-
-            CreateMap<DiseaseCreateDTO, Disease>();
-            CreateMap<Disease, DiseaseCreateDTO>();
-
-            CreateMap<PlantImageDTO, PlantImage>();
-            CreateMap<PlantImage, PlantImageDTO>();
-
-            CreateMap<PlantReferenceDTO, PlantReference>();
-            CreateMap<PlantReference, PlantReferenceDTO>();
-
-            // create DTO -> entity for categories/uses
-            CreateMap<CategoryCreateDTO, Category>();
-            CreateMap<UseCreateDTO, Use>();
-
-            // entity -> DTO (for listing dropdowns)
-            CreateMap<Category, CategoryDTO>();
-            CreateMap<CategoryDTO, Category>();
-
-            CreateMap<Use, UseDTO>();
-            CreateMap<UseDTO, Use>();
-
-            CreateMap<SpeciesCreateDTO, Species>();
-            CreateMap<PlantUpdateDTO, Plant>();
+            CreateMap<PlantUpdateDTO, Plant>().ReverseMap();
             CreateMap<Plant, PlantUpdateDTO>()
-            .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.PlantImages))
-            .ForMember(dest => dest.References, opt => opt.MapFrom(src => src.PlantReferences));
+                .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.PlantImages))
+                .ForMember(dest => dest.References, opt => opt.MapFrom(src => src.PlantReferences));
 
             CreateMap<PlantDetailDTO, PlantUpdateDTO>();
 
+            // Disease <-> DiseasesDTO, DiseaseCreateDTO
+            CreateMap<Disease, DiseasesDTO>().ReverseMap();
+            CreateMap<Disease, DiseaseCreateDTO>().ReverseMap();
+
+            // Use, Category, Species, GrowthCondition, PlantImage, PlantReference
+            CreateMap<Use, UseDTO>().ReverseMap();
+            CreateMap<Category, CategoryDTO>().ReverseMap();
+            CreateMap<Species, SpeciesDTO>().ReverseMap();
+            CreateMap<GrowthCondition, GrowthConditionDTO>().ReverseMap();
+            CreateMap<PlantImage, PlantImageDTO>().ReverseMap();
+            CreateMap<PlantReference, PlantReferenceDTO>().ReverseMap();
+
+            // CreateDTO -> Entity
+            CreateMap<CategoryCreateDTO, Category>();
+            CreateMap<UseCreateDTO, Use>();
+            CreateMap<SpeciesCreateDTO, Species>();
+
+            // Review
             CreateMap<PlantReview, ReviewDTO>()
-            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username));
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Username));
             CreateMap<ReviewDTO, PlantReview>();
+            CreateMap<PlantReview, CreateReviewDTO>().ReverseMap();
+            CreateMap<PlantReview, UpdateReviewDTO>().ReverseMap();
 
-            CreateMap<PlantReview, CreateReviewDTO>();
-            CreateMap<CreateReviewDTO, PlantReview>();
-
-            CreateMap<PlantReview, UpdateReviewDTO>();
-            CreateMap<UpdateReviewDTO, PlantReview>();
-
-            CreateMap<User, UserDTO>();
-            CreateMap<UserDTO, User>();
+            // User
+            CreateMap<User, UserDTO>().ReverseMap();
 
         }
     }

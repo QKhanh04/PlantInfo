@@ -8,6 +8,7 @@ namespace PlantManagement.Repositories.Interfaces
 {
     public interface ISpeciesRepository : IGenericRepository<Species>
     {
-        
+        Task<Species?> FindByScientificNameAsync(string name);
+        Task<List<Species>> SearchAsync(string query, int limit = 5);
     }
 }

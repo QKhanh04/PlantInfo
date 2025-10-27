@@ -90,7 +90,7 @@ namespace PlantManagement.Pages
             }
             else
             {
-                TempData["ToastType"] = "error";
+                TempData["ToastType"] = "danger";
                 TempData["ToastMessage"] = result.Message;
             }
             await OnGetAsync();

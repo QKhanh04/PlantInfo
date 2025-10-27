@@ -14,5 +14,9 @@ namespace PlantManagement.Repositories.Implementations
         public UseRepository(PlantDbContext context) : base(context)
         {
         }
+        public async Task<Use?> FindByNameAsync(string name)
+        {
+            return await _dbSet.FirstOrDefaultAsync(u => EF.Functions.ILike(u.UseName, $"%{name}%"));
+        }
     }
 }

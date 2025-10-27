@@ -49,7 +49,7 @@ namespace PlantManagement.Pages
                 else
                 {
                     TempData["ToastMessage"] = user.Message;
-                    TempData["ToastType"] = "danger";
+                    TempData["ToastType"] = "info";
                 }
 
                 return Page();

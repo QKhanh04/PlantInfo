@@ -53,7 +53,7 @@ namespace PlantManagement.Pages.Admin
             if (!result.Success || result.Data == null)
             {
                 TempData["ToastMessage"] = "Dữ liệu nhập không hợp lệ. Vui lòng kiểm tra lại!";
-                TempData["ToastType"] = "error";
+                TempData["ToastType"] = "danger";
                 foreach (var key in ModelState.Keys)
                 {
                     var errors = ModelState[key].Errors;
@@ -61,7 +61,7 @@ namespace PlantManagement.Pages.Admin
                     {
                         _logger.LogWarning($"ModelState error for {key}: {error.ErrorMessage}");
                         TempData["ToastMessage"] = $"D{key}: {error.ErrorMessage}";
-                        TempData["ToastType"] = "error";
+                        TempData["ToastType"] = "danger";
                     }
                 }
                 TempData["ToastMessage"] = "Không tìm thấy cây!";
