@@ -8,7 +8,7 @@ namespace PlantManagement.Services.Implementations
 {
     public class GeminiService
     {
-        private readonly string _apiKey = "AIzaSyBcD8B9zE4D6zZt449iB9AFHr5_p-4N36E";
+        private readonly string _apiKey = "";
         private readonly string _endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
         public async Task<string> AskGeminiAsync(string prompt)
