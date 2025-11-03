@@ -182,7 +182,7 @@ namespace PlantManagement.Pages.Admin
                             col.Item()
                                 .AlignCenter()
                                 .PaddingBottom(20)
-                                .Element(c => 
+                                .Element(c =>
                                     c.Height(400)
                                     .Width(400)
                                     .Image(chartBytes)
@@ -249,7 +249,8 @@ namespace PlantManagement.Pages.Admin
         }
 
 
-        public async Task<IActionResult> OnGetExportTopFavoritesReportAsync(DateTime? startDate, DateTime? endDate)
+        // 📊 Báo cáo Top Cây Yêu Thích (có biểu đồ)
+        public async Task<IActionResult> OnPostExportTopFavoritesReportWithChartAsync(DateTime? startDate, DateTime? endDate)
         {
             var topFavorites = await _reportService.GetTopFavoritePlantsAsync(top, startDate, endDate);
 
@@ -258,12 +259,24 @@ namespace PlantManagement.Pages.Admin
                 .Select(s => new[] { s.PlantName, s.FavoriteCount.ToString() })
                 .ToList();
 
-            var pdfBytes = GenerateTableReport("TOP CÂY YÊU THÍCH", headers, rows);
+            // Nhận chart base64 từ form
+            var chartBase64 = Request.Form["chartImage"].ToString();
+            byte[] chartBytes = null;
+            if (!string.IsNullOrEmpty(chartBase64))
+            {
+                var base64Data = chartBase64.Split(',')[1];
+                chartBytes = Convert.FromBase64String(base64Data);
+            }
+            _logger.LogInformation("TopFavorites chartBytes: {Length}", chartBytes?.Length ?? 0);
+
+            var pdfBytes = GenerateTableReport("TOP CÂY YÊU THÍCH", headers, rows, chartBytes);
             return File(pdfBytes, "application/pdf", "TopCayYeuThich.pdf");
         }
 
 
-        public async Task<IActionResult> OnGetExportTopViewReportAsync(DateTime? startDate, DateTime? endDate)
+
+        // 📈 Báo cáo Top Cây Có Lượt Xem Cao Nhất (có biểu đồ)
+        public async Task<IActionResult> OnPostExportTopViewReportWithChartAsync(DateTime? startDate, DateTime? endDate)
         {
             var topViews = await _reportService.GetTopViewedPlantsAsync(top, startDate, endDate);
 
@@ -272,11 +285,43 @@ namespace PlantManagement.Pages.Admin
                 .Select(s => new[] { s.PlantName, s.ViewCount.ToString() })
                 .ToList();
 
-            var pdfBytes = GenerateTableReport("TOP CÂY CÓ LƯỢT XEM CAO NHẤT", headers, rows);
+            var chartBase64 = Request.Form["chartImage"].ToString();
+            byte[] chartBytes = null;
+            if (!string.IsNullOrEmpty(chartBase64))
+            {
+                var base64Data = chartBase64.Split(',')[1];
+                chartBytes = Convert.FromBase64String(base64Data);
+            }
+            _logger.LogInformation("TopView chartBytes: {Length}", chartBytes?.Length ?? 0);
+
+            var pdfBytes = GenerateTableReport("TOP CÂY CÓ LƯỢT XEM CAO NHẤT", headers, rows, chartBytes);
             return File(pdfBytes, "application/pdf", "TopCayCoLuotXemCaoNhat.pdf");
         }
 
 
+
+        // 🔎 Báo cáo Top Từ Khóa Tìm Kiếm (có biểu đồ)
+        // public async Task<IActionResult> OnPostExportTopKeywordReportWithChartAsync(DateTime? startDate, DateTime? endDate)
+        // {
+        //     var topKeywords = await _reportService.GetTopSearchKeywordsAsync(top, startDate, endDate);
+
+        //     var headers = new[] { "Từ khóa", "Lượt tìm kiếm" };
+        //     var rows = topKeywords
+        //         .Select(s => new[] { s.Keyword, s.Count.ToString() })
+        //         .ToList();
+
+        //     var chartBase64 = Request.Form["chartImage"].ToString();
+        //     byte[] chartBytes = null;
+        //     if (!string.IsNullOrEmpty(chartBase64))
+        //     {
+        //         var base64Data = chartBase64.Split(',')[1];
+        //         chartBytes = Convert.FromBase64String(base64Data);
+        //     }
+        //     _logger.LogInformation("TopKeyword chartBytes: {Length}", chartBytes?.Length ?? 0);
+
+        //     var pdfBytes = GenerateTableReport("TOP TỪ KHÓA TÌM KIẾM", headers, rows, chartBytes);
+        //     return File(pdfBytes, "application/pdf", "TopTuKhoaTimKiem.pdf");
+        // }
 
         public async Task<IActionResult> OnGetExportTopKeywordReportAsync(DateTime? startDate, DateTime? endDate)
         {
