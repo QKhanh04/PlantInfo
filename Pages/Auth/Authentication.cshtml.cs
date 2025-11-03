@@ -15,12 +15,14 @@ namespace PlantManagement.Pages
 {
     public class AuthenticationModel : PageModel
     {
+        private readonly ILogger<AuthenticationModel> _logger;
         private readonly IAuthService _userService;
         private readonly IChatLogService _chatLogService;
-        public AuthenticationModel(IAuthService user, IChatLogService chatLogService)
+        public AuthenticationModel(IAuthService user, IChatLogService chatLogService, ILogger<AuthenticationModel> logger)
         {
             _userService = user;
             _chatLogService = chatLogService;
+            _logger = logger;
         }
         [BindProperty]
         public LoginViewModel? LoginVM { get; set; }
@@ -77,12 +79,12 @@ namespace PlantManagement.Pages
                         ExpiresUtc = DateTime.UtcNow.AddMinutes(30)
                     });
 
-
+            _logger.LogInformation($"Session {sessionId} logged in successfully.");
             // 🔹 Gộp tin nhắn của session guest sang user
             if (!string.IsNullOrEmpty(sessionId))
             {
                 await _chatLogService.MergeChatSessionAsync(user.Data.UserId, sessionId);
-                Console.WriteLine($"Merged chat session {sessionId} -> user {user.Data.UserId}");
+                _logger.LogInformation($"Merged chat session {sessionId} -> user {user.Data.UserId}");
 
             }
 

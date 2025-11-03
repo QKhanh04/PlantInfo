@@ -143,19 +143,23 @@
             document.addEventListener("DOMContentLoaded", () => {
                 const input = document.getElementById("sessionIdInput");
                 const currentSession = localStorage.getItem("chat_session_id");
+
                 if (input && currentSession) {
                     input.value = currentSession;
                     console.log("📤 Gửi sessionId khi đăng nhập:", currentSession);
                 }
+
+                const loginForm = document.getElementById("loginFormElement");
+                if (loginForm) {
+                    loginForm.addEventListener("submit", () => {
+                        sessionStorage.setItem("toast_login_success", "true");
+                    });
+                }
             });
-
-            document.getElementById("loginFormElement").addEventListener("submit", () => {
-                sessionStorage.setItem("toast_login_success", "true");
-
         </script>
         <partial name="_ValidationScriptsPartial" />
-
     }
+
 </body>
 
 </html>

@@ -263,8 +263,7 @@
                 <div style="display: flex; gap: 8px;">
                     <button class="btn-download" onclick="downloadChart('pieChart')">📥</button>
                     <button class="btn btn-info" onclick="openCategoryModal()">Chi tiết</button>
-                    <a href="/Admin/Report?handler=ExportCategoryReport&startDate=@Request.Query["startDate"]&endDate=@Request.Query["endDate"]"
-                        class="btn btn-danger btn-export-pdf">
+                    <a href="javascript:void(0)" class="btn btn-danger btn-export-pdf" onclick="exportCategoryReport()">
                         Xuất PDF
                     </a>
                 </div>
@@ -299,8 +298,8 @@
                 <div style="display: flex; gap: 8px;">
                     <button class="btn-download" onclick="downloadChart('barChart')">📥</button>
                     <button class="btn btn-info" onclick="openFavoriteModal()">Chi tiết</button>
-                    <a href="/Admin/Report?handler=ExportTopFavoritesReport&startDate=@Request.Query["startDate"]&endDate=@Request.Query["endDate"]"
-                        class="btn btn-danger btn-export-pdf">
+                    <a href="javascript:void(0)" class="btn btn-danger btn-export-pdf"
+                        onclick="exportTopFavoritesReport()">
                         Xuất PDF
                     </a>
                 </div>
@@ -313,8 +312,8 @@
                 <div style="display: flex; gap: 8px;">
                     <button class="btn-download" onclick="downloadChart('topViewChart')">📥</button>
                     <button class="btn btn-info" onclick="openTopViewModal()">Chi tiết</button>
-                    <a href="/Admin/Report?handler=OnGetExportTopVỉewReportAsync&startDate=@Request.Query["startDate"]&endDate=@Request.Query["endDate"]"
-                        class="btn btn-danger btn-export-pdf">
+
+                    <a href="javascript:void(0)" class="btn btn-danger btn-export-pdf" onclick="exportTopViewReport()">
                         Xuất PDF
                     </a>
                 </div>
@@ -342,25 +341,6 @@
     </div>
 
 
-    @* <!-- Summary Table -->
-        <div class="summary-table">
-            <div class="chart-header" style="margin-bottom: 20px;">
-                <h2>Bảng tổng hợp chi tiết</h2>
-                <button class="btn-export" onclick="exportTableToExcel()">📥 Xuất Excel</button>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Danh mục</th>
-                        <th style="text-align: right;">Số lượng</th>
-                        <th style="text-align: right;">Tỷ lệ</th>
-                        <th style="text-align: right;">Xu hướng</th>
-                    </tr>
-                </thead>
-                <tbody id="summaryTableBody"></tbody>
-            </table>
-        </div>
-    </div> *@
 
     <script>
 
@@ -711,6 +691,64 @@
             // Load dữ liệu ban đầu
             fetchChartData($('#yearSelector').val());
         });
+
+
+        // ======= XUẤT PDF CHUNG CÓ CHART =======
+
+        // 1️⃣ Xuất biểu đồ "Phân bố theo danh mục"
+        async function exportCategoryReport() {
+            await exportChartWithReport('pieChart', 'ExportCategoryReportWithChart', 'BaoCaoPhanBoDanhMuc.pdf');
+        }
+
+        // 2️⃣ Xuất biểu đồ "Top từ khóa phổ biến"
+        async function exportTopKeywordReport() {
+            await exportChartWithReport('keywordChart', 'ExportTopKeywordReportWithChart', 'BaoCaoTuKhoaPhoBien.pdf');
+        }
+
+        // 3️⃣ Xuất biểu đồ "Top cây được yêu thích"
+        async function exportTopFavoritesReport() {
+            await exportChartWithReport('barChart', 'ExportTopFavoritesReportWithChart', 'BaoCaoCayYeuThich.pdf');
+        }
+
+        // 4️⃣ Xuất biểu đồ "Top cây được xem nhiều nhất"
+        async function exportTopViewReport() {
+            await exportChartWithReport('topViewChart', 'ExportTopViewReportWithChart', 'BaoCaoCayXemNhieu.pdf');
+        }
+
+        // ======= HÀM DÙNG CHUNG =======
+        async function exportChartWithReport(chartId, handlerName, fileName) {
+            const chart = document.getElementById(chartId);
+            if (!chart) {
+                alert(`Không tìm thấy biểu đồ: ${chartId}`);
+                return;
+            }
+
+            const imageBase64 = chart.toDataURL('image/png');
+            const formData = new FormData();
+            formData.append('chartImage', imageBase64);
+
+            const startDate = new URLSearchParams(window.location.search).get('startDate') || '';
+            const endDate = new URLSearchParams(window.location.search).get('endDate') || '';
+
+            try {
+                const res = await fetch(`/Admin/Report?handler=${handlerName}&startDate=${startDate}&endDate=${endDate}`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!res.ok) throw new Error(`Server trả về lỗi ${res.status}`);
+
+                const blob = await res.blob();
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = fileName;
+                link.click();
+            } catch (err) {
+                console.error('Lỗi xuất PDF:', err);
+                alert('Không thể xuất PDF. Vui lòng thử lại.');
+            }
+        }
+
     </script>
 </body>
 

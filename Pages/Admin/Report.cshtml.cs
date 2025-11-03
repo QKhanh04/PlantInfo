@@ -2,10 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GrapeCity.ActiveReports;
-using GrapeCity.ActiveReports.Export.Excel.Section;
-using GrapeCity.ActiveReports.Export.Pdf.Section;
-using GrapeCity.ActiveReports.SectionReportModel;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,12 +10,19 @@ using Microsoft.Extensions.Logging;
 using PlantManagement.Common.Results;
 using PlantManagement.DTOs;
 using PlantManagement.Services.Interfaces;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace PlantManagement.Pages.Admin
 {
-     [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
+    [IgnoreAntiforgeryToken]
+
     public class ReportModel : PageModel
     {
+        private readonly ILogger<ReportModel> _logger;
+
         private readonly IReportService _reportService;
         private readonly IPlantService _plantService;
         private readonly IFavoriteService _favoriteService;
@@ -39,12 +43,13 @@ namespace PlantManagement.Pages.Admin
 
 
 
-        public ReportModel(IReportService reportService, IFavoriteService favoriteService, IPlantService plantService, IViewLogService viewLogService)
+        public ReportModel(IReportService reportService, IFavoriteService favoriteService, IPlantService plantService, IViewLogService viewLogService, ILogger<ReportModel> logger)
         {
             _reportService = reportService;
             _plantService = plantService;
             _favoriteService = favoriteService;
             _viewLogService = viewLogService;
+            _logger = logger;
         }
 
         public async Task OnGetAsync(DateTime? startDate, DateTime? endDate, int? year)
@@ -63,292 +68,227 @@ namespace PlantManagement.Pages.Admin
         }
 
 
+        private byte[] GenerateTableReport(string title, string[] headers, List<string[]> rows, byte[]? chartBytes = null)
+        {
+            var doc = Document.Create(container =>
+            {
+                container.Page(page =>
+                {
+                    // 🧾 Cấu hình trang
+                    page.Size(PageSizes.A4);
+                    page.Margin(40);
+                    page.PageColor(Colors.White);
+                    page.DefaultTextStyle(x => x.FontSize(11).FontFamily("Helvetica"));
 
-        public async Task<IActionResult> OnGetExportCategoryReportAsync(DateTime? startDate, DateTime? endDate)
+                    // 🌿 Header
+                    page.Header().BorderBottom(1).BorderColor(Colors.Grey.Lighten1).PaddingBottom(10).Row(row =>
+                    {
+                        row.RelativeColumn().AlignLeft().Column(col =>
+                        {
+                            col.Item().Text("Plant Management System")
+                                .Bold().FontSize(14).FontColor(Colors.Green.Darken2);
+                            col.Item().Text(DateTime.Now.ToString("dd/MM/yyyy"))
+                                .FontSize(10).FontColor(Colors.Grey.Darken1);
+                        });
+
+                        // row.ConstantColumn(60)
+                        //     .AlignRight()
+                        //     .Height(40)
+                        //     .Width(60)
+                        //     .Image("wwwroot/images/logo.png", ImageScaling.FitArea); // có thể bỏ nếu không có logo
+                    });
+
+                    // 🏷️ Tiêu đề chính
+                    page.Content().PaddingVertical(25).Column(col =>
+                    {
+                        col.Item().AlignCenter()
+                            .Text(title)
+                            .FontSize(18)
+                            .Bold()
+                            .FontColor(Colors.Blue.Darken2);
+
+                        col.Item().PaddingVertical(15);
+
+
+                        // 📊 Bảng dữ liệu
+                        col.Item().Table(table =>
+{
+    // Cấu trúc cột
+    table.ColumnsDefinition(cols =>
+    {
+        foreach (var _ in headers)
+            cols.RelativeColumn();
+    });
+
+    // Header bảng (căn giữa hoàn toàn)
+    table.Header(header =>
+    {
+        foreach (var head in headers)
+        {
+            header.Cell()
+                .Background(Colors.Green.Darken1)
+                .Border(0.5f)
+                .BorderColor(Colors.White)
+                .PaddingVertical(8)
+                .PaddingHorizontal(5)
+                .AlignMiddle()
+                .AlignCenter()  // 🔹 căn giữa ngang
+                .Text(head)
+                .Bold()
+                .FontColor(Colors.White);
+        }
+    });
+
+    // Dòng dữ liệu (căn giữa)
+    int index = 0;
+    foreach (var rowData in rows)
+    {
+        var bgColor = (index++ % 2 == 0)
+            ? Colors.Grey.Lighten4
+            : Colors.White;
+
+        foreach (var cell in rowData)
+        {
+            table.Cell()
+                .Border(0.5f)
+                .BorderColor(Colors.Grey.Lighten2)
+                .Background(bgColor)
+                .PaddingVertical(6)
+                .PaddingHorizontal(5)
+                .AlignMiddle()   // 🔹 căn giữa dọc
+                .AlignCenter()   // 🔹 căn giữa ngang
+                .Text(cell ?? string.Empty)
+                .FontSize(10);
+        }
+    }
+});
+
+
+                        // 📌 Ghi chú hoặc tổng kết (tùy chọn)
+                        if (rows.Count > 0)
+                        {
+                            col.Item().PaddingTop(15).AlignRight()
+                                .Text($"Tổng số dòng: {rows.Count}")
+                                .Italic()
+                                .FontSize(10)
+                                .FontColor(Colors.Grey.Darken1);
+                        }
+
+                        // 🌿 Nếu có ảnh chart
+
+                        // Biểu đồ
+                        if (chartBytes != null && chartBytes.Length > 0)
+                        {
+                            col.Item()
+                                .AlignCenter()
+                                .PaddingBottom(20)
+                                .Element(c => 
+                                    c.Height(400)
+                                    .Width(400)
+                                    .Image(chartBytes)
+                                    .FitArea()
+                                );
+                        }
+                        else
+                        {
+                            col.Item().AlignCenter()
+                                .PaddingBottom(20)
+
+                                .Text("(Không có biểu đồ hiển thị)")
+                                .Italic()
+                                .FontColor(Colors.Grey.Darken1);
+                        }
+                        _logger.LogInformation("chartBytes: {Length}", chartBytes?.Length ?? 0);
+                    });
+
+
+
+                    // 📄 Footer
+                    page.Footer()
+                        .BorderTop(1)
+                        .BorderColor(Colors.Grey.Lighten1)
+                        .PaddingTop(8)
+                        .AlignCenter()
+                        .Text(txt =>
+                        {
+                            txt.Span("Trang ").FontColor(Colors.Grey.Darken1);
+                            txt.CurrentPageNumber();
+                            txt.Span(" / ");
+                            txt.TotalPages();
+                        });
+                });
+            });
+
+            using var ms = new MemoryStream();
+            doc.GeneratePdf(ms);
+            return ms.ToArray();
+        }
+
+
+
+        public async Task<IActionResult> OnPostExportCategoryReportWithChartAsync(DateTime? startDate, DateTime? endDate)
         {
             var categoryStats = await _reportService.GetPlantCountByCategoryAsync(startDate, endDate);
 
-            var report = new SectionReport();
-
-            var reportHeader = new ReportHeader();
-            var pageHeader = new PageHeader { Height = 0.3f };
-            var detail = new Detail { Height = 0.3f };
-            var pageFooter = new PageFooter();
-            var reportFooter = new ReportFooter();
-
-            report.Sections.Add(reportHeader);
-            report.Sections.Add(pageHeader);
-            report.Sections.Add(detail);
-            report.Sections.Add(pageFooter);
-            report.Sections.Add(reportFooter);
-
-            // Header
-            float left = 0f, width = 3f;
             var headers = new[] { "Danh mục", "Số lượng cây" };
-            for (int i = 0; i < headers.Length; i++)
+            var rows = categoryStats
+                .Select(s => new[] { s.CategoryName, s.PlantCount.ToString() })
+                .ToList();
+            // Lấy ảnh chart gửi từ form
+            var chartBase64 = Request.Form["chartImage"].ToString();
+            byte[] chartBytes = null;
+            if (!string.IsNullOrEmpty(chartBase64))
             {
-                var tb = new TextBox
-                {
-                    Left = left,
-                    Top = 0,
-                    Width = width,
-                    Height = 0.3f,
-                    Text = headers[i],
-                    Style = "font-weight: bold; background-color: LightGray;"
-                };
-                pageHeader.Controls.Add(tb);
-                left += width;
+                var base64Data = chartBase64.Split(',')[1];
+                chartBytes = Convert.FromBase64String(base64Data);
             }
+            _logger.LogInformation("chartBytes: {Length}", chartBytes?.Length ?? 0);
 
-            // Detail
-            left = 0f;
-            var dataFields = new[] { "CategoryName", "PlantCount" };
-            for (int i = 0; i < dataFields.Length; i++)
-            {
-                var tb = new TextBox
-                {
-                    Left = left,
-                    Top = 0,
-                    Width = width,
-                    Height = 0.3f,
-                    DataField = dataFields[i]
-                };
-                detail.Controls.Add(tb);
-                left += width;
-            }
-
-            // Data source
-            var dataList = categoryStats.Select(s => new
-            {
-                CategoryName = s.CategoryName,
-                PlantCount = s.PlantCount
-            }).ToList();
-            report.DataSource = dataList;
-
-            report.Run();
-
-            using (var ms = new MemoryStream())
-            {
-                var pdfExport = new GrapeCity.ActiveReports.Export.Pdf.Section.PdfExport();
-                pdfExport.Export(report.Document, ms);
-                ms.Position = 0;
-                return File(ms.ToArray(), "application/pdf", "BaoCaoPhanBoDanhMuc.pdf");
-            }
+            var pdfBytes = GenerateTableReport("BÁO CÁO PHÂN BỐ DANH MỤC", headers, rows, chartBytes);
+            return File(pdfBytes, "application/pdf", "BaoCaoPhanBoDanhMuc.pdf");
         }
+
+
         public async Task<IActionResult> OnGetExportTopFavoritesReportAsync(DateTime? startDate, DateTime? endDate)
         {
             var topFavorites = await _reportService.GetTopFavoritePlantsAsync(top, startDate, endDate);
 
-            var report = new SectionReport();
-
-            var reportHeader = new ReportHeader();
-            var pageHeader = new PageHeader { Height = 0.3f };
-            var detail = new Detail { Height = 0.3f };
-            var pageFooter = new PageFooter();
-            var reportFooter = new ReportFooter();
-
-            report.Sections.Add(reportHeader);
-            report.Sections.Add(pageHeader);
-            report.Sections.Add(detail);
-            report.Sections.Add(pageFooter);
-            report.Sections.Add(reportFooter);
-
-            // Header
-            float left = 0f, width = 3f;
             var headers = new[] { "Tên cây", "Lượt yêu thích" };
-            for (int i = 0; i < headers.Length; i++)
-            {
-                var tb = new TextBox
-                {
-                    Left = left,
-                    Top = 0,
-                    Width = width,
-                    Height = 0.3f,
-                    Text = headers[i],
-                    Style = "font-weight: bold; background-color: LightGray;"
-                };
-                pageHeader.Controls.Add(tb);
-                left += width;
-            }
+            var rows = topFavorites
+                .Select(s => new[] { s.PlantName, s.FavoriteCount.ToString() })
+                .ToList();
 
-            // Detail
-            left = 0f;
-            var dataFields = new[] { "PlantName", "FavoriteCount" };
-            for (int i = 0; i < dataFields.Length; i++)
-            {
-                var tb = new TextBox
-                {
-                    Left = left,
-                    Top = 0,
-                    Width = width,
-                    Height = 0.3f,
-                    DataField = dataFields[i]
-                };
-                detail.Controls.Add(tb);
-                left += width;
-            }
-
-            // Data source
-            var dataList = topFavorites.Select(s => new
-            {
-                PlantName = s.PlantName,
-                FavoriteCount = s.FavoriteCount
-            }).ToList();
-            report.DataSource = dataList;
-
-            report.Run();
-
-            using (var ms = new MemoryStream())
-            {
-                var pdfExport = new GrapeCity.ActiveReports.Export.Pdf.Section.PdfExport();
-                pdfExport.Export(report.Document, ms);
-                ms.Position = 0;
-                return File(ms.ToArray(), "application/pdf", "TopCayYeuThich.pdf");
-            }
+            var pdfBytes = GenerateTableReport("TOP CÂY YÊU THÍCH", headers, rows);
+            return File(pdfBytes, "application/pdf", "TopCayYeuThich.pdf");
         }
 
-        public async Task<IActionResult> OnGetExportTopVỉewReportAsync(DateTime? startDate, DateTime? endDate)
+
+        public async Task<IActionResult> OnGetExportTopViewReportAsync(DateTime? startDate, DateTime? endDate)
         {
-            var topFavorites = await _reportService.GetTopViewedPlantsAsync(top, startDate, endDate);
+            var topViews = await _reportService.GetTopViewedPlantsAsync(top, startDate, endDate);
 
-            var report = new SectionReport();
-
-            var reportHeader = new ReportHeader();
-            var pageHeader = new PageHeader { Height = 0.3f };
-            var detail = new Detail { Height = 0.3f };
-            var pageFooter = new PageFooter();
-            var reportFooter = new ReportFooter();
-
-            report.Sections.Add(reportHeader);
-            report.Sections.Add(pageHeader);
-            report.Sections.Add(detail);
-            report.Sections.Add(pageFooter);
-            report.Sections.Add(reportFooter);
-
-            // Header
-            float left = 0f, width = 3f;
             var headers = new[] { "Tên cây", "Lượt xem" };
-            for (int i = 0; i < headers.Length; i++)
-            {
-                var tb = new TextBox
-                {
-                    Left = left,
-                    Top = 0,
-                    Width = width,
-                    Height = 0.3f,
-                    Text = headers[i],
-                    Style = "font-weight: bold; background-color: LightGray;"
-                };
-                pageHeader.Controls.Add(tb);
-                left += width;
-            }
+            var rows = topViews
+                .Select(s => new[] { s.PlantName, s.ViewCount.ToString() })
+                .ToList();
 
-            // Detail
-            left = 0f;
-            var dataFields = new[] { "PlantName", "ViewCount" };
-            for (int i = 0; i < dataFields.Length; i++)
-            {
-                var tb = new TextBox
-                {
-                    Left = left,
-                    Top = 0,
-                    Width = width,
-                    Height = 0.3f,
-                    DataField = dataFields[i]
-                };
-                detail.Controls.Add(tb);
-                left += width;
-            }
-
-            // Data source
-            var dataList = TopPlantView.Select(s => new
-            {
-                PlantName = s.PlantName,
-                ViewCount = s.ViewCount
-            }).ToList();
-            report.DataSource = dataList;
-
-            report.Run();
-
-            using (var ms = new MemoryStream())
-            {
-                var pdfExport = new GrapeCity.ActiveReports.Export.Pdf.Section.PdfExport();
-                pdfExport.Export(report.Document, ms);
-                ms.Position = 0;
-                return File(ms.ToArray(), "application/pdf", "TopCayCoLuotXemCaoNhat.pdf");
-            }
+            var pdfBytes = GenerateTableReport("TOP CÂY CÓ LƯỢT XEM CAO NHẤT", headers, rows);
+            return File(pdfBytes, "application/pdf", "TopCayCoLuotXemCaoNhat.pdf");
         }
 
-        public async Task<IActionResult> OnGetExportTopKeyWordReportAsync(DateTime? startDate, DateTime? endDate)
+
+
+        public async Task<IActionResult> OnGetExportTopKeywordReportAsync(DateTime? startDate, DateTime? endDate)
         {
-            var topFavorites = await _reportService.GetTopSearchKeywordsAsync(10, startDate, endDate);
+            var topKeywords = await _reportService.GetTopSearchKeywordsAsync(10, startDate, endDate);
 
-            var report = new SectionReport();
-
-            var reportHeader = new ReportHeader();
-            var pageHeader = new PageHeader { Height = 0.3f };
-            var detail = new Detail { Height = 0.3f };
-            var pageFooter = new PageFooter();
-            var reportFooter = new ReportFooter();
-
-            report.Sections.Add(reportHeader);
-            report.Sections.Add(pageHeader);
-            report.Sections.Add(detail);
-            report.Sections.Add(pageFooter);
-            report.Sections.Add(reportFooter);
-
-            // Header
-            float left = 0f, width = 3f;
             var headers = new[] { "Từ khóa", "Lượt tìm kiếm" };
-            for (int i = 0; i < headers.Length; i++)
-            {
-                var tb = new TextBox
-                {
-                    Left = left,
-                    Top = 0,
-                    Width = width,
-                    Height = 0.3f,
-                    Text = headers[i],
-                    Style = "font-weight: bold; background-color: LightGray;"
-                };
-                pageHeader.Controls.Add(tb);
-                left += width;
-            }
+            var rows = topKeywords
+                .Select(s => new[] { s.Keyword, s.Count.ToString() })
+                .ToList();
 
-            // Detail
-            left = 0f;
-            var dataFields = new[] { "Keyword", "SearchCount" };
-            for (int i = 0; i < dataFields.Length; i++)
-            {
-                var tb = new TextBox
-                {
-                    Left = left,
-                    Top = 0,
-                    Width = width,
-                    Height = 0.3f,
-                    DataField = dataFields[i]
-                };
-                detail.Controls.Add(tb);
-                left += width;
-            }
-
-            // Data source
-            var dataList = topFavorites.Select(s => new
-            {
-                Keyword = s.Keyword,
-                SearchCount = s.Count
-            }).ToList();
-            report.DataSource = dataList;
-
-            report.Run();
-
-            using (var ms = new MemoryStream())
-            {
-                var pdfExport = new GrapeCity.ActiveReports.Export.Pdf.Section.PdfExport();
-                pdfExport.Export(report.Document, ms);
-                ms.Position = 0;
-                return File(ms.ToArray(), "application/pdf", "TopTuKhoaTimKiem.pdf");
-            }
+            var pdfBytes = GenerateTableReport("TOP TỪ KHÓA TÌM KIẾM", headers, rows);
+            return File(pdfBytes, "application/pdf", "TopTuKhoaTimKiem.pdf");
         }
 
     }

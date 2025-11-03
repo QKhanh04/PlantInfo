@@ -8,6 +8,7 @@ using PlantManagement.Repositories.Implementations;
 using PlantManagement.Repositories.Interfaces;
 using PlantManagement.Services.Implementations;
 using PlantManagement.Services.Interfaces;
+using QuestPDF.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -88,6 +89,8 @@ builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
 
 builder.Services.AddAuthorization();
+
+QuestPDF.Settings.License = LicenseType.Community;
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

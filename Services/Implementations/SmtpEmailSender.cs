@@ -10,6 +10,15 @@ namespace PlantManagement.Services.Implementations
 {
     public class SmtpEmailSender : IEmailSender
     {
+        private readonly string _senderEmail = null!;
+        private readonly string _appPassword = null!;
+
+        public SmtpEmailSender(IConfiguration config)
+        {
+            _senderEmail = config["EmailSettings:SenderEmail"]!;
+            _appPassword = config["EmailSettings:AppPassword"]!;
+        }
+
 
         public bool SendEmail(string to, string subject, string body)
         {
@@ -18,7 +27,7 @@ namespace PlantManagement.Services.Implementations
                 var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
-                    Credentials = new NetworkCredential("dangcongquockhanh@gmail.com", ""),
+                    Credentials = new NetworkCredential(_senderEmail, _appPassword),
                     EnableSsl = true,
                 };
                 var mailMessage = new MailMessage

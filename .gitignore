@@ -1,0 +1,21 @@
+# Ignore user secrets and local settings
+appsettings.json
+appsettings.*.json
+
+# Ignore environment specific configs
+*.Development.json
+
+# Ignore compiled output
+bin/
+obj/
+
+# Ignore Visual Studio temporary files
+.vs/
+*.user
+*.suo
+
+# Ignore logs
+*.log
+
+# Ignore publish outputs
+publish/
