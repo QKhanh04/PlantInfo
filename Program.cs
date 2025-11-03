@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using PlantManagement.AI;
 using PlantManagement.Data;
 using PlantManagement.Hubs;
 using PlantManagement.Middlewares;
@@ -30,6 +31,7 @@ builder.Services.AddScoped<IFavoriteRepository, FavoriteRepository>();
 builder.Services.AddScoped<IViewLogRepository, ViewLogRepository>();
 builder.Services.AddScoped<IPlantReviewRepository, PlantReviewRepository>();
 builder.Services.AddScoped<ISearchLogRepository, SearchLogRepository>();
+builder.Services.AddScoped<IChatLogRepository, ChatLogRepository>();
 
 // // Nếu có bảng liên kết:
 // builder.Services.AddScoped<IPlantCategoryRepository, PlantCategoryRepository>();
@@ -51,6 +53,21 @@ builder.Services.AddScoped<IEmailSender, SmtpEmailSender>();
 builder.Services.AddScoped<IViewLogService, ViewLogService>();
 builder.Services.AddScoped<IPlantReviewService, PlantReviewService>();
 builder.Services.AddScoped<ISearchLogService, SearchLogService>();
+builder.Services.AddScoped<IChatLogService, ChatService>();
+builder.Services.AddScoped<GeminiSqlGenerator>(sp =>
+{
+    var dbContext = sp.GetRequiredService<PlantDbContext>();
+    var geminiService = sp.GetRequiredService<GeminiService>();
+    var schemaPath = Path.Combine(AppContext.BaseDirectory, "AI", "schemaDescription.txt");
+    var schemaDescription = File.Exists(schemaPath)
+        ? File.ReadAllText(schemaPath)
+        : "No schema description found.";
+    return new GeminiSqlGenerator(dbContext, geminiService);
+});
+builder.Services.AddScoped<NaturalResponse>();
+builder.Services.AddScoped<GeminiService>();
+
+builder.Services.AddControllers();
 
 // Nếu có bảng liên kết:
 // builder.Services.AddScoped<IPlantCategoryService, PlantCategoryService>();
@@ -90,8 +107,9 @@ app.UseSession();
 
 app.UseAuthentication();
 app.UseMiddleware<UserLockMiddleware>();
+// app.UseMiddleware<ChatSessionMiddleware>();
 app.UseAuthorization();
 
 app.MapRazorPages();
-
+app.MapControllers(); 
 app.Run();

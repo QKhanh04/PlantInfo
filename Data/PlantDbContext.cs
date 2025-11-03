@@ -77,7 +77,12 @@ public partial class PlantDbContext : DbContext
                 .HasColumnType("timestamp without time zone")
                 .HasColumnName("created_at");
             entity.Property(e => e.Message).HasColumnName("message");
-            entity.Property(e => e.Response).HasColumnName("response");
+            entity.Property(e => e.Sender)
+                .HasMaxLength(20)
+                .HasColumnName("sender");
+            entity.Property(e => e.SessionId)
+                .HasMaxLength(100)
+                .HasColumnName("session_id");
             entity.Property(e => e.UserId).HasColumnName("user_id");
 
             entity.HasOne(d => d.User).WithMany(p => p.ChatLogs)

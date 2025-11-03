@@ -36,7 +36,9 @@
 
                 <!-- Login Form -->
                 <div class="form-wrapper login @(Model.ActiveTab != "login" ? "inactive" : "active")" id="loginForm">
-                    <form method="post" asp-page-handler="Login">
+                    <form method="post" asp-page-handler="Login" id="loginFormElement">
+                        <input type="hidden" name="sessionId" id="sessionIdInput" />
+
                         <input type="hidden" name="returnUrl"
                             value="@PageContext.HttpContext.Request.Query["returnUrl"]" />
                         <!-- Username/Email -->
@@ -137,7 +139,22 @@
 
     @section Scripts {
         <script src="~/js/auth.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const input = document.getElementById("sessionIdInput");
+                const currentSession = localStorage.getItem("chat_session_id");
+                if (input && currentSession) {
+                    input.value = currentSession;
+                    console.log("📤 Gửi sessionId khi đăng nhập:", currentSession);
+                }
+            });
+
+            document.getElementById("loginFormElement").addEventListener("submit", () => {
+                sessionStorage.setItem("toast_login_success", "true");
+
+        </script>
         <partial name="_ValidationScriptsPartial" />
+
     }
 </body>
 

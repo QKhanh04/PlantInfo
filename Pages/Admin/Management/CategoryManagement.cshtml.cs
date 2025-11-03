@@ -14,7 +14,7 @@ using PlantManagement.Services.Interfaces;
 namespace PlantManagement.Pages.Admin.Management
 {
     [IgnoreAntiforgeryToken]
-    [Authorize (Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class CategoryManagementModel : PageModel
     {
 
@@ -35,9 +35,23 @@ namespace PlantManagement.Pages.Admin.Management
         public int PageSize { get; set; } = 5;
         [BindProperty(SupportsGet = true)]
         public int TotalPages { get; set; }
-        public List<Plant> PlantsInCategory { get; set; } = new();
-        [BindProperty]
-        public int DeleteCategoryId { get; set; }
+        private async Task<PagedResult<CategoryDTO>> LoadPagedCategoriesAsync(string keyword, int currentPage)
+        {
+            var result = await _categoryService.GetPagedCategoriesAsync(keyword, currentPage, PageSize);
+
+            if (!result.Success || result.Data == null)
+            {
+                result.Data = new PagedResult<CategoryDTO>
+                {
+                    Items = new List<CategoryDTO>(),
+                    CurrentPage = currentPage,
+                    PageSize = PageSize,
+                    TotalItems = 0
+                };
+            }
+
+            return result.Data;
+        }
         public async Task OnGetAsync()
         {
             Categories = await LoadPagedCategoriesAsync(Keyword, CurrentPage);
@@ -47,6 +61,8 @@ namespace PlantManagement.Pages.Admin.Management
         public async Task<IActionResult> OnGetDetailAsync(int id)
         {
             var result = await _categoryService.GetByIdAsync(id);
+            var categories = await _categoryService.GetPagedCategoriesAsync("", 1, PageSize);
+            int totalPages = categories.Data?.TotalPages ?? 1;
             if (result.Success)
             {
                 return new JsonResult(new
@@ -57,9 +73,11 @@ namespace PlantManagement.Pages.Admin.Management
                         categoryId = result.Data.CategoryId,
                         categoryName = result.Data.CategoryName,
                         description = result.Data.Description
-                    }
+                    },
+                    totalPages
                 });
             }
+
             return new JsonResult(new { success = false });
         }
 
@@ -134,6 +152,8 @@ namespace PlantManagement.Pages.Admin.Management
             // Nếu lỗi (ví dụ trùng tên), trả về thông báo chi tiết
             return new JsonResult(new { success = false, message = result.Message });
         }
+
+
         public async Task<IActionResult> OnPostCheckBeforeDeleteAsync([FromBody] CheckDeleteRequest req)
         {
             int id = req.Id;
@@ -160,35 +180,18 @@ namespace PlantManagement.Pages.Admin.Management
         public async Task<IActionResult> OnPostDeleteConfirmedAsync(int id)
         {
             var result = await _categoryService.DeleteCategoryAsync(id);
-            return new JsonResult(new { success = result.Success, message = result.Message });
+
+            // Sau khi xóa, lấy lại tổng số trang
+            var categories = await _categoryService.GetPagedCategoriesAsync("", 1, PageSize);
+            int totalPages = categories.Data?.TotalPages ?? 1;
+
+            return new JsonResult(new { success = result.Success, message = result.Message, totalPages });
         }
         public async Task<PartialViewResult> OnGetListAsync(string keyword, int currentPage = 1)
         {
             var data = await LoadPagedCategoriesAsync(keyword, currentPage);
             return Partial("Shared/_CategoryTableBody", data.Items);
         }
-
-        private async Task<PagedResult<CategoryDTO>> LoadPagedCategoriesAsync(string keyword, int currentPage)
-        {
-            var result = await _categoryService.GetPagedCategoriesAsync(keyword, currentPage, PageSize);
-
-            if (!result.Success || result.Data == null)
-            {
-                result.Data = new PagedResult<CategoryDTO>
-                {
-                    Items = new List<CategoryDTO>(),
-                    CurrentPage = currentPage,
-                    PageSize = PageSize,
-                    TotalItems = 0
-                };
-            }
-
-            return result.Data;
-        }
-
-
-
-
 
     }
     public class AddCategoryRequest
@@ -201,7 +204,6 @@ namespace PlantManagement.Pages.Admin.Management
         public int CategoryId { get; set; }
         public string Description { get; set; }
     }
-
     public class CheckDeleteRequest
     {
         public int Id { get; set; }

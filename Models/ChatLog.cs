@@ -9,9 +9,11 @@ public partial class ChatLog
 
     public int? UserId { get; set; }
 
-    public string Message { get; set; } = null!;
+    public string? SessionId { get; set; }
 
-    public string? Response { get; set; }
+    public string Sender { get; set; } = null!;
+
+    public string Message { get; set; } = null!;
 
     public DateTime? CreatedAt { get; set; }
 

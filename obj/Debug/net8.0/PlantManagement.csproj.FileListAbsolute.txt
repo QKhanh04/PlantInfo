@@ -2,6 +2,7 @@ C:\Users\Admin\Desktop\PlantManagement\bin\Debug\net8.0\appsettings.Development.
 C:\Users\Admin\Desktop\PlantManagement\bin\Debug\net8.0\appsettings.json
 C:\Users\Admin\Desktop\PlantManagement\bin\Debug\net8.0\PlantManagement.staticwebassets.runtime.json
 C:\Users\Admin\Desktop\PlantManagement\bin\Debug\net8.0\PlantManagement.staticwebassets.endpoints.json
+C:\Users\Admin\Desktop\PlantManagement\bin\Debug\net8.0\AI\schemaDescription.txt
 C:\Users\Admin\Desktop\PlantManagement\bin\Debug\net8.0\PlantManagement.exe
 C:\Users\Admin\Desktop\PlantManagement\bin\Debug\net8.0\PlantManagement.deps.json
 C:\Users\Admin\Desktop\PlantManagement\bin\Debug\net8.0\PlantManagement.runtimeconfig.json

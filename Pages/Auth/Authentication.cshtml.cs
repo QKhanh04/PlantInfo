@@ -16,9 +16,11 @@ namespace PlantManagement.Pages
     public class AuthenticationModel : PageModel
     {
         private readonly IAuthService _userService;
-        public AuthenticationModel(IAuthService user)
+        private readonly IChatLogService _chatLogService;
+        public AuthenticationModel(IAuthService user, IChatLogService chatLogService)
         {
             _userService = user;
+            _chatLogService = chatLogService;
         }
         [BindProperty]
         public LoginViewModel? LoginVM { get; set; }
@@ -27,7 +29,7 @@ namespace PlantManagement.Pages
         public string ActiveTab { get; set; } = "login";
         public void OnGet() { }
 
-        public async Task<IActionResult> OnPostLogin(string returnUrl = null)
+        public async Task<IActionResult> OnPostLogin(string? sessionId = null, string returnUrl = null)
         {
             ModelState.Clear();
             TryValidateModel(LoginVM, nameof(LoginVM));
@@ -55,6 +57,7 @@ namespace PlantManagement.Pages
                 return Page();
             }
 
+
             // Tạo claims
             var claims = new List<Claim>
             {
@@ -73,6 +76,16 @@ namespace PlantManagement.Pages
                         IsPersistent = true,
                         ExpiresUtc = DateTime.UtcNow.AddMinutes(30)
                     });
+
+
+            // 🔹 Gộp tin nhắn của session guest sang user
+            if (!string.IsNullOrEmpty(sessionId))
+            {
+                await _chatLogService.MergeChatSessionAsync(user.Data.UserId, sessionId);
+                Console.WriteLine($"Merged chat session {sessionId} -> user {user.Data.UserId}");
+
+            }
+
             TempData["ToastMessage"] = "Đăng nhập thành công!";
             TempData["ToastType"] = "success";
 

@@ -1,0 +1,115 @@
+# 🌿 PLANT INFORMATION DATABASE SCHEMA (for AI SQL Generation)
+
+Database: Plant Management System (PostgreSQL)
+Schema name: public
+
+---
+
+## TABLES
+
+### 1. plants
+Columns:
+- plant_id (PK)
+- common_name (VARCHAR)
+- origin (VARCHAR)
+- species_id (FK → species.species_id)
+- description (TEXT)
+- is_active (BOOLEAN)
+- create_at (TIMESTAMP)
+- update_at (TIMESTAMP)
+
+### 2. species
+Columns:
+- species_id (PK)
+- scientific_name (VARCHAR, unique)
+- genus (VARCHAR)
+- family (VARCHAR)
+- order_name (VARCHAR)
+- description (TEXT)
+
+### 3. growth_conditions
+Columns:
+- plant_id (PK, FK → plants.plant_id)
+- soil_type (VARCHAR)
+- climate (VARCHAR)
+- temperature_range (VARCHAR)
+- water_requirement (VARCHAR)
+- sunlight (VARCHAR)
+
+### 4. diseases
+Columns:
+- disease_id (PK)
+- plant_id (FK → plants.plant_id)
+- disease_name (VARCHAR)
+- symptoms (TEXT)
+- treatment (TEXT)
+
+### 5. uses
+Columns:
+- use_id (PK)
+- use_name (VARCHAR, unique)
+- description (TEXT)
+
+### 6. plant_use
+Columns:
+- plant_id (FK → plants.plant_id)
+- use_id (FK → uses.use_id)
+- PRIMARY KEY (plant_id, use_id)
+
+### 7. plant_images
+Columns:
+- image_id (PK)
+- plant_id (FK → plants.plant_id)
+- image_url (VARCHAR)
+- caption (TEXT)
+- is_primary (BOOLEAN)
+
+### 8. categories
+Columns:
+- category_id (PK)
+- category_name (VARCHAR, unique)
+- description (TEXT)
+
+### 9. plant_category
+Columns:
+- plant_id (FK → plants.plant_id)
+- category_id (FK → categories.category_id)
+- PRIMARY KEY (plant_id, category_id)
+
+### 10. plant_references
+Columns:
+- reference_id (PK)
+- plant_id (FK → plants.plant_id)
+- source_name (VARCHAR)
+- url (VARCHAR)
+- author (VARCHAR)
+- published_year (INT)
+
+---
+
+## RELATIONS
+
+- plants.species_id → species.species_id
+- growth_conditions.plant_id → plants.plant_id
+- diseases.plant_id → plants.plant_id
+- plant_use.plant_id → plants.plant_id
+- plant_use.use_id → uses.use_id
+- plant_images.plant_id → plants.plant_id
+- plant_category.plant_id → plants.plant_id
+- plant_category.category_id → categories.category_id
+- plant_references.plant_id → plants.plant_id
+
+---
+
+## QUERY RULES
+
+1. Only generate SELECT queries.
+2. Never use INSERT, UPDATE, DELETE, DROP, ALTER, or TRUNCATE.
+3. Always include LIMIT 10 if no limit is specified.
+4. Use ILIKE '%keyword%' for case-insensitive text search.
+5. Use joins only according to defined relations.
+6. Always include readable column names and aliases (AS).
+7. Do NOT include schema prefixes; use table names directly.
+8. Output only one SQL statement (no explanations, no markdown).
+9. Only get columns related to the crop and information needed to answer the question.
+10. Do not get system attributes like id, create_at, update_at unless absolutely necessary.
