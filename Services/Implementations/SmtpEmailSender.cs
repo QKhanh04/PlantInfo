@@ -18,7 +18,7 @@ namespace PlantManagement.Services.Implementations
                 var smtpClient = new SmtpClient("smtp.gmail.com")
                 {
                     Port = 587,
-                    Credentials = new NetworkCredential("dangcongquockhanh@gmail.com", "zvax jepv slof ipgq"),
+                    Credentials = new NetworkCredential("dangcongquockhanh@gmail.com", ""),
                     EnableSsl = true,
                 };
                 var mailMessage = new MailMessage
