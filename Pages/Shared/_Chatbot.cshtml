@@ -152,6 +152,27 @@
         }
 
     });
+
+    document.addEventListener("click", (e) => {
+        if (e.target.tagName === "IMG" && e.target.closest(".message.bot")) {
+            const src = e.target.src;
+            const overlay = document.createElement("div");
+            overlay.style.position = "fixed";
+            overlay.style.top = "0";
+            overlay.style.left = "0";
+            overlay.style.width = "100%";
+            overlay.style.height = "100%";
+            overlay.style.background = "rgba(0,0,0,0.8)";
+            overlay.style.display = "flex";
+            overlay.style.alignItems = "center";
+            overlay.style.justifyContent = "center";
+            overlay.style.zIndex = "10000";
+            overlay.innerHTML = `<img src="${src}" style="max-width:90%; max-height:90%; border-radius:12px;">`;
+            overlay.onclick = () => overlay.remove();
+            document.body.appendChild(overlay);
+        }
+    });
+
 </script>
 
 <style>
@@ -473,6 +494,23 @@
         width: 20px;
         height: 20px;
     }
+
+    /* Giới hạn kích thước ảnh trong tin nhắn bot */
+    .message.bot img {
+        max-width: 100%;
+        max-height: 180px;
+        border-radius: 8px;
+        object-fit: cover;
+        margin-top: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    .message.bot img:hover {
+        transform: scale(1.05);
+    }
+
 
     /* ===== RESPONSIVE DESIGN ===== */
     @@media (max-width: 480px) {

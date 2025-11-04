@@ -14,7 +14,7 @@ namespace PlantManagement.Services.Implementations
 
         public GeminiService(IConfiguration config)
         {
-            _apiKey = config["Gemini:ApiKey"] ?? _apiKey;
+            _apiKey = config["Gemini:ChatbotKey"] ?? _apiKey;
         }
         public async Task<string> AskGeminiAsync(string prompt)
         {
