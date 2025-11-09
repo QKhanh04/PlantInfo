@@ -50,6 +50,11 @@ namespace PlantManagement.Repositories.Implementations
         {
             _dbSet.Remove(entity);
         }
+        // add remove range
+        public void RemoveRange(IEnumerable<T> entities)
+        {
+            _dbSet.RemoveRange(entities);
+        }
 
         public async Task<int> Count()
         {

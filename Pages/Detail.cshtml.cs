@@ -124,7 +124,7 @@ namespace PlantManagement.Pages
             {
                 success = result.Success,
                 message = result.Message,
-                toastType = result.Success ? "success" : "danger"
+                toastType = result.Success ? "success" : "warning"
             }); 
         }
 
@@ -135,16 +135,13 @@ namespace PlantManagement.Pages
             UpdateReview.PlantId = Id;
             var result = await _plantReviewService.UpdateReviewAsync(userId, UpdateReview);
 
-            // Có thể bỏ TempData nếu không dùng cho AJAX
-            // TempData["ToastMessage"] = result.Message;
-            // TempData["ToastType"] = result.Success ? "success" : "danger";
 
             // Trả về dữ liệu JSON cho client
             return new JsonResult(new
             {
                 success = result.Success,
                 message = result.Message,
-                toastType = result.Success ? "success" : "danger"
+                toastType = result.Success ? "success" : "warning"
             });
         }
 

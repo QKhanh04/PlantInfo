@@ -228,7 +228,8 @@ if (editForm) {
 
             } else {
                 // Thông báo lỗi
-                alert(data.message || "Cập nhật không thành công!");
+                showToast(data.message || "Thêm đánh giá không thành công!", data.toastType || "info");
+
             }
         } catch (err) {
             alert('Không thể gửi yêu cầu. Vui lòng thử lại!');
@@ -273,7 +274,7 @@ if (addForm) {
             if (response.ok && data.success) {
                 location.reload();
             } else {
-                alert(data.message || "Thêm đánh giá không thành công!");
+                showToast(data.message || "Thêm đánh giá không thành công!", data.toastType || "info");
             }
         } catch (err) {
             alert('Không thể gửi yêu cầu. Vui lòng thử lại!');

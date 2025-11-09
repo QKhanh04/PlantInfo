@@ -6,7 +6,9 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PlantManagement.Data;
+using PlantManagement.Repositories.Interfaces;
 using PlantManagement.Services.Implementations;
+using PlantManagement.Services.Interfaces;
 
 namespace PlantManagement.AI
 {
@@ -16,6 +18,7 @@ namespace PlantManagement.AI
         private readonly GeminiService _geminiService;
         private readonly string _schemaDescription;
         private readonly int _defaultRowLimit = 50;
+        private readonly ISearchLogService _searchLogService;
 
         private static readonly string[] AllowedTables = new[]
         {
@@ -29,7 +32,7 @@ namespace PlantManagement.AI
             "create", "grant", "revoke", "exec", "execute", ";--", "--"
         };
 
-        public GeminiSqlGenerator(PlantDbContext dbContext, GeminiService geminiService)
+        public GeminiSqlGenerator(PlantDbContext dbContext, GeminiService geminiService, ISearchLogService searchLogService)
         {
             _dbContext = dbContext;
             _geminiService = geminiService;
@@ -41,6 +44,7 @@ namespace PlantManagement.AI
 
             Console.WriteLine("==== LOADED SCHEMA DESCRIPTION ====");
             Console.WriteLine(_schemaDescription);
+            _searchLogService = searchLogService;
         }
 
         public async Task<SqlGenerationResult> RunQueryFlowAsync(string userQuestion)
@@ -67,7 +71,40 @@ namespace PlantManagement.AI
 
             try
             {
+
                 var rows = await ExecuteSelectAsync(normalizedSql);
+
+                string splitPlantNamePrompt = $@"
+Phân tích câu sau và trích ra **chính xác các tên cây (plant name)** được nhắc đến trực tiếp trong câu hỏi:
+""{userQuestion}"".
+
+YÊU CẦU:
+- Chỉ liệt kê tên các loài cây thực vật (ví dụ: ổi, kim tiền, tía tô, bạc hà...).
+- Không liệt kê các từ chung chung như: 'cây', 'lá', 'hoa', 'thân', 'rễ', 'quả', 'chậu', 'loài', 'giống' hoặc các danh từ không phải tên riêng của cây.
+- Chỉ lấy các tên cây xuất hiện **nguyên văn trong câu hỏi**, không đoán thêm hoặc mở rộng.
+- Kết quả chỉ là danh sách tên cây, cách nhau bằng dấu phẩy.
+- Giữ nguyên tiếng Việt, không thêm mô tả hoặc ký tự khác.
+- Nếu không có cây nào, trả về chuỗi rỗng.
+";
+
+
+
+                string plantNamesRaw = await _geminiService.AskGeminiAsync(splitPlantNamePrompt);
+
+                var plantNames = plantNamesRaw
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(p => p.Trim().ToLowerInvariant())
+                    .Where(p => p.Length > 1) // loại bỏ chuỗi rỗng hoặc 1 ký tự
+                    .Distinct()
+                    .ToList();
+
+
+                foreach (var plantName in plantNames)
+                {
+                    if (!string.IsNullOrWhiteSpace(plantName))
+                        await _searchLogService.AddSearchLogAsync(plantName);
+
+                }
                 return SqlGenerationResult.Success(normalizedSql, rows, rawAiResponse);
             }
             catch (Exception ex)

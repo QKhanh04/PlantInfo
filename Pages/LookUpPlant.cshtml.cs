@@ -75,8 +75,11 @@ namespace PlantManagement.Pages
 
 
             // Khi tạo PlantListDTO, thêm thuộc tính IsFavorited
+
             if (FilterVM.Keyword != null)
-            await _searchLogService.AddSearchLogAsync(FilterVM.Keyword, userId);
+            {
+                await _searchLogService.AddSearchLogAsync(FilterVM.Keyword, userId);
+            }
 
             var result = await _plantService.GetPagedAsync(FilterVM?.Keyword, CurrentPage, pageSize, FilterVM?.CategoryIds, FilterVM?.UseIds, FilterVM?.DiseaseIds, FilterVM?.OrderName, null, null);
             var categories = await _categoryService.GetAllCategoryAsync();
@@ -108,9 +111,9 @@ namespace PlantManagement.Pages
 
             Plants = result.Data;
             foreach (var plant in Plants.Items)
-                {
-                    plant.IsFavorited = favoritePlantIds.Any(p => p.PlantId == plant.PlantId);
-                }
+            {
+                plant.IsFavorited = favoritePlantIds.Any(p => p.PlantId == plant.PlantId);
+            }
             TotalPages = result.Data.TotalPages;
             Categories = categories.Data ?? new List<Category>();
             Uses = use.Data ?? new List<Use>();

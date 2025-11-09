@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PlantManagement.Data;
+using PlantManagement.Helper;
 using PlantManagement.Models;
 using PlantManagement.Repositories.Interfaces;
 
@@ -19,24 +20,18 @@ namespace PlantManagement.Repositories.Implementations
             _ctx = ctx;
         }
 
-        // public async Task<Plant?> FindByNameAsync(string name)
-        // {
-        //     return await _ctx.Plants
-        //         .Include(p => p.Species)
-        //         .Include(p => p.GrowthCondition)
-        //         .Include(p => p.Diseases)
-        //         .Include(p => p.Uses)
-        //         .Include(p => p.Categories)
-        //         .Include(p => p.PlantImages)
-        //         .FirstOrDefaultAsync(p => p.CommonName.ToLower().Contains(name.ToLower()));
-        // }
 
         public async Task<Plant?> FindByNameAsync(string keyword)
         {
-            return await _dbSet.FirstOrDefaultAsync(p =>
-                p.CommonName.ToLower().Contains(keyword.ToLower()) ||
-                p.Species.ScientificName.ToLower().Contains(keyword.ToLower()));
+            keyword = TextHelper.NormalizeKeyword(keyword);
+
+            return await _dbSet
+                .Include(p => p.Species)
+                .FirstOrDefaultAsync(p =>
+                    EF.Functions.ILike(p.CommonName, $"%{keyword}%") ||
+                    EF.Functions.ILike(p.Species.ScientificName, $"%{keyword}%"));
         }
+
 
 
         public async Task<List<Plant>> SearchAsync(string query, int limit = 5)

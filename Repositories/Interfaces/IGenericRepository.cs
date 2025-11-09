@@ -17,6 +17,8 @@ namespace PlantManagement.Repositories.Interfaces
         Task AddAsync(T entity);
         void Update(T entity);
         void Delete(T entity);
+        void RemoveRange(IEnumerable<T> entities);
+
         Task<int> Count();
 
         IQueryable<T> Query();

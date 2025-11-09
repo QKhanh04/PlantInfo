@@ -10,7 +10,7 @@ namespace PlantManagement.Services.Interfaces
     {
         Task AddSearchLogAsync(string keyword, int? userId = null);
 
-        Task<ServiceResult<int>> CountPlantSearchAsync(DateTime? startDate = null, DateTime? endDate = null);
+        Task RemoveLogsForKeywordAsync(string plantName);
 
     }
 }

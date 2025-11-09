@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using PlantManagement.Common.Results;
 using PlantManagement.Data;
 using PlantManagement.DTOs;
+using PlantManagement.Helper;
 using PlantManagement.Models;
 using PlantManagement.Repositories;
 using PlantManagement.Repositories.Interfaces;
@@ -28,6 +29,7 @@ namespace PlantManagement.Services.Implementations
         private readonly IDiseaseRepository _diseaseRepo;
         private readonly IPlantImageRepository _imageRepo;
         private readonly IPlantReferenceRepository _referenceRepo;
+        private readonly ISearchLogService _searchLogService;
         private readonly IMapper _mapper;
         private readonly PlantDbContext _dbContext;
 
@@ -39,7 +41,8 @@ namespace PlantManagement.Services.Implementations
            IGrowthConditionRepository growthRepo,
            IDiseaseRepository diseaseRepo,
            IPlantImageRepository imageRepo,
-           IPlantReferenceRepository referenceRepo, IMapper mapper, PlantDbContext dbContext)
+           IPlantReferenceRepository referenceRepo,
+           ISearchLogService searchLogService, IMapper mapper, PlantDbContext dbContext)
         {
             _plantRepo = plantRepo;
             _speciesRepo = speciesRepo;
@@ -49,6 +52,7 @@ namespace PlantManagement.Services.Implementations
             _diseaseRepo = diseaseRepo;
             _imageRepo = imageRepo;
             _referenceRepo = referenceRepo;
+            _searchLogService = searchLogService;
             _mapper = mapper;
             _dbContext = dbContext;
         }
@@ -183,23 +187,29 @@ namespace PlantManagement.Services.Implementations
                     .AsQueryable();
 
                 query = query.Where(p => p.IsActive == true);
+
+
                 if (!string.IsNullOrWhiteSpace(keyword))
                 {
-                    string lowered = keyword.ToLower().Trim();
+                    string normalized = TextHelper.NormalizeKeyword(keyword);
                     query = query.Where(p =>
-                        p.CommonName.ToLower().Contains(lowered) ||
-                        (p.Species != null && p.Species.ScientificName.ToLower().Contains(lowered))
-                    );
+    EF.Functions.ILike(p.CommonName, $"%{normalized}%") ||   // keyword nằm trong tên cây
+    (p.Species != null && (
+        EF.Functions.ILike(p.Species.ScientificName, $"%{normalized}%")
+    ))
+);
+
                 }
 
                 if (categoryIds?.Any() == true)
-                    query = query.Where(p => p.Categories.Any(c => categoryIds.Contains(c.CategoryId)));
+                    query = query.Where(p => categoryIds.All(id => p.Categories.Any(c => c.CategoryId == id)));
 
                 if (useIds?.Any() == true)
-                    query = query.Where(p => p.Uses.Any(u => useIds.Contains(u.UseId)));
+                    query = query.Where(p => useIds.All(id => p.Uses.Any(u => u.UseId == id)));
 
                 if (diseaseIds?.Any() == true)
                     query = query.Where(p => p.Diseases.Any(d => diseaseIds.Contains(d.DiseaseId)));
+
                 if (!string.IsNullOrEmpty(orderName))
                 {
                     query = query.Where(p => p.Species != null && p.Species.OrderName == orderName);
@@ -294,6 +304,11 @@ namespace PlantManagement.Services.Implementations
                     return ServiceResult<PlantDTO>.Fail("Bạn phải chọn loài có sẵn hoặc thêm mới loài");
                 }
 
+                var plantExist = await _plantRepo.FindAsync(p => p.CommonName == model.CommonName);
+                if (plantExist.Any())
+                {
+                    return ServiceResult<PlantDTO>.Fail("Cây này đã tồn tại");
+                }
                 var plant = new Plant
                 {
                     CommonName = model.CommonName,
@@ -412,11 +427,14 @@ namespace PlantManagement.Services.Implementations
                     }
                 }
                 await _plantRepo.SaveChangesAsync();
+                await _searchLogService.RemoveLogsForKeywordAsync(model.CommonName);
+
                 await transaction.CommitAsync();
                 return ServiceResult<PlantDTO>.Ok(
                     _mapper.Map<PlantDTO>(plant),
                     "Thêm cây thành công"
                 );
+
             }
             catch (Exception ex)
             {

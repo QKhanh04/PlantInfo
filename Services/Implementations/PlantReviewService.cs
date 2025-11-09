@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using PlantInformation.DTOs;
+using PlantManagement.AI;
 using PlantManagement.Common.Results;
 using PlantManagement.Models;
 using PlantManagement.Repositories.Interfaces;
@@ -14,17 +15,26 @@ namespace PlantManagement.Services.Implementations
     public class PlantReviewService : IPlantReviewService
     {
         private readonly IPlantReviewRepository _plantReviewRepository;
+        private readonly GeminiModeration _moderation;
         private readonly IMapper _mapper;
-        public PlantReviewService(IPlantReviewRepository plantReviewRepository, IMapper mapper)
+        public PlantReviewService(IPlantReviewRepository plantReviewRepository, IMapper mapper, GeminiModeration moderation)
         {
             _plantReviewRepository = plantReviewRepository;
             _mapper = mapper;
+            _moderation = moderation;
         }
         public async Task<ServiceResult<bool>> AddReviewAsync(int userId, CreateReviewDTO dto)
         {
             if (dto.Rating < 1 || dto.Rating > 5)
                 return ServiceResult<bool>.Fail("Bạn phải đánh giá!");
-
+            if (!string.IsNullOrWhiteSpace(dto.Comment))
+            {
+                var moderation = await _moderation.IsCommentAllowedAsync(dto.Comment);
+                if (!moderation.Success || moderation.Data == false)
+                {
+                    return ServiceResult<bool>.Fail(moderation.Message ?? "Bình luận chứa nội dung không phù hợp!");
+                }
+            }
             var review = _mapper.Map<PlantReview>(dto);
             review.UserId = userId;
             await _plantReviewRepository.AddReviewAsync(review);
@@ -69,7 +79,15 @@ namespace PlantManagement.Services.Implementations
             var review = await _plantReviewRepository.GetUserReviewAsync(dto.PlantId, userId);
             if (review == null)
                 return ServiceResult<bool>.Fail("Review không tồn tại hoặc user không có quyền sửa!");
-
+            if (!string.IsNullOrWhiteSpace(dto.Comment))
+            {
+                var moderation = await _moderation.IsCommentAllowedAsync(dto.Comment);
+                if (!moderation.Success || moderation.Data == false)
+                {
+                    return ServiceResult<bool>.Fail(moderation.Message ?? "Bình luận chứa nội dung không phù hợp!");
+                }
+                review.Comment = dto.Comment;
+            }
             if (dto.Rating.HasValue)
                 review.Rating = dto.Rating.Value;
             review.Comment = dto.Comment;

@@ -63,10 +63,12 @@ builder.Services.AddScoped<GeminiSqlGenerator>(sp =>
     var schemaDescription = File.Exists(schemaPath)
         ? File.ReadAllText(schemaPath)
         : "No schema description found.";
-    return new GeminiSqlGenerator(dbContext, geminiService);
+    var searchLogService = sp.GetRequiredService<ISearchLogService>();
+    return new GeminiSqlGenerator(dbContext, geminiService, searchLogService);
 });
 builder.Services.AddScoped<NaturalResponse>();
 builder.Services.AddScoped<GeminiService>();
+builder.Services.AddHttpClient<GeminiModeration>();
 
 builder.Services.AddControllers();
 
