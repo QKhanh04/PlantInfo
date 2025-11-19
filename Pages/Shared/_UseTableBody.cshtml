@@ -1,0 +1,15 @@
+@model IEnumerable<PlantManagement.DTOs.UseDTO>
+
+@foreach (var use in Model)
+{
+    <tr>
+        <td>@use.UseName</td>
+        <td id="desc_@use.UseId">@use.Description</td>
+        <td>
+            <button class="btn btn-primary btn-sm" onclick="openEditModal(@use.UseId)">Xem chi tiết</button>
+            <button class="btn btn-danger btn-sm" onclick="checkBeforeDelete(@use.UseId)">
+                <i class="bi bi-trash"></i> Xóa
+            </button>
+        </td>
+    </tr>
+}

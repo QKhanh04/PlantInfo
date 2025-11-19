@@ -154,7 +154,7 @@ namespace PlantManagement.Pages.Admin.Management
         }
 
 
-        public async Task<IActionResult> OnPostCheckBeforeDeleteAsync([FromBody] CheckDeleteRequest req)
+        public async Task<IActionResult> OnPostCheckBeforeDeleteAsync([FromBody] CheckCategoryDeleteRequest req)
         {
             int id = req.Id;
             var plants = await _categoryService.GetPlantsByCategoryIdAsync(id);
@@ -169,12 +169,21 @@ namespace PlantManagement.Pages.Admin.Management
             }
 
             // Ghép tên cây (ưu tiên CommonName, fallback ScientificName)
-            string plantList = string.Join(", ", plants.Select(p => p.CommonName ?? p.Species?.ScientificName ?? "Không rõ"));
+            // Ghép danh sách cây thành <li>
+            string plantListHtml = string.Join("", plants.Select(p =>
+                $"<li>{p.CommonName ?? p.Species?.ScientificName ?? "Không rõ"}</li>"
+            ));
 
+            string html = $@"
+    <p>Danh mục này đang được sử dụng bởi <strong>{plants.Count}</strong> cây:</p>
+    <ul style='max-height: 200px; overflow-y: auto; padding-left: 20px;'>
+        {plantListHtml}
+    </ul>
+";
             return new JsonResult(new
             {
                 success = false,
-                message = $"Danh mục này đang được sử dụng bởi {plants.Count} cây: {plantList}"
+                message = html
             });
         }
         public async Task<IActionResult> OnPostDeleteConfirmedAsync(int id)
@@ -204,7 +213,7 @@ namespace PlantManagement.Pages.Admin.Management
         public int CategoryId { get; set; }
         public string Description { get; set; }
     }
-    public class CheckDeleteRequest
+    public class CheckCategoryDeleteRequest
     {
         public int Id { get; set; }
     }

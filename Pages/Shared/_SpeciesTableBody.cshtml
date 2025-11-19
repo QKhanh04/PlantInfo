@@ -1,0 +1,17 @@
+@model IEnumerable<PlantManagement.DTOs.SpeciesDTO>
+
+@foreach (var sp in Model)
+{
+    <tr>
+        <td>@sp.ScientificName</td>
+        <td>@sp.Genus</td>
+        <td>@sp.Family</td>
+        <td>@sp.OrderName</td>
+        <td>
+            <button class="btn btn-primary btn-sm" onclick="openEditModal(@sp.SpeciesId)">Xem chi tiết</button>
+            <button class="btn btn-danger btn-sm" onclick="checkBeforeDelete(@sp.SpeciesId)">
+                <i class="bi bi-trash"></i> Xóa
+            </button>
+        </td>
+    </tr>
+}

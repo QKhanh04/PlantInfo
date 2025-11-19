@@ -15,68 +15,111 @@ namespace PlantManagement.Services.Implementations
     public class DiseaseService : IDiseaseService
     {
         private readonly IDiseaseRepository _diseaseRepository;
+        private readonly IPlantRepository _plantRepository;
         private readonly IMapper _mapper;
 
-        public DiseaseService(IDiseaseRepository diseaseRepository, IMapper mapper)
+        public DiseaseService(IDiseaseRepository diseaseRepository, IPlantRepository plantRepository, IMapper mapper)
         {
             _diseaseRepository = diseaseRepository;
+            _plantRepository = plantRepository;
             _mapper = mapper;
         }
 
-        public async Task<ServiceResult<Disease>> CreateDiseaseAsync(DiseasesDTO dto)
+        public async Task<ServiceResult<Disease>> CreateDiseaseAsync(DiseaseDTO dto)
         {
             try
             {
-                var exists = await _diseaseRepository.Query()
-            .AnyAsync(d => d.DiseaseName.ToLower() == dto.DiseaseName.ToLower());
-                if (exists)
+                // Kiểm tra plant có tồn tại không
+                var plant = await _plantRepository.GetByIdAsync(dto.PlantId);
+                if (plant == null)
                 {
-                    return ServiceResult<Disease>.Fail("Disease name already exists. Please choose a different name.");
+                    return ServiceResult<Disease>.Fail("Không tìm thấy cây trồng.");
                 }
-                var disease = _mapper.Map<Disease>(dto);
+
+                var disease = new Disease
+                {
+                    PlantId = dto.PlantId,
+                    DiseaseName = dto.DiseaseName,
+                    Symptoms = dto.Symptoms,
+                    Treatment = dto.Treatment
+                };
+
                 await _diseaseRepository.AddAsync(disease);
                 await _diseaseRepository.SaveChangesAsync();
-                return ServiceResult<Disease>.Ok(disease, "Disease created successfully");
+                
+                return ServiceResult<Disease>.Ok(disease, "Tạo sâu bệnh thành công");
             }
             catch (Exception ex)
             {
-                return ServiceResult<Disease>.Fail($"Error creating Disease: {ex.Message}");
+                return ServiceResult<Disease>.Fail($"Lỗi khi tạo sâu bệnh: {ex.Message}");
             }
         }
 
-        public async Task<ServiceResult<Disease>> UpdateDiseaseAsync(DiseasesDTO dto)
+        public async Task<ServiceResult<Disease>> UpdateDiseaseAsync(DiseaseDTO dto)
         {
             try
             {
                 var existing = await _diseaseRepository.GetByIdAsync(dto.DiseaseId);
                 if (existing == null)
                 {
-                    return ServiceResult<Disease>.Fail($"Disease not found");
+                    return ServiceResult<Disease>.Fail("Không tìm thấy sâu bệnh");
                 }
-                _mapper.Map(dto, existing);
+
+                // Kiểm tra plant có tồn tại không
+                var plant = await _plantRepository.GetByIdAsync(dto.PlantId);
+                if (plant == null)
+                {
+                    return ServiceResult<Disease>.Fail("Không tìm thấy cây trồng.");
+                }
+
+                existing.PlantId = dto.PlantId;
+                existing.DiseaseName = dto.DiseaseName;
+                existing.Symptoms = dto.Symptoms;
+                existing.Treatment = dto.Treatment;
+
                 _diseaseRepository.Update(existing);
                 await _diseaseRepository.SaveChangesAsync();
-                return ServiceResult<Disease>.Ok(existing, "Disease updated successfully");
+                
+                return ServiceResult<Disease>.Ok(existing, "Cập nhật sâu bệnh thành công");
             }
             catch (Exception ex)
             {
-                return ServiceResult<Disease>.Fail($"Error updating Disease: {ex.Message}");
+                return ServiceResult<Disease>.Fail($"Lỗi khi cập nhật sâu bệnh: {ex.Message}");
             }
         }
 
-        public async Task<ServiceResult<IEnumerable<Disease>>> GetAllDiseaseAsync()
+        public async Task<ServiceResult<IEnumerable<Disease>>> GetAllDiseasesAsync()
         {
             var diseases = await _diseaseRepository.GetAllAsync();
             return ServiceResult<IEnumerable<Disease>>.Ok(diseases);
         }
 
-        public async Task<ServiceResult<PagedResult<DiseasesDTO>>> GetPagedDiseasesAsync(string? keyword, int page, int pageSize)
+        public async Task<ServiceResult<Disease>> GetByIdAsync(int id)
         {
-            var query = _diseaseRepository.Query();
+            var disease = await _diseaseRepository.GetDiseasesWithPlant()
+                .FirstOrDefaultAsync(d => d.DiseaseId == id);
+            
+            return disease == null
+                ? ServiceResult<Disease>.Fail("Không tìm thấy sâu bệnh")
+                : ServiceResult<Disease>.Ok(disease);
+        }
+
+        public async Task<ServiceResult<PagedResult<DiseaseDTO>>> GetPagedDiseasesAsync(string? keyword, int? plantId, int page, int pageSize)
+        {
+            var query = _diseaseRepository.GetDiseasesWithPlant();
+            
             if (!string.IsNullOrWhiteSpace(keyword))
             {
                 string loweredKeyword = keyword.ToLower();
-                query = query.Where(d => d.DiseaseName.ToLower().Contains(loweredKeyword));
+                query = query.Where(d => d.DiseaseName.ToLower().Contains(loweredKeyword) 
+                                      || (d.Symptoms != null && d.Symptoms.ToLower().Contains(loweredKeyword))
+                                      || (d.Plant.CommonName != null && d.Plant.CommonName.ToLower().Contains(loweredKeyword))
+                                      || (d.Plant.Species != null && d.Plant.Species.ScientificName.ToLower().Contains(loweredKeyword)));
+            }
+
+            if (plantId.HasValue && plantId.Value > 0)
+            {
+                query = query.Where(d => d.PlantId == plantId.Value);
             }
 
             int totalItems = await query.CountAsync();
@@ -84,10 +127,19 @@ namespace PlantManagement.Services.Implementations
                 .OrderBy(d => d.DiseaseName)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
-                .Select(d => _mapper.Map<DiseasesDTO>(d))
+                .Select(d => new DiseaseDTO
+                {
+                    DiseaseId = d.DiseaseId,
+                    PlantId = d.PlantId,
+                    DiseaseName = d.DiseaseName,
+                    Symptoms = d.Symptoms,
+                    Treatment = d.Treatment,
+                    PlantName = d.Plant.CommonName,
+                    // PlantScientificName = d.Plant.Species != null ? d.Plant.Species.ScientificName : null
+                })
                 .ToListAsync();
 
-            var pagedResult = new PagedResult<DiseasesDTO>
+            var pagedResult = new PagedResult<DiseaseDTO>
             {
                 Items = items,
                 TotalItems = totalItems,
@@ -95,17 +147,36 @@ namespace PlantManagement.Services.Implementations
                 PageSize = pageSize
             };
 
-            return ServiceResult<PagedResult<DiseasesDTO>>.Ok(pagedResult);
+            return ServiceResult<PagedResult<DiseaseDTO>>.Ok(pagedResult);
         }
 
-        public async Task<ServiceResult<Disease>> GetByIdAsync(int id)
+        public async Task<ServiceResult<bool>> DeleteDiseaseAsync(int diseaseId)
         {
-            var disease = await _diseaseRepository.GetByIdAsync(id);
-            return disease == null
-                ? ServiceResult<Disease>.Fail("Disease not found")
-                : ServiceResult<Disease>.Ok(disease);
+            var disease = await _diseaseRepository.GetByIdAsync(diseaseId);
+            if (disease == null)
+                return ServiceResult<bool>.Fail("Không tìm thấy sâu bệnh.");
+
+            _diseaseRepository.Delete(disease);
+            await _diseaseRepository.SaveChangesAsync();
+            
+            return ServiceResult<bool>.Ok(true, "Xóa sâu bệnh thành công.");
         }
 
+        public async Task<ServiceResult<IEnumerable<PlantDTO>>> GetAllPlantsForDropdownAsync()
+        {
+            var plants = await _plantRepository.Query()
+                .Include(p => p.Species)
+                .Where(p => p.IsActive == true)
+                .OrderBy(p => p.CommonName)
+                .Select(p => new PlantDTO
+                {
+                    PlantId = p.PlantId,
+                    CommonName = p.CommonName,
+                    // ScientificName = p.Species != null ? p.Species.ScientificName : null
+                })
+                .ToListAsync();
 
+            return ServiceResult<IEnumerable<PlantDTO>>.Ok(plants);
+        }
     }
 }

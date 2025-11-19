@@ -76,7 +76,7 @@ namespace PlantManagement.Pages.Admin
                 Text = s.ScientificName
             }).ToList();
 
-            var disease = await _diseaseService.GetAllDiseaseAsync();
+            var disease = await _diseaseService.GetAllDiseasesAsync();
             DiseaseList = disease.Data.Select(s => new SelectListItem
             {
                 Value = s.DiseaseId.ToString(),

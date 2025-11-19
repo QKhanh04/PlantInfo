@@ -61,7 +61,9 @@ namespace PlantManagement.Mappings
 
             // User
             CreateMap<User, UserDTO>().ReverseMap();
-
+            CreateMap<Disease, DiseaseDTO>()
+                        .ForMember(dest => dest.PlantName, opt => opt.MapFrom(src => src.Plant.CommonName));
+            CreateMap<DiseaseDTO, Disease>();
         }
     }
 }

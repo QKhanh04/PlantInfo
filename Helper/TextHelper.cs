@@ -17,7 +17,7 @@ namespace PlantManagement.Helper
             keyword = keyword.ToLower().Trim();
 
             // Loại bỏ các từ vô nghĩa thường gặp
-            string[] stopWords = { "cây", "loài", "thực vật", "loại cây", "loại", "cây thuốc" };
+            string[] stopWords = { "cây", "loài", "thực vật", "loại cây", "loại", "cây thuốc", "quả" };
             foreach (var word in stopWords)
             {
                 keyword = keyword.Replace(word, " ");

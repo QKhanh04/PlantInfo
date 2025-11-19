@@ -10,10 +10,12 @@ namespace PlantManagement.Services.Interfaces
 {
     public interface IDiseaseService
     {
-        Task<ServiceResult<PagedResult<DiseasesDTO>>> GetPagedDiseasesAsync(string? keyword, int page, int pageSize);
-        Task<ServiceResult<Disease>> CreateDiseaseAsync(DiseasesDTO dto);
-        Task<ServiceResult<Disease>> UpdateDiseaseAsync(DiseasesDTO dto);
+        Task<ServiceResult<Disease>> CreateDiseaseAsync(DiseaseDTO dto);
+        Task<ServiceResult<Disease>> UpdateDiseaseAsync(DiseaseDTO dto);
+        Task<ServiceResult<IEnumerable<Disease>>> GetAllDiseasesAsync();
         Task<ServiceResult<Disease>> GetByIdAsync(int id);
-        Task<ServiceResult<IEnumerable<Disease>>> GetAllDiseaseAsync();
+        Task<ServiceResult<PagedResult<DiseaseDTO>>> GetPagedDiseasesAsync(string? keyword, int? plantId, int page, int pageSize);
+        Task<ServiceResult<bool>> DeleteDiseaseAsync(int diseaseId);
+        Task<ServiceResult<IEnumerable<PlantDTO>>> GetAllPlantsForDropdownAsync();
     }
 }

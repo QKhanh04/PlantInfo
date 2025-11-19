@@ -14,5 +14,11 @@ namespace PlantManagement.Repositories.Implementations
         public DiseaseRepository(PlantDbContext context) : base(context)
         {
         }
+        public IQueryable<Disease> GetDiseasesWithPlant()
+        {
+            return _context.Diseases
+                .Include(d => d.Plant)
+                    .ThenInclude(p => p.Species);
+        }
     }
 }

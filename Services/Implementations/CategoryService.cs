@@ -76,51 +76,51 @@ namespace PlantManagement.Services.Implementations
         }
 
 
-        // public async Task<ServiceResult<bool>> DeleteCategoryAsync(int categoryId)
-        // {
-        //     var plants = await _categoryRepository.GetPlantsByCategoryIdAsync(categoryId);
-
-        //     if (plants.Any())
-        //     {
-        //         string plantList = string.Join(", ", plants.Select(p => p.CommonName ?? p.Species?.ScientificName));
-        //         return ServiceResult<bool>.Fail(
-        //             $"Không thể xóa vì danh mục đang được dùng bởi {plants.Count} cây: {plantList}"
-        //         );
-        //     }
-
-        //     var category = await _categoryRepository.GetByIdAsync(categoryId);
-        //     if (category == null)
-        //         return ServiceResult<bool>.Fail("Không tìm thấy danh mục.");
-
-        //     _categoryRepository.Delete(category);
-        //     await _categoryRepository.SaveChangesAsync();
-        //     return ServiceResult<bool>.Ok(true, "Xóa danh mục thành công.");
-        // }
-
         public async Task<ServiceResult<bool>> DeleteCategoryAsync(int categoryId)
         {
             var plants = await _categoryRepository.GetPlantsByCategoryIdAsync(categoryId);
+
+            if (plants.Any())
+            {
+                string plantList = string.Join(", ", plants.Select(p => p.CommonName ?? p.Species?.ScientificName));
+                return ServiceResult<bool>.Fail(
+                    $"Không thể xóa vì danh mục đang được dùng bởi {plants.Count} cây: {plantList}"
+                );
+            }
 
             var category = await _categoryRepository.GetByIdAsync(categoryId);
             if (category == null)
                 return ServiceResult<bool>.Fail("Không tìm thấy danh mục.");
 
-            // ✅ Nếu có cây thì chỉ cảnh báo chứ vẫn cho phép xóa
-            string message;
-            if (plants.Any())
-            {
-                string plantList = string.Join(", ", plants.Select(p => p.CommonName ?? p.Species?.ScientificName));
-                message = $"Danh mục đã được xóa, mặc dù đang được sử dụng bởi {plants.Count} cây: {plantList}";
-            }
-            else
-            {
-                message = "Xóa danh mục thành công.";
-            }
-
             _categoryRepository.Delete(category);
             await _categoryRepository.SaveChangesAsync();
-            return ServiceResult<bool>.Ok(true, message);
+            return ServiceResult<bool>.Ok(true, "Xóa danh mục thành công.");
         }
+
+        // public async Task<ServiceResult<bool>> DeleteCategoryAsync(int categoryId)
+        // {
+        //     var plants = await _categoryRepository.GetPlantsByCategoryIdAsync(categoryId);
+
+        //     var category = await _categoryRepository.GetByIdAsync(categoryId);
+        //     if (category == null)
+        //         return ServiceResult<bool>.Fail("Không tìm thấy danh mục.");
+
+        //     // ✅ Nếu có cây thì chỉ cảnh báo chứ vẫn cho phép xóa
+        //     string message;
+        //     if (plants.Any())
+        //     {
+        //         string plantList = string.Join(", ", plants.Select(p => p.CommonName ?? p.Species?.ScientificName));
+        //         message = $"Danh mục đã được xóa, mặc dù đang được sử dụng bởi {plants.Count} cây: {plantList}";
+        //     }
+        //     else
+        //     {
+        //         message = "Xóa danh mục thành công.";
+        //     }
+
+        //     _categoryRepository.Delete(category);
+        //     await _categoryRepository.SaveChangesAsync();
+        //     return ServiceResult<bool>.Ok(true, message);
+        // }
 
 
 

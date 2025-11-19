@@ -36,8 +36,6 @@ namespace PlantManagement.Services.Implementations
                     return ServiceResult<Species>.Fail("Scientific name already exists. Please choose a different name.");
                 }
 
-        
-
                 var species = _mapper.Map<Species>(dto);
                 await _speciesRepository.AddAsync(species);
                 await _speciesRepository.SaveChangesAsync();
@@ -123,11 +121,38 @@ namespace PlantManagement.Services.Implementations
                 .ToList();
         }
 
+        public async Task<ServiceResult<bool>> DeleteSpeciesAsync(int speciesId)
+        {
+            var plants = await _speciesRepository.GetPlantsBySpeciesIdAsync(speciesId);
+
+            if (plants.Any())
+            {
+                string plantList = string.Join(", ", plants.Select(p => p.CommonName ?? "Unnamed Plant"));
+                return ServiceResult<bool>.Fail(
+                    $"Không thể xóa vì loài thực vật đang được dùng bởi {plants.Count} cây: {plantList}"
+                );
+            }
+
+            var species = await _speciesRepository.GetByIdAsync(speciesId);
+            if (species == null)
+                return ServiceResult<bool>.Fail("Không tìm thấy loài thực vật.");
+
+            _speciesRepository.Delete(species);
+            await _speciesRepository.SaveChangesAsync();
+
+            return ServiceResult<bool>.Ok(true, "Xóa loài thực vật thành công.");
+        }
+
 
         public async Task<ServiceResult<IEnumerable<Species>>> GetAllSpeciesAsync()
         {
             var species = await _speciesRepository.GetAllAsync();
             return species == null ? ServiceResult<IEnumerable<Species>>.Fail("Have No Species") : ServiceResult<IEnumerable<Species>>.Ok(species);
+        }
+
+        public async Task<List<Plant>> GetPlantsBySpeciesIdAsync(int speciesId)
+        {
+            return await _speciesRepository.GetPlantsBySpeciesIdAsync(speciesId);
         }
 
     }

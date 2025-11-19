@@ -8,7 +8,9 @@ namespace PlantManagement.Repositories.Interfaces
 {
     public interface IUseRepository : IGenericRepository<Use>
     {
-            Task<Use?> FindByNameAsync(string name);
+        Task<Use?> FindByNameAsync(string name);
+        Task<List<Plant>> GetPlantsByUseIdAsync(int useId);
+
 
     }
 }

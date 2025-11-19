@@ -18,5 +18,16 @@ namespace PlantManagement.Repositories.Implementations
         {
             return await _dbSet.FirstOrDefaultAsync(u => EF.Functions.ILike(u.UseName, $"%{name}%"));
         }
+
+         public async Task<List<Plant>> GetPlantsByUseIdAsync(int useId)
+        {
+            // Truy vấn qua navigation property
+            var use = await _context.Uses
+                .Include(u => u.Plants)
+                    .ThenInclude(p => p.Species)
+                .FirstOrDefaultAsync(u => u.UseId == useId);
+            
+            return use?.Plants.ToList() ?? new List<Plant>();
+        }
     }
 }

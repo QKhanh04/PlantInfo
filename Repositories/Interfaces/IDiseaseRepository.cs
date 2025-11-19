@@ -8,6 +8,7 @@ namespace PlantManagement.Repositories.Interfaces
 {
     public interface IDiseaseRepository : IGenericRepository<Disease>
     {
-        
+        IQueryable<Disease> GetDiseasesWithPlant();
+
     }
 }

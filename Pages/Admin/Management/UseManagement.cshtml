@@ -1,9 +1,9 @@
 @page
 @using PlantManagement.Pages.Shared
-@model CategoryManagementModel
+@model UseManagementModel
 @{
   Layout = "_AdminLayout";
-  ViewData["Title"] = "Quản lý danh mục";
+  ViewData["Title"] = "Quản lý công dụng";
 }
 
 @section Styles {
@@ -13,30 +13,29 @@
 
 <div class="search-section">
   <form method="get" class="search-form">
-    <input type="text" name="Keyword" value="@Model.Keyword" placeholder="Tìm kiếm tên danh mục" class="search-input" />
-
-
+    <input type="text" name="Keyword" value="@Model.Keyword" placeholder="Tìm kiếm tên công dụng" class="search-input" />
     <button type="submit" class="btn-search">Tìm kiếm</button>
   </form>
-  <button class="btn btn-success ms-2" onclick="openAddModal()">Thêm danh mục mới</button>
+  <button class="btn btn-success ms-2" onclick="openAddModal()">Thêm công dụng mới</button>
 </div>
+
 <table class="table table-bordered">
   <thead>
     <tr>
-      <th>Tên danh mục</th>
+      <th>Tên công dụng</th>
       <th>Mô tả</th>
       <th>Hành động</th>
     </tr>
   </thead>
   <tbody>
-    @foreach (var cat in Model.Categories.Items)
+    @foreach (var use in Model.Uses.Items)
     {
       <tr>
-        <td>@cat.CategoryName</td>
-        <td id="desc_@cat.CategoryId">@cat.Description</td>
+        <td>@use.UseName</td>
+        <td id="desc_@use.UseId">@use.Description</td>
         <td>
-          <button class="btn btn-primary btn-sm" onclick="openEditModal(@cat.CategoryId)">Xem chi tiết</button>
-          <button class="btn btn-danger btn-sm" onclick="checkBeforeDelete(@cat.CategoryId)">
+          <button class="btn btn-primary btn-sm" onclick="openEditModal(@use.UseId)">Xem chi tiết</button>
+          <button class="btn btn-danger btn-sm" onclick="checkBeforeDelete(@use.UseId)">
             <i class="bi bi-trash"></i> Xóa
           </button>
         </td>
@@ -45,26 +44,24 @@
   </tbody>
 </table>
 
-
-
-<!-- Modal chỉnh sửa danh mục -->
+<!-- Modal chỉnh sửa công dụng -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <form id="editForm" onsubmit="return saveEditCategory();">
+    <form id="editForm" onsubmit="return saveEditUse();">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Sửa mô tả danh mục</h5>
+          <h5 class="modal-title">Chỉnh sửa công dụng</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
         </div>
         <div class="modal-body">
-          <input type="hidden" id="editCategoryId" name="CategoryId" />
+          <input type="hidden" id="editUseId" name="UseId" />
           <div class="mb-3">
-            <label for="editCategoryName" class="form-label">Tên danh mục</label>
-            <input type="text" class="form-control" id="editCategoryName" name="CategoryName" readonly />
+            <label for="editUseName" class="form-label">Tên công dụng <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="editUseName" name="UseName" required />
           </div>
           <div class="mb-3">
             <label for="editDescription" class="form-label">Mô tả</label>
-            <textarea class="form-control" id="editDescription" name="Description"></textarea>
+            <textarea class="form-control" id="editDescription" name="Description" rows="4"></textarea>
           </div>
         </div>
         <div class="modal-footer">
@@ -77,23 +74,23 @@
   </div>
 </div>
 
-<!-- Modal thêm danh mục -->
+<!-- Modal thêm công dụng -->
 <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
   <div class="modal-dialog">
-    <form id="addForm" onsubmit="return saveAddCategory();">
+    <form id="addForm" onsubmit="return saveAddUse();">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Thêm danh mục mới</h5>
+          <h5 class="modal-title">Thêm công dụng mới</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
         </div>
         <div class="modal-body">
           <div class="mb-3">
-            <label for="addCategoryName" class="form-label">Tên danh mục</label>
-            <input type="text" class="form-control" id="addCategoryName" name="CategoryName" required />
+            <label for="addUseName" class="form-label">Tên công dụng <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="addUseName" name="UseName" required />
           </div>
           <div class="mb-3">
             <label for="addDescription" class="form-label">Mô tả</label>
-            <textarea class="form-control" id="addDescription" name="Description"></textarea>
+            <textarea class="form-control" id="addDescription" name="Description" rows="4"></textarea>
           </div>
         </div>
         <div class="modal-footer">
@@ -106,12 +103,12 @@
   </div>
 </div>
 
-<!-- Modal xác nhận -->
+<!-- Modal xác nhận xóa -->
 <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title">Xác nhận xóa danh mục</h5>
+        <h5 class="modal-title">Xác nhận xóa công dụng</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body" id="deleteModalBody"></div>
@@ -123,14 +120,13 @@
   </div>
 </div>
 
-
 @if (Model.TotalPages > 1)
 {
   var paginationModel = new PaginationModel
   {
     CurrentPage = Model.CurrentPage,
     TotalPages = Model.TotalPages,
-    PageUrl = (page) => Url.Page("/Admin/Management/CategoryManagement", null, new
+    PageUrl = (page) => Url.Page("/Admin/Management/UseManagement", null, new
     {
       CurrentPage = page,
       Keyword = Model.Keyword,
@@ -148,29 +144,28 @@
     let editModal = new bootstrap.Modal(document.getElementById('editModal'));
 
     function openEditModal(id) {
-      // Reset lỗi
       document.getElementById('editError').innerText = '';
-      // Gọi AJAX để lấy thông tin chi tiết
-      fetch(`/Admin/Management/CategoryManagement?handler=Detail&id=${id}`)
+      fetch(`/Admin/Management/UseManagement?handler=Detail&id=${id}`)
         .then(r => r.json())
         .then(data => {
           if (data.success) {
-            document.getElementById('editCategoryId').value = data.category.categoryId;
-            document.getElementById('editCategoryName').value = data.category.categoryName;
-            document.getElementById('editDescription').value = data.category.description;
+            document.getElementById('editUseId').value = data.use.useId;
+            document.getElementById('editUseName').value = data.use.useName;
+            document.getElementById('editDescription').value = data.use.description || '';
             editModal.show();
           } else {
-            alert("Không tìm thấy danh mục.");
+            alert("Không tìm thấy công dụng.");
           }
         });
     }
 
-    function saveEditCategory() {
+    function saveEditUse() {
       const formData = new FormData();
-      formData.append("CategoryId", document.getElementById("editCategoryId").value);
+      formData.append("UseId", document.getElementById("editUseId").value);
+      formData.append("UseName", document.getElementById("editUseName").value);
       formData.append("Description", document.getElementById("editDescription").value);
 
-      fetch(`/Admin/Management/CategoryManagement?handler=Edit`, {
+      fetch(`/Admin/Management/UseManagement?handler=Edit`, {
         method: 'POST',
         body: formData
       })
@@ -178,8 +173,9 @@
         .then(data => {
           if (data.success) {
             showToast(data.message, "success");
-            document.getElementById(`desc_${formData.get("CategoryId")}`).innerText = formData.get("Description");
+            document.getElementById(`desc_${formData.get("UseId")}`).innerText = formData.get("Description");
             editModal.hide();
+            reloadUseList();
           } else {
             document.getElementById('editError').innerText = data.message || "Có lỗi xảy ra!";
           }
@@ -192,93 +188,79 @@
 
     function openAddModal() {
       document.getElementById('addError').innerText = '';
-      document.getElementById('addCategoryName').value = '';
+      document.getElementById('addUseName').value = '';
       document.getElementById('addDescription').value = '';
       addModal.show();
     }
 
-    function saveAddCategory() {
+    function saveAddUse() {
       const formData = new FormData();
-      formData.append("CategoryName", document.getElementById("addCategoryName").value);
+      formData.append("UseName", document.getElementById("addUseName").value);
       formData.append("Description", document.getElementById("addDescription").value);
 
-      fetch(`/Admin/Management/CategoryManagement?handler=Add`, {
+      fetch(`/Admin/Management/UseManagement?handler=Add`, {
         method: 'POST',
         body: formData
       })
         .then(r => r.json())
         .then(data => {
           if (data.success) {
-
-
             showToast(data.message, "success");
             addModal.hide();
-            reloadCategoryList(); // ✅ reload danh sách mà không cần reload trang
+            reloadUseList();
           } else {
             document.getElementById('addError').innerText = data.message || "Có lỗi xảy ra!";
           }
         })
-        .catch(err => console.error("Error adding category:", err));
+        .catch(err => console.error("Error adding use:", err));
 
       return false;
     }
 
-
-    let deleteCategoryId = 0;
-    let hasPlants = false;
+    let deleteUseId = 0;
 
     function checkBeforeDelete(id) {
-      fetch(`/Admin/Management/CategoryManagement?handler=CheckBeforeDelete`, {
+      fetch(`/Admin/Management/UseManagement?handler=CheckBeforeDelete`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id })
       })
         .then(res => res.json())
         .then(data => {
-          deleteCategoryId = id;
-          hasPlants = data.success;
+          deleteUseId = id;
           document.getElementById("deleteModalBody").innerHTML = data.message;
           new bootstrap.Modal(document.getElementById("deleteConfirmModal")).show();
         });
     }
 
     document.getElementById("confirmDeleteBtn").addEventListener("click", () => {
-      fetch(`/Admin/Management/CategoryManagement?handler=DeleteConfirmed&id=${deleteCategoryId}`, {
+      fetch(`/Admin/Management/UseManagement?handler=DeleteConfirmed&id=${deleteUseId}`, {
         method: 'POST'
       })
         .then(res => res.json())
         .then(data => {
           showToast(data.message, data.success ? "success" : "warning");
           if (data.success) {
-            // Nếu trang hiện tại lớn hơn totalPages mới thì chuyển về trang cuối
             if (@Model.CurrentPage > data.totalPages) {
-              reloadCategoryList(data.totalPages);
-              bootstrap.Modal.getInstance(document.getElementById("deleteConfirmModal")).hide();
+              reloadUseList(data.totalPages);
             } else {
-              reloadCategoryList();
-              bootstrap.Modal.getInstance(document.getElementById("deleteConfirmModal")).hide();
+              reloadUseList();
             }
-          } else {
-            bootstrap.Modal.getInstance(document.getElementById("deleteConfirmModal")).hide();
-
           }
+          bootstrap.Modal.getInstance(document.getElementById("deleteConfirmModal")).hide();
         });
     });
 
-
-    function reloadCategoryList(newPage) {
+    function reloadUseList(newPage) {
       const pageToLoad = newPage || @Model.CurrentPage;
-
-      const url = `/Admin/Management/CategoryManagement?handler=List&keyword=${encodeURIComponent("@Model.Keyword")}&currentPage=${pageToLoad}`;
+      const url = `/Admin/Management/UseManagement?handler=List&keyword=${encodeURIComponent("@Model.Keyword")}&currentPage=${pageToLoad}`;
 
       fetch(url)
         .then(res => res.text())
         .then(html => {
           document.querySelector("table tbody").innerHTML = html;
 
-          // Sau khi cập nhật list, có thể reload lại phân trang nếu muốn
-          // (gọi lại chính trang, nhưng lấy phần pagination)
-          fetch(window.location.pathname + `?Keyword=${encodeURIComponent("@Model.Keyword")}&CurrentPage=${@Model.CurrentPage}`)
+          fetch(window.location.pathname + `?Keyword=${encodeURIComponent("@Model.Keyword")}&CurrentPage=${pageToLoad}`)
             .then(r => r.text())
             .then(pageHtml => {
               const parser = new DOMParser();
@@ -290,8 +272,7 @@
               }
             });
         })
-        .catch(err => console.error("Error reloading categories:", err));
+        .catch(err => console.error("Error reloading uses:", err));
     }
-
   </script>
 }

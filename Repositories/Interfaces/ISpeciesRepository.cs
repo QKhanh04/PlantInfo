@@ -10,5 +10,8 @@ namespace PlantManagement.Repositories.Interfaces
     {
         Task<Species?> FindByScientificNameAsync(string name);
         Task<List<Species>> SearchAsync(string query, int limit = 5);
+
+       Task<List<Plant>> GetPlantsBySpeciesIdAsync(int speciesId);
+
     }
 }

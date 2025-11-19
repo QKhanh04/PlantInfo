@@ -1,0 +1,16 @@
+@model IEnumerable<PlantManagement.DTOs.DiseaseDTO>
+
+@foreach (var disease in Model)
+{
+    <tr>
+        <td>@disease.DiseaseName</td>
+        <td>@disease.PlantName</td>
+        <td id="symptoms_@disease.DiseaseId">@(disease.Symptoms?.Length > 100 ? disease.Symptoms.Substring(0, 100) + "..." : disease.Symptoms)</td>
+        <td>
+            <button class="btn btn-primary btn-sm" onclick="openEditModal(@disease.DiseaseId)">Xem chi tiết</button>
+            <button class="btn btn-danger btn-sm" onclick="confirmDelete(@disease.DiseaseId)">
+                <i class="bi bi-trash"></i> Xóa
+            </button>
+        </td>
+    </tr>
+}

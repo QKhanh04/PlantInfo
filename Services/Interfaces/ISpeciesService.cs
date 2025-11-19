@@ -16,6 +16,12 @@ namespace PlantManagement.Services.Interfaces
         Task<ServiceResult<Species>> CreateSpeciesAsync(SpeciesDTO dto);
         Task<ServiceResult<Species>> UpdateSpeciesAsync(SpeciesDTO dto);
         Task<ServiceResult<Species>> GetByIdAsync(int id);
+        Task<List<Plant>> GetPlantsBySpeciesIdAsync(int speciesId);
+
         Task<ServiceResult<IEnumerable<Species>>> GetAllSpeciesAsync();
+        Task<ServiceResult<bool>> DeleteSpeciesAsync(int speciesId);
+
+
+
     }
 }

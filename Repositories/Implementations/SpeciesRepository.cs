@@ -34,5 +34,13 @@ namespace PlantManagement.Repositories.Implementations
                 .Take(limit)
                 .ToListAsync();
         }
+
+        public async Task<List<Plant>> GetPlantsBySpeciesIdAsync(int speciesId)
+        {
+            return await _context.Plants
+                .Where(p => p.SpeciesId == speciesId)
+                .ToListAsync();
+        }
+
     }
 }
